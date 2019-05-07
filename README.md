@@ -9,6 +9,11 @@ So with the inventories produced by this `yeoman` generator and the [ala-install
 
 Also, thanks to `yeoman`, you can rerun the assistant enabling, for instance, some new module reusing your previous settings and comparing the differences (se the screenshot).
 
+This is only a Proof of Concept. If we think that some tool like this can be useful, we can add more funcionality like:
+- CAS deployment
+- Allow deployment in multiple machines
+- Better comments of properties in generated inventories for easy operation & tunning
+
 ## Installation
 
 First, install [Yeoman](http://yeoman.io) and generator-living-atlas using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
