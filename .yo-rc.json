@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Vicente J. Ruiz Jurado",
+      "authorEmail": "vjrj@gbif.es",
+      "authorUrl": ""
+    }
+  }
+}

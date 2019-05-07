@@ -1,0 +1,319 @@
+########################################################################################################################
+#
+# An inventory to use to set up a machine on EC2 or other cloud provider.
+# To use this add the following into your /etc/hosts file:
+#
+# 12.12.12.12	<%= LA_pkg_name %>	<%= LA_domain %>
+#
+# You'll need to replace "12.12.12.12" with the IP address of your newly created
+# Ubuntu 16 instance. For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
+#
+# ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/inventories/<%= LA_pkg_name %>.yml ansible/ala-demo.yml
+#
+########################################################################################################################
+
+[ala-demo]
+<%= LA_domain %>
+
+[ala-demo:vars]
+is_vagrant=false
+# Mounted storage is usually /mnt on EC2. Create a symlink to /mnt -> /data
+data_dir=/data
+
+demo_hostname = <%= LA_domain %>
+skin_home_url = <%= LA_urls_prefix %><%= LA_domain %>
+
+############# GBIF Name matching index
+
+custom_namematching_url = https://s3.amazonaws.com/ala-nameindexes/latest/namematching-gbif-lucene5.tgz
+nameindex_to_use = custom
+name_index_dir=/data/lucene/namematching/namematching
+
+####################### Biocache ##############################################
+
+biocache_db_host = localhost
+biocache_db_type = cassandra3
+biocache_db_port = 9042
+cassandra_listen_host = localhost
+biocache_service_hostname = <%= LA_biocache_service_hostname %>
+biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>
+biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_hostname %>
+biocache_service_context_path = <%= LA_biocache_service_path %>
+logging_enabled = true
+default_country =
+layers_service_url =
+layers_service_sampling = false
+enable_lists = true
+lists_service_url = <%= LA_urls_prefix %><%= LA_lists_hostname %><%= LA_lists_path %>
+registry_api_key = dummy-registry-api-key
+commonname_lang = en
+media_store_local = false
+media_store_url=<%= LA_urls_prefix %><%= LA_images_hostname %><%= LA_images_path %>
+download_dir=/data/biocache-download
+
+####################### Hub ###################################################
+
+biocache_hub_hostname = <%= LA_ala_hub_hostname %>
+biocache_hub_url = <%= LA_urls_prefix %><%= LA_ala_hub_hostname %><%= LA_ala_hub_path %>
+biocache_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_hostname %>
+biocache_hub_context_path = <%= LA_ala_hub_path %>
+userdetails_url = https://<%= LA_cas_hostname %>/userdetails/userDetails
+
+google_apikey = AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk
+
+# this is disabled to avoid startup problems
+caches_collections_enabled = false
+
+org_url = <%= LA_urls_prefix %><%= LA_domain %>
+
+skin_orgNameLong = <%= LA_project_name %>
+orgNameLong = <%= LA_project_name %>
+orgNameShort = <%= LA_project_name %>
+
+explore_your_area_lat = 40.4168
+explore_your_area_lng = -3.7038
+explore_your_area_location = Madrid
+
+map_default_latitude = 40.4168
+map_default_longitude = -3.7038
+map_default_zoom = 5
+
+skin_layout = generic
+skin_fluid_layout = true
+
+use_ala_image_service = true
+image_service_url = <%= LA_urls_prefix %><%= LA_images_hostname %><%= LA_images_path %>
+image_service_viewer_url = <%= LA_urls_prefix %><%= LA_images_hostname %><%= LA_images_path %>/image/viewer?imageId=
+image_service_metadata_url = <%= LA_urls_prefix %><%= LA_images_hostname %><%= LA_images_path %>/image/details?imageId=
+alwaysshow_imagetab = true
+
+use_download_plugin=true
+downloads_indexed_download_url=<%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>/occurrences/offline/download
+downloads_checklist_download_url=<%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>/occurrences/facets/download
+downloads_indexed_fields_url=<%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>/index/fields
+downloads_fieldguide_download_url =
+downloads_static_downloads_url =
+downloads_terms_of_use =
+download_solr_only = true
+
+####################### Collectory ############################################
+
+collectory_hostname = <%= LA_collectory_hostname %>
+collectory_url = <%= LA_urls_prefix %><%= LA_collectory_hostname %><%= LA_collectory_path %>
+collectory_service_url = <%= LA_urls_prefix %><%= LA_collectory_hostname %><%= LA_collectory_path %>/ws
+collectory_base_url = <%= LA_urls_prefix %><%= LA_collectory_hostname %>
+collectory_context_path = <%= LA_collectory_path %>
+collectory_db_host_address = localhost
+collectory_db_host = localhost
+collectory_db_user = collectory
+collectory_db_password = password
+bypass_cas = true
+
+# API key that support registry updates
+api_key = dummy-registry-api-key
+
+# Google maps
+google_apikey = AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk
+
+orgNameLong = <%= LA_project_name %>
+orgNameShort = <%= LA_project_name %>
+
+# CAS
+uri_filter_pattern = /dummy
+
+# Security bypass
+security_bypass = true
+
+# External API access
+api_key = to_be_added
+
+# Skinning
+skin = ala
+
+# Map config
+collections_map_lat = 40.4168
+collections_map_lon = -3.7038
+collections_map_zoom = 5
+
+# Project name
+orgNameShort = <%= LA_project_name %>
+orgNameLong = <%= LA_project_name %>
+region = Spain
+
+# EML config
+eml_delivery_point = Smith Street
+eml_city = Leipzig
+eml_admin_area = Spain
+eml_postal_code = S21 2SS
+eml_country = Spain
+
+# Disable UI components
+disable_map = true
+disable_alerts = true
+disable_logger = false
+
+# Whether to check API keys for incoming write requests
+api_key_check_enabled = false
+
+# GBIF base URL for webservices
+gbifApiUrl = http://api.gbif.org/v1
+
+# Logger URL
+logger_webservice_url = <%= LA_urls_prefix %><%= LA_logger_hostname %><%= LA_logger_path %>/service
+
+# Species list tool
+species_list_tool_url = <%= LA_urls_prefix %><%= LA_lists_hostname %><%= LA_lists_path %>
+
+####################### SOLR #######################
+
+solr_hostname = <%= LA_solr_hostname %>
+solr_url = <%= LA_urls_prefix %><%= LA_solr_hostname %>:8983/solr/biocache
+solr_base_url = <%= LA_urls_prefix %><%= LA_solr_hostname %>:8983
+solr_context_path = <%= LA_solr_path %>
+solr_host = <%= LA_solr_hostname %>
+solr_port = 8983
+
+solr_heap = 8g
+
+sandbox_hostname = <%= LA_domain %>
+sandbox_url = <%= LA_urls_prefix %><%= LA_domain %>/sandbox
+sandbox_base_url = <%= LA_urls_prefix %><%= LA_domain %>
+sandbox_context_path = /sandbox
+
+################# Logger Service ############
+
+logger_hostname = <%= LA_logger_hostname %>
+logger_url = <%= LA_urls_prefix %><%= LA_logger_hostname %><%= LA_logger_path %>
+logger_base_url = <%= LA_urls_prefix %><%= LA_logger_hostname %>
+logger_context_path = <%= LA_logger_path %>
+logger_db_name = logger
+logger_db_username = logger_user
+logger_db_password = logger_user
+logger_db_hostname = localhost
+
+############### Auth Server #########
+
+auth_base_url = https://<%= LA_cas_hostname %>
+auth_cas_url = https://<%= LA_cas_hostname %>/cas
+
+####### When near the GBIF building (e.g. in Europe) the GBIF nexus will likely be fastest #########
+
+use_gbif_nexus = false
+
+####### Disable SDS checks for the demo #######
+
+sds_enabled = false
+{% if cookiecutter.LA_collectory_uses_subdomain == 'no' and cookiecutter.LA_ala_hub_uses_subdomain == 'no' %}
+
+# Disabled caches - the collections cache is problematic when collectory + biocache on same server
+
+caches_auth_enabled=false
+caches_log_enabled=false
+caches_collections_enabled=false
+caches_layers_enabled=false
+{% endif %}
+
+webserver_nginx=true
+ssl=<%= LA_enable_ssl %>
+nginx_vhost_fragments_to_clear=["<%= LA_domain %>"]
+
+############### Biocache CLI options ###############
+
+biocache_opts = -Xmx1g -Xms1g
+
+############## Base header / footer ###############
+header_and_footer_baseurl = <%= LA_urls_prefix %><%= LA_domain %>
+
+###### favicon #######
+skin_favicon = https://www.gbif.org/favicon-16x16.png
+
+{% if cookiecutter.LA_use_species_lists == 'yes' %}
+
+######### Species list ##############
+
+specieslist_hostname = <%= LA_lists_hostname %>
+specieslist_url = <%= LA_urls_prefix %><%= LA_lists_hostname %><%= LA_lists_path %>
+specieslist_base_url = <%= LA_urls_prefix %><%= LA_lists_hostname %>
+specieslist_context_path = <%= LA_lists_path %>
+specieslist_db_hostname = localhost
+specieslist_db_name = specieslists
+specieslist_db_username = specieslists
+specieslist_db_password = password
+collectory_enable_sync = false
+biocache_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_hostname %><%= LA_ala_hub_path %>
+bie_service_base_url = <%= LA_urls_prefix %><%= LA_bie_index_hostname %><%= LA_bie_index_path %>
+field_guide_base_url =
+
+{% endif %}
+
+############# BIE index ################
+
+bie_index_base_url = <%= LA_urls_prefix %><%= LA_bie_index_hostname %>
+bie_index_context_path = <%= LA_bie_index_path %>
+bie_index_hostname = <%= LA_bie_index_hostname %>
+
+index_live_url = http://localhost:8983/solr/bie
+index_offline_url = http://localhost:8983/solr/bie-offline
+
+biocache_solr_url = http://localhost:8983/solr/biocache
+collectory_url = <%= LA_urls_prefix %><%= LA_collectory_hostname %><%= LA_collectory_path %>
+
+disable_cas = true
+bypass_cas = true
+
+index_images = true
+
+############# BIE Hub ################
+
+bie_skin_layout = generic
+bie_hub = ala-bie
+bie_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_hostname %>
+bie_hub_context_path = <%= LA_ala_bie_path %>
+bie_hub_hostname = <%= LA_ala_bie_hostname %>
+species_list_url = <%= LA_urls_prefix %><%= LA_lists_hostname %><%= LA_lists_path %>
+sightings_url =
+alerts_url =
+spatial_url =
+
+bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_hostname %><%= LA_ala_bie_path %>
+ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
+
+####### Images #######
+
+images_url = <%= LA_urls_prefix %><%= LA_images_hostname %>
+images_base_url = <%= LA_urls_prefix %><%= LA_images_hostname %>
+images_context_path = <%= LA_images_path %>
+images_hostname = <%= LA_images_hostname %>
+images_db_password = images
+images_db_username = images
+
+{% if cookiecutter.LA_use_regions == 'yes' %}
+
+####### Regions #######
+
+regions_hostname = <%= LA_regions_hostname %>
+regions_base_url = <%= LA_urls_prefix %><%= LA_regions_hostname %>
+regions_context_path = <%= LA_regions_path %>
+
+regions_map_bounds = []
+regions_map_height =
+spatial_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>
+spatial_base_url_ws=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws
+alerts_base_url=
+geoserver_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/geoserver
+biocache_records_url=<%= LA_urls_prefix %><%= LA_ala_hub_hostname %><%= LA_ala_hub_path %>
+biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>
+
+{% endif %}
+
+##### Copied from workshop, should be in living-atlas inventory
+
+postgresql_username=postgres
+postgresql_password=postgres
+postgis_version=9.6
+pg_service=postgresql-9.6
+pg_version=9.6
+postgis_version=2.4
+# Needed for installing on Ubuntu-18.04
+# https://github.com/AtlasOfLivingAustralia/biocache-service/issues/363
+tomcat=tomcat7
