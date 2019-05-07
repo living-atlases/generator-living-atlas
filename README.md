@@ -41,7 +41,7 @@ yo living-atlas
 
 ![](yo-living-atlas.png)
 
-After runing the inventories following the generated README instructions:
+After runing the inventories following the instructions from the generated README:
 
 ![](after-running-inventories.png)
 
