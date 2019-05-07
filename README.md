@@ -3,7 +3,7 @@
 
 ## Intro
 
-This is a simple yeoman generator trying to facilitate a quick start with Living Atlas `ansible` inventories.
+This is a super simple yeoman generator trying to facilitate a quick start with Living Atlas `ansible` inventories.
 
 So with the inventories produced by this `yeoman` generator and the [ala-install](https://github.com/AtlasOfLivingAustralia/ala-install/) `ansible` playbooks you should deploy a demo with the main LA services quickly and without too much pain.
 
@@ -46,7 +46,7 @@ yo living-atlas
 
 ![](yo-living-atlas.png)
 
-After runing the inventories following the instructions from the generated README:
+After runing the inventories following the instructions from the generated README over two VMs (like in the Paris 2019 Workshop):
 
 ![](after-running-inventories.png)
 
