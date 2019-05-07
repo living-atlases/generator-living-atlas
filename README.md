@@ -37,9 +37,13 @@ Then generate your new project:
 ```bash
 yo living-atlas
 ```
-## Screenshot
+## Screenshots
 
 ![](yo-living-atlas.png)
+
+After runing the inventories following the generated README instructions:
+
+![](after-running-inventories.png)
 
 ## Getting To Know Yeoman
 
