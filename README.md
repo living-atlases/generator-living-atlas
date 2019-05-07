@@ -7,7 +7,7 @@ This is a simple yeoman generator trying to facilitate a quick start with Living
 
 So with the inventories produced by this `yeoman` generator and the [ala-install](https://github.com/AtlasOfLivingAustralia/ala-install/) `ansible` playbooks you should deploy a demo with the main LA services quickly and without too much pain.
 
-Also, thanks to `yeoman`, you can rerun the assistant enabling, for instance, some new module reusing your previous settings and comparing the diferences (se the screenshot).
+Also, thanks to `yeoman`, you can rerun the assistant enabling, for instance, some new module reusing your previous settings and comparing the differences (se the screenshot).
 
 ## Installation
 
