@@ -1,5 +1,5 @@
 # generator-living-atlas [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> An experimal Yeoman Generator for Living Atlas Ansible Inventories
+> An experimental Yeoman Generator for Living Atlas Ansible Inventories
 
 ## Intro
 
