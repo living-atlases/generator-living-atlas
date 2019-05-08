@@ -3,16 +3,40 @@
 
 ## Intro
 
-This is a super simple yeoman generator trying to facilitate a quick start with Living Atlas `ansible` inventories.
+This is a super simple `yeoman` generator trying to facilitate a quick start with Living Atlas `ansible` inventories.
 
 So with the inventories produced by this `yeoman` generator and the [ala-install](https://github.com/AtlasOfLivingAustralia/ala-install/) `ansible` playbooks you should deploy a demo with the main LA services quickly and without too much pain.
 
 Also, thanks to `yeoman`, you can rerun the assistant enabling, for instance, some new module reusing your previous settings and comparing the differences (se the screenshot).
 
-This is only a Proof of Concept. If we think that some tool like this can be useful, we can add more funcionality like:
+## But why this?
+
+Ansible is a fantastic tool for manage LA node infrastructures. But nowadays we have some problems with our current `ala-install` inventories/roles & documentation that make their use difficult by newcomers nodes, but also for other non-Australian nodes maintenance:
+- There are many config properties that are not documented and this makes quite difficult to tune a LA node
+- Sometimes the `/data/*/config/*properties` are well commented but not their source inventories
+- From time to time new properties appears but others not ALA nodes don’t notice
+- We end using several self-made inventories, duplicate properties (like orgName, urls, etc), and many times this is a source of problems (like [code duplication](https://en.wikipedia.org/wiki/Duplicate_code)). Some minor sample:
+![](dups.png)
+- There is a lack of more real production-ready inventories (you have to ask for then).
+- `ala-install` has a structure that sometimes is difficult to find some samples or how to start to deploy some service (think in CAS)
+- Many times you have to check the ansible generated `config/*properties` for non configured or default properties, search the `ansible` role code for know how to configure these variables, re-run `ansible` with these new variables and re-check the `ansible` `/data/*/config/*properties`.
+- The demo inventory (or the last Paris workshop inventories) are a good sample but not enough for a new production LA node (lack of inventory variables documentation, missing of important services like regions or CAS)
+- We have a lack of info about services versions compatibility
+- Sometimes default module versions in inventories or `LATEST` nexus packages are not the correct/latest ones.
+- It would be nice to choose strategies that was usable by ALA too (not only LA nodes) - that might help maintenance.
+
+## Can these quick-start inventories solve all this?
+
+No. This is only a *Proof of Concept*. If we think that some tool like this can be useful, we can add more funcionality like:
+
 - Better comments of properties in generated inventories for easy operation & tunning
 - CAS deployment
 - Allow deployment in multiple machines (right now this is only tested using two VMs)
+- Focus in have well maintained these generator and their inventories
+- Autogenerate documentation from the inventories comments with tools like `doxygen`
+- etc
+
+or maybe this experiment suggests us other path to follow.
 
 ## Installation
 
