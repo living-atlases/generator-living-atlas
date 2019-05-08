@@ -19,7 +19,7 @@ Ansible is a fantastic tool for manage LA node infrastructures. But nowadays we 
 ![](dups.png)
 - There is a lack of more real production-ready inventories (you have to ask for then).
 - `ala-install` has a structure that sometimes is difficult to find some samples or how to start to deploy some service (think in CAS)
-- Many times you have to check the ansible generated `config/*properties` for non configured or default properties, search the `ansible` role code for know how to configure these variables, re-run `ansible` with these new variables and re-check the `ansible` `/data/*/config/*properties`.
+- Many times you have to check the `ansible` generated `config/*properties` for non configured or default properties, search the `ansible` role code for know how to configure these variables, re-run `ansible` with these new variables and re-check the `ansible` `/data/*/config/*properties`.
 - The demo inventory (or the last Paris workshop inventories) are a good sample but not enough for a new production LA node (lack of inventory variables documentation, missing of important services like regions or CAS)
 - We have a lack of info about services versions compatibility
 - Sometimes default module versions in inventories or `LATEST` nexus packages are not the correct/latest ones.
@@ -27,9 +27,11 @@ Ansible is a fantastic tool for manage LA node infrastructures. But nowadays we 
 
 ## Can these quick-start inventories solve all this?
 
-No. This is only a *Proof of Concept*. If we think that some tool like this can be useful, we can add more funcionality like:
+No. This is only a *Proof of Concept* that tries to mitigate some of the previous problems.
 
-- Better comments of properties in generated inventories for easy operation & tunning
+If we think that some tool like this can be useful, we can add more functionality like:
+
+- Better comments of properties in generated inventories for easy operation & tuning
 - CAS deployment
 - Allow deployment in multiple machines (right now this is only tested using two VMs)
 - Focus in have well maintained these generator and their inventories
