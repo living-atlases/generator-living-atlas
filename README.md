@@ -46,7 +46,7 @@ First, install [Yeoman](http://yeoman.io) and generator-living-atlas using [npm]
 npm install -g yo
 ```
 
-This generator is experimental and it's not published in npm. So if you want to test it, you can clone this repo and:
+Wait!, this generator is experimental and it's not published in npm. So if you want to test it, you can clone this repo and:
 
 ```bash
 npm link
