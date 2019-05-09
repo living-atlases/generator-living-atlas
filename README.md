@@ -76,6 +76,10 @@ After runing the inventories following the instructions from the generated READM
 
 ![](after-running-inventories.png)
 
+Differences beween two runs:
+
+![](re-running-diff.png)
+
 We can use these inventories as a base for extracting documentation via `doxygen` (or similar):
 
 ![](doxygen-ansible-reference.png)
