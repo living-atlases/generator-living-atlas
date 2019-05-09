@@ -72,7 +72,7 @@ yo living-atlas
 
 ![](yo-living-atlas.png)
 
-After runing the inventories following the instructions from the generated README over two VMs (like in the Paris 2019 Workshop):
+After running the inventories following the instructions from the generated README over two VMs (like in the Paris 2019 Workshop):
 
 ![](after-running-inventories.png)
 
