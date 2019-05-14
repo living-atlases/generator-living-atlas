@@ -3,15 +3,80 @@ const Generator = require("yeoman-generator");
 const chalk = require("chalk");
 const yosay = require("yosay");
 const defaultStore = false;
-const defUseSubdomain = function(a) {
+const defUseSubdomain = a => {
   return a.LA_collectory_uses_subdomain;
 };
 const debug = false;
-const defUseSubdomainPrompt = function(a, service) {
+const defUseSubdomainPrompt = (a, service) => {
   return `Will the ${chalk.keyword("orange")(service)} module use a http${
     a.LA_enable_ssl ? "s" : ""
   }://${chalk.keyword("orange")("subdomain")}.${a.LA_domain} or not?`;
 };
+const domainRe = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/g;
+const validateDomain = input => {
+  return new Promise(function(resolve, reject) {
+    if (!input.match(domainRe)) {
+      reject(new Error("You need to provide some-example-domain.org"));
+    } else {
+      resolve(true);
+    }
+  });
+};
+const machines = new Set();
+
+const storeMachine = input => {
+  return new Promise(function(resolve) {
+    if (!machines.has(input)) machines.add(input);
+    resolve(input);
+  });
+};
+
+function PromptSubdomainFor(varName, subdomain) {
+  this.store = defaultStore;
+  this.type = "confirm";
+  this.name = varName;
+  this.message = function(a) {
+    return defUseSubdomainPrompt(a, subdomain);
+  };
+  this.default = function(a) {
+    return defUseSubdomain(a);
+  };
+}
+
+function PromptHostnameFor(varName, varUsesSubdomain, subdomain, when) {
+  this.store = defaultStore;
+  // TODO choices
+  this.type = "input";
+  this.name = varName;
+  this.message = `LA ${subdomain} hostname`;
+  this.default = function(a) {
+    return a[varUsesSubdomain] ? `${subdomain}.${a.LA_domain}` : a.LA_domain;
+  };
+  if (when) {
+    this.when = when;
+  }
+  this.filter = input => storeMachine(input);
+  this.validate = input => validateDomain(input);
+}
+
+function PromptPathFor(varName, varUsesSubdomain, path, when) {
+  this.store = defaultStore;
+  this.type = "input";
+  this.name = varName;
+  this.message = `LA ${path} /path`;
+  this.default = "/" + path;
+  if (when) {
+    this.when = when;
+  } else {
+    this.when = function(a) {
+      return !a[varUsesSubdomain];
+    };
+  }
+}
+
+function PromptBaseUrlFor(varName, subdomain, when) {
+  // TODO
+}
 
 module.exports = class extends Generator {
   async prompting() {
@@ -54,12 +119,13 @@ module.exports = class extends Generator {
         store: true,
         type: "input",
         name: "LA_domain",
-        message: "Your LA domain",
+        message: "What is your LA node main domain",
         default: function(answers) {
           return `${answers.LA_pkg_name}.org`;
-        }
+        },
+        filter: input => storeMachine(input),
+        validate: input => validateDomain(input)
       },
-
       {
         store: true,
         type: "confirm",
@@ -117,288 +183,124 @@ module.exports = class extends Generator {
       },
       {
         store: defaultStore,
-        type: "input",
-        name: "LA_collectory_hostname",
-        message: "LA collectory hostname",
+        type: "choices",
+        name: "LA_collectory_base_url",
+        message: "LA collectory url",
         default: function(a) {
           return a.LA_collectory_uses_subdomain
             ? `collectory.${a.LA_domain}`
             : a.LA_domain;
         }
       },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_collectory_path",
-        message: "Collectory /path name",
-        default: "/collectory",
-        when: function(a) {
-          return !a.LA_collectory_uses_subdomain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_ala_hub_uses_subdomain",
-        message: function(a) {
-          return defUseSubdomainPrompt(a, "biocache");
-        },
-        default: function(a) {
-          return defUseSubdomain(a);
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_ala_hub_hostname",
-        message: "LA biocache hostname",
-        default: function(a) {
-          return a.LA_ala_hub_uses_subdomain
-            ? `biocache.${a.LA_domain}`
-            : a.LA_domain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_ala_hub_path",
-        default: "/ala-hub",
-        when: function(a) {
-          return !a.LA_ala_hub_uses_subdomain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_biocache_service_uses_subdomain",
-        message: function(a) {
-          return defUseSubdomainPrompt(a, "biocache-service");
-        },
-        default: function(a) {
-          return defUseSubdomain(a);
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_biocache_service_hostname",
-        message: "LA biocache-service hostname",
-        default: function(a) {
-          return a.LA_biocache_service_uses_subdomain
-            ? `biocache-ws.${a.LA_domain}`
-            : a.LA_domain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_biocache_service_path",
-        default: "/biocache-service",
-        when: function(a) {
-          return !a.LA_biocache_service_uses_subdomain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_ala_bie_uses_subdomain",
-        message: function(a) {
-          return defUseSubdomainPrompt(a, "bie");
-        },
-        default: function(a) {
-          return defUseSubdomain(a);
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_ala_bie_hostname",
-        message: "LA bie hostname",
-        default: function(a) {
-          return a.LA_ala_bie_uses_subdomain
-            ? `bie.${a.LA_domain}`
-            : a.LA_domain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_ala_bie_path",
-        default: "/ala-bie",
-        when: function(a) {
-          return !a.LA_ala_bie_uses_subdomain;
-        }
-      },
-
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_bie_index_uses_subdomain",
-        message: function(a) {
-          return defUseSubdomainPrompt(a, "bie-service");
-        },
-        default: function(a) {
-          return defUseSubdomain(a);
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_bie_index_hostname",
-        message: "LA bie-service hostname",
-        default: function(a) {
-          return a.LA_bie_index_uses_subdomain
-            ? `bie-ws.${a.LA_domain}`
-            : a.LA_domain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_bie_index_path",
-        default: "/bie-index",
-        when: function(a) {
-          return !a.LA_bie_index_uses_subdomain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_lists_uses_subdomain",
-        message: function(a) {
-          return defUseSubdomainPrompt(a, "specieslists");
-        },
-        default: function(a) {
-          return defUseSubdomain(a);
-        },
-        when: function(a) {
+      new PromptHostnameFor(
+        "LA_collectory_hostname",
+        "LA_collectory_uses_subdomain",
+        "collectory"
+      ),
+      new PromptPathFor(
+        "LA_collectory_path",
+        "LA_collectory_uses_subdomain",
+        "collectory"
+      ),
+      new PromptSubdomainFor("LA_ala_hub_uses_subdomain", "biocache"),
+      new PromptHostnameFor(
+        "LA_ala_hub_hostname",
+        "LA_ala_hub_uses_subdomain",
+        "biocache"
+      ),
+      new PromptPathFor(
+        "LA_ala_hub_path",
+        "LA_ala_hub_uses_subdomain",
+        "ala-hub"
+      ),
+      new PromptSubdomainFor(
+        "LA_biocache_service_uses_subdomain",
+        "biocache-service"
+      ),
+      new PromptHostnameFor(
+        "LA_biocache_service_hostname",
+        "LA_biocache_service_uses_subdomain",
+        "biocache-ws"
+      ),
+      new PromptPathFor(
+        "LA_biocache_service_path",
+        "LA_biocache_service_uses_subdomain",
+        "biocache-service"
+      ),
+      new PromptSubdomainFor("LA_ala_bie_uses_subdomain", "bie"),
+      new PromptHostnameFor(
+        "LA_ala_bie_hostname",
+        "LA_ala_bie_uses_subdomain",
+        "bie"
+      ),
+      new PromptPathFor(
+        "LA_ala_bie_path",
+        "LA_ala_bie_uses_subdomain",
+        "ala-bie"
+      ),
+      new PromptSubdomainFor("LA_bie_index_uses_subdomain", "bie-service"),
+      new PromptHostnameFor(
+        "LA_bie_index_hostname",
+        "LA_bie_index_uses_subdomain",
+        "bie-ws"
+      ),
+      new PromptPathFor(
+        "LA_bie_index_path",
+        "LA_bie_index_uses_subdomain",
+        "bie-index"
+      ),
+      new PromptSubdomainFor("LA_lists_uses_subdomain", "specieslists"),
+      new PromptHostnameFor(
+        "LA_lists_hostname",
+        "LA_lists_uses_subdomain",
+        "lists",
+        function(a) {
           return a.LA_use_species_lists;
         }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_lists_hostname",
-        message: "LA specieslists hostname",
-        default: function(a) {
-          return a.LA_lists_uses_subdomain
-            ? `lists.${a.LA_domain}`
-            : a.LA_domain;
-        },
-        when: function(a) {
-          return a.LA_use_species_lists;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_lists_path",
-        default: "/specieslists",
-        when: function(a) {
+      ),
+      new PromptPathFor(
+        "LA_lists_path",
+        "LA_lists_uses_subdomain",
+        "specieslists",
+        function(a) {
           return a.LA_use_species_lists && !a.LA_lists_uses_subdomain;
         }
-      },
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_images_uses_subdomain",
-        message: function(a) {
-          return defUseSubdomainPrompt(a, "images");
-        },
-        default: function(a) {
-          return defUseSubdomain(a);
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_images_hostname",
-        message: "LA images hostname",
-        default: function(a) {
-          return a.LA_images_uses_subdomain
-            ? `images.${a.LA_domain}`
-            : a.LA_domain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_images_path",
-        default: "/images",
-        when: function(a) {
-          return !a.LA_images_uses_subdomain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_regions_uses_subdomain",
-        message: function(a) {
-          return defUseSubdomainPrompt(a, "regions");
-        },
-        default: function(a) {
-          return defUseSubdomain(a);
-        },
-        when: function(a) {
+      ),
+      new PromptSubdomainFor("LA_images_uses_subdomain", "images"),
+      new PromptHostnameFor(
+        "LA_images_hostname",
+        "LA_images_uses_subdomain",
+        "images"
+      ),
+      new PromptPathFor("LA_images_path", "LA_images_uses_subdomain", "images"),
+      new PromptSubdomainFor("LA_regions_uses_subdomain", "regions"),
+      new PromptHostnameFor(
+        "LA_regions_hostname",
+        "LA_regions_uses_subdomain",
+        "regions",
+        function(a) {
           return a.LA_use_regions;
         }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_regions_hostname",
-        message: "LA regions hostname",
-        default: function(a) {
-          return a.LA_regions_uses_subdomain
-            ? `regions.${a.LA_domain}`
-            : a.LA_domain;
-        },
-        when: function(a) {
-          return a.LA_use_regions;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_regions_path",
-        default: "/regions",
-        when: function(a) {
+      ),
+      new PromptPathFor(
+        "LA_regions_path",
+        "LA_regions_uses_subdomain",
+        "regions",
+        function(a) {
           return a.LA_use_regions && !a.LA_regions_uses_subdomain;
         }
-      },
-
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_logger_uses_subdomain",
-        message: function(a) {
-          return defUseSubdomainPrompt(a, "logger");
-        },
-        default: function(a) {
-          return defUseSubdomain(a);
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_logger_hostname",
-        message: "LA logger hostname",
-        default: function(a) {
-          return a.LA_logger_uses_subdomain
-            ? `logger.${a.LA_domain}`
-            : a.LA_domain;
-        }
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_logger_path",
-        default: "/logger",
-        when: function(a) {
-          return !a.LA_logger_uses_subdomain;
-        }
-      },
-
+      ),
+      new PromptSubdomainFor("LA_logger_uses_subdomain", "logger"),
+      new PromptHostnameFor(
+        "LA_logger_hostname",
+        "LA_logger_uses_subdomain",
+        "logger"
+      ),
+      new PromptPathFor(
+        "LA_logger_path",
+        "LA_logger_uses_subdomain",
+        "logger-service"
+      ),
       {
         store: defaultStore,
         type: "confirm",
