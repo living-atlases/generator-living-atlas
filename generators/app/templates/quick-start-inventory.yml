@@ -68,7 +68,7 @@ org_url = <%= LA_urls_prefix %><%= LA_domain %>
 
 skin_orgNameLong = <%= LA_project_name %>
 orgNameLong = <%= LA_project_name %>
-orgNameShort = <%= LA_project_name %>
+orgNameShort = <%= LA_project_shortname %>
 
 explore_your_area_lat = 40.4168
 explore_your_area_lng = -3.7038
@@ -116,7 +116,7 @@ api_key = dummy-registry-api-key
 google_apikey = AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk
 
 orgNameLong = <%= LA_project_name %>
-orgNameShort = <%= LA_project_name %>
+orgNameShort = <%= LA_project_shortname %>
 
 # CAS
 uri_filter_pattern = /dummy
@@ -136,7 +136,7 @@ collections_map_lon = -3.7038
 collections_map_zoom = 5
 
 # Project name
-orgNameShort = <%= LA_project_name %>
+orgNameShort = <%= LA_project_shortname %>
 orgNameLong = <%= LA_project_name %>
 region = Spain
 

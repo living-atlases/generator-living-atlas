@@ -112,7 +112,7 @@ local_repo_dir=~/.ala
 data_dir=/data
 
 orgNameLong = <%= LA_project_name %>
-orgNameShort = <%= LA_project_name %>
+orgNameShort = <%= LA_project_shortname %>
 
 spatial_service_hostname=spatial.<%= LA_domain %>
 spatial_service_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws
