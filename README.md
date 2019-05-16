@@ -68,6 +68,9 @@ Then generate your new project:
 ```bash
 yo living-atlas
 ```
+
+You can use `--debug` to see some debug info.
+
 ## Screenshots
 
 ![](yo-living-atlas.png)
