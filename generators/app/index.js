@@ -469,6 +469,7 @@ module.exports = class extends Generator {
       this.answers.LA_solr_path = "";
     }
 
+    this.answers.LA_machines = machines;
     this.answers.LA_services_machines = servicesAndMachines;
 
     if (debug) this.log(this.answers);

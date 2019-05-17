@@ -6,10 +6,10 @@ These are some generated inventories to use to set up some machines on EC2 or ot
 
 To use this, add the following into your `/etc/hosts` (of your working machine, and new service machine/s) and/or in your <%= LA_domain %> `DNS`. So these hostname should be accessible from your local working machine but also remotely between each machine/s so the hostname should resolve correctly.
 
-```<% for(var i=0; i < LA_services_machines.length; i++) { %>
-12.12.12.<%= i + 1 %>   <%= LA_services_machines[i].machine %><% } %>
-<% if (LA_use_CAS) { %>12.12.12.20  <%= LA_cas_hostname %><% } %>
-<% if (LA_use_spatial) { %>12.12.12.21  <%= `spatial.${LA_domain}` %><% } %>
+```<% let i=12; LA_machines.forEach(machine => { %>
+12.12.12.<%= i %>   <%= machine %><% }); i++ %>
+<% if (LA_use_CAS) { %>12.12.12.<%= i %>  <%= LA_cas_hostname %><% }; i++ %>
+<% if (LA_use_spatial) { %>12.12.12.<%= i %>  <%= `spatial.${LA_domain}` %><% } %>
 ```
 
 You'll need to replace `12.12.12.1` etc with the IP address of some new Ubuntu 16 instance in your provider.
@@ -34,8 +34,8 @@ export AI=<location-of-your-cloned-ala-install-repo>
 #  For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
 
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i inventories/quick-start-inventory.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
-<% for(var i=0; i < LA_services_machines.length; i++) { %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i inventories/quick-start-inventory.yml $AI/ansible/<%= LA_services_machines[i].map.playbook %>.yml --limit <%= LA_services_machines[i].machine %><% } %>
+<% for(var j=0; j < LA_services_machines.length; j++) { %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i inventories/quick-start-inventory.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
 <% if (LA_use_spatial) { %>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i inventories/quick-start-spatial-inventory.yml $AI/ansible/spatial.yml<% } %>
 ```
