@@ -121,13 +121,14 @@ function PromptHostnameFor(name, subdomain, when) {
       choices = [...machines, "other"];
     }
     // Add previous selected hostname at the start of the array
-    const previousHostname = previousConfig[varName];
+    const hasPrevious = typeof previousConfig !== "undefined";
+    const previousHostname = hasPrevious ? previousConfig[varName] : null;
     if (
       replay &&
       typeof previousHostname !== "undefined" &&
       !choices.includes(previousHostname)
     ) {
-      choices.unshift(previousHostname);
+      if (previousHostname) choices.unshift(previousHostname);
     }
     if (debug) logger(choices);
     return choices;
@@ -485,25 +486,26 @@ module.exports = class extends Generator {
 
     this.answers.LA_machines = machines;
     this.answers.LA_services_machines = servicesAndMachines;
+    const dest = this.answers.LA_pkg_name;
 
     if (debug) this.log(this.answers);
 
     this.fs.copyTpl(
       this.templatePath("README.md"),
-      this.destinationPath("README.md"),
+      this.destinationPath(`${dest}/README.md`),
       this.answers
     );
 
     this.fs.copyTpl(
       this.templatePath("quick-start-inventory.yml"),
-      this.destinationPath("quick-start-inventory.yml"),
+      this.destinationPath(`${dest}/quick-start-inventory.yml`),
       this.answers
     );
 
     if (this.answers.LA_use_spatial) {
       this.fs.copyTpl(
         this.templatePath("quick-start-spatial-inventory.yml"),
-        this.destinationPath("quick-start-spatial-inventory.yml"),
+        this.destinationPath(`${dest}/quick-start-spatial-inventory.yml`),
         this.answers
       );
     }

@@ -33,9 +33,9 @@ export AI=<location-of-your-cloned-ala-install-repo>
 
 #  For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
 
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i inventories/quick-start-inventory.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/quick-start-inventory.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
 <% for(var j=0; j < LA_services_machines.length; j++) { %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i inventories/quick-start-inventory.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/quick-start-inventory.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
 <% if (LA_use_spatial) { %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i inventories/quick-start-spatial-inventory.yml $AI/ansible/spatial.yml<% } %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/quick-start-spatial-inventory.yml $AI/ansible/spatial.yml<% } %>
 ```
