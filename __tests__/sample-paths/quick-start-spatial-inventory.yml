@@ -2,7 +2,7 @@
 #
 # Spatial inventory for setting up the spatial LA stack (spatial portal, spatial services, geoserver, geonetwork).
 #
-# Note: Before this is ran, 'spatial.living-atlas.wk' should resolve in DNS either by using a
+# Note: Before this is ran, 'spatial.living-atlas.ad' should resolve in DNS either by using a
 # Domain Name System (DNS) web service (e.g. Route53) or by adding an entry into /etc/hosts of the
 # target VM.
 #
@@ -13,19 +13,19 @@
 ########################################################################################################################
 
 [spatial]
-spatial.living-atlas.wk
+spatial.living-atlas.ad
 
 [geoserver]
-spatial.living-atlas.wk
+spatial.living-atlas.ad
 
 [geonetwork]
-spatial.living-atlas.wk
+spatial.living-atlas.ad
 
 [spatial-hub]
-spatial.living-atlas.wk
+spatial.living-atlas.ad
 
 [spatial-service]
-spatial.living-atlas.wk
+spatial.living-atlas.ad
 
 ###
 # Geoserver
@@ -36,9 +36,9 @@ is_vagrant=false
 local_repo_dir=~/.ala
 data_dir=/data
 
-geoserver_hostname=spatial.living-atlas.wk
-geoserver_url=https://spatial.living-atlas.wk/geoserver
-geoserver_base_url=https://spatial.living-atlas.wk
+geoserver_hostname=spatial.living-atlas.ad
+geoserver_url=https://spatial.living-atlas.ad/geoserver
+geoserver_base_url=https://spatial.living-atlas.ad
 geoserver_context_path=/geoserver
 geoserver_app=geoserver
 
@@ -72,9 +72,9 @@ is_vagrant=true
 local_repo_dir=~/.ala
 data_dir=/data
 
-geonetwork_hostname=spatial.living-atlas.wk
-geonetwork_url=https://spatial.living-atlas.wk/geonetwork
-geonetwork_base_url=https://spatial.living-atlas.wk
+geonetwork_hostname=spatial.living-atlas.ad
+geonetwork_url=https://spatial.living-atlas.ad/geonetwork
+geonetwork_base_url=https://spatial.living-atlas.ad
 geonetwork_context_path=/geonetwork
 geonetwork_app=geonetwork
 
@@ -114,13 +114,13 @@ data_dir=/data
 orgNameLong = Living Atlas of Wakanda
 orgNameShort = LA Wakanda
 
-spatial_service_hostname=spatial.living-atlas.wk
-spatial_service_url=https://spatial.living-atlas.wk/ws
-spatial_service_base_url=https://spatial.living-atlas.wk
+spatial_service_hostname=spatial.living-atlas.ad
+spatial_service_url=https://spatial.living-atlas.ad/ws
+spatial_service_base_url=https://spatial.living-atlas.ad
 spatial_service_context_path=/ws
 
-layers_service_url=https://spatial.living-atlas.wk/ws
-biocache_service_url=https://demo.living-atlas.wk/biocache-service
+layers_service_url=https://spatial.living-atlas.ad/ws
+biocache_service_url=https://demo.living-atlas.ad/biocache-service
 
 layers_db_host=localhost
 layers_db_port=5432
@@ -143,8 +143,8 @@ service_enable=true
 
 spatial_service_remote_url=https://nectar-spatial-staging.ala.org.au/spatial-service
 
-auth_base_url = https://auth.living-atlas.wk
-auth_cas_url = https://auth.living-atlas.wk/cas
+auth_base_url = https://auth.living-atlas.ad
+auth_cas_url = https://auth.living-atlas.ad/cas
 
 webserver_nginx=true
 robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
@@ -166,17 +166,17 @@ startup_lng = 0
 startup_zoom = 2
 
 spatial_hub_skin_layout=generic
-spatial_hub_hostname=spatial.living-atlas.wk
-spatial_hub_url=https://spatial.living-atlas.wk/
-spatial_hub_base_url=https://spatial.living-atlas.wk
+spatial_hub_hostname=spatial.living-atlas.ad
+spatial_hub_url=https://spatial.living-atlas.ad/
+spatial_hub_base_url=https://spatial.living-atlas.ad
 spatial_hub_context_path=/
 
-layers_service_url=https://spatial.living-atlas.wk/ws
-geoserver_url=https://spatial.living-atlas.wk/geoserver
+layers_service_url=https://spatial.living-atlas.ad/ws
+geoserver_url=https://spatial.living-atlas.ad/geoserver
 
-sandbox_url=https://sandbox.living-atlas.wk/ala-hub
-sandbox_ui_url=https://sandbox.living-atlas.wk/datacheck
-sandbox_biocache_service_url=https://sandbox.living-atlas.wk/biocache-service
+sandbox_url=https://sandbox.living-atlas.ad/ala-hub
+sandbox_ui_url=https://sandbox.living-atlas.ad/datacheck
+sandbox_biocache_service_url=https://sandbox.living-atlas.ad/biocache-service
 
 google_api_key=get-a-google-api-key
 spatial_hub_api_key=get-an-ala-api-key
@@ -196,10 +196,10 @@ nginx_client_max_body_size=120m
 # Other components
 ##
 
-bie_base_url = https://living-atlas.wk/ala-bie
-bie_service_base_url = https://living-atlas.wk/bie-index
+bie_base_url = https://living-atlas.ad/ala-bie
+bie_service_base_url = https://living-atlas.ad/bie-index
 favicon_url=https://www.gbif.org/favicon-16x16.png
-collectory_url=https://living-atlas.wk/collectory
-biocache_url=https://living-atlas.wk/ala-hub
-biocache_service_url = https://living-atlas.wk/biocache-service
-sampling_url=https://spatial.living-atlas.wk/ws
+collectory_url=https://living-atlas.ad/collectory
+biocache_url=https://living-atlas.ad/ala-hub
+biocache_service_url = https://living-atlas.ad/biocache-service
+sampling_url=https://spatial.living-atlas.ad/ws

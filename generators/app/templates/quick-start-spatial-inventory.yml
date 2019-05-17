@@ -196,10 +196,10 @@ nginx_client_max_body_size=120m
 # Other components
 ##
 
-bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_hostname %><%= LA_ala_bie_path %>
-bie_service_base_url = <%= LA_urls_prefix %><%= LA_bie_index_hostname %><%= LA_bie_index_path %>
+bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
+bie_service_base_url = <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
 favicon_url=https://www.gbif.org/favicon-16x16.png
-collectory_url=<%= LA_urls_prefix %><%= LA_collectory_hostname %><%= LA_collectory_path %>
-biocache_url=<%= LA_urls_prefix %><%= LA_ala_hub_hostname %><%= LA_ala_hub_path %>
-biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>
+collectory_url=<%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
+biocache_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
+biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 sampling_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws

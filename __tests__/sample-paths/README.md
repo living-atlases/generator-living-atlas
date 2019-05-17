@@ -4,11 +4,11 @@ These are some generated inventories to use to set up some machines on EC2 or ot
 
 ### Initial Setup
 
-To use this, add the following into your `/etc/hosts` (of your working machine, and new service machine/s) and/or in your living-atlas.wk `DNS`. So these hostname should be accessible from your local working machine but also remotely between each machine/s so the hostname should resolve correctly.
+To use this, add the following into your `/etc/hosts` (of your working machine, and new service machine/s) and/or in your living-atlas.ad `DNS`. So these hostname should be accessible from your local working machine but also remotely between each machine/s so the hostname should resolve correctly.
 
 ```
-12.12.12.11  living-atlas-of-wakanda living-atlas.wk
-12.12.12.12  spatial.living-atlas.wk
+12.12.12.11  living-atlas-of-wakanda living-atlas.ad
+12.12.12.12  spatial.living-atlas.ad
 
 
 

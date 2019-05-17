@@ -39,6 +39,7 @@
   "dependencies": {
     "chalk": "^2.1.0",
     "onionsay": "github:theonion/onionsay",
+    "parse-domain": "^2.1.7",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   },

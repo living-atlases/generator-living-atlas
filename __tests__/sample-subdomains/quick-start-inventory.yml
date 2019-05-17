@@ -3,7 +3,7 @@
 # An inventory to use to set up a machine on EC2 or other cloud provider.
 # To use this add the following into your /etc/hosts file:
 #
-# 12.12.12.12	living-atlas-of-wakanda	living-atlas.wk
+# 12.12.12.12	living-atlas-of-wakanda	living-atlas.ad
 #
 # You'll need to replace "12.12.12.12" with the IP address of your newly created
 # Ubuntu 16 instance. For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
@@ -13,15 +13,15 @@
 ########################################################################################################################
 
 [ala-demo]
-living-atlas.wk
+living-atlas.ad
 
 [ala-demo:vars]
 is_vagrant=false
 # Mounted storage is usually /mnt on EC2. Create a symlink to /mnt -> /data
 data_dir=/data
 
-demo_hostname = living-atlas.wk
-skin_home_url = https://living-atlas.wk
+demo_hostname = living-atlas.ad
+skin_home_url = https://living-atlas.ad
 
 ############# GBIF Name matching index
 
@@ -35,36 +35,36 @@ biocache_db_host = localhost
 biocache_db_type = cassandra3
 biocache_db_port = 9042
 cassandra_listen_host = localhost
-biocache_service_hostname = 
-biocache_service_url = https://
-biocache_service_base_url = https://
+biocache_service_hostname = biocache-ws.living-atlas.ad
+biocache_service_url = biocache-ws.living-atlas.ad
+biocache_service_base_url = https://biocache-ws.living-atlas.ad
 biocache_service_context_path = 
 logging_enabled = true
 default_country =
 layers_service_url =
 layers_service_sampling = false
 enable_lists = true
-lists_service_url = https://
+lists_service_url = https://lists.living-atlas.ad
 registry_api_key = dummy-registry-api-key
 commonname_lang = en
 media_store_local = false
-media_store_url=https://
+media_store_url=https://images.living-atlas.ad
 download_dir=/data/biocache-download
 
 ####################### Hub ###################################################
 
-biocache_hub_hostname = 
-biocache_hub_url = https://
-biocache_hub_base_url = https://
+biocache_hub_hostname = biocache.living-atlas.ad
+biocache_hub_url = https://biocache.living-atlas.ad
+biocache_hub_base_url = https://biocache.living-atlas.ad
 biocache_hub_context_path = 
-userdetails_url = https://auth.living-atlas.wk/userdetails/userDetails
+userdetails_url = https://auth.living-atlas.ad/userdetails/userDetails
 
 google_apikey = AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk
 
 # this is disabled to avoid startup problems
 caches_collections_enabled = false
 
-org_url = https://living-atlas.wk
+org_url = https://living-atlas.ad
 
 skin_orgNameLong = Living Atlas of Wakanda
 orgNameLong = Living Atlas of Wakanda
@@ -82,15 +82,15 @@ skin_layout = generic
 skin_fluid_layout = true
 
 use_ala_image_service = true
-image_service_url = https://
-image_service_viewer_url = https:///image/viewer?imageId=
-image_service_metadata_url = https:///image/details?imageId=
+image_service_url = https://images.living-atlas.ad
+image_service_viewer_url = https://images.living-atlas.ad/image/viewer?imageId=
+image_service_metadata_url = https://images.living-atlas.ad/image/details?imageId=
 alwaysshow_imagetab = true
 
 use_download_plugin=true
-downloads_indexed_download_url=https:///occurrences/offline/download
-downloads_checklist_download_url=https:///occurrences/facets/download
-downloads_indexed_fields_url=https:///index/fields
+downloads_indexed_download_url=https://biocache-ws.living-atlas.ad/occurrences/offline/download
+downloads_checklist_download_url=https://biocache-ws.living-atlas.ad/occurrences/facets/download
+downloads_indexed_fields_url=https://biocache-ws.living-atlas.ad/index/fields
 downloads_fieldguide_download_url =
 downloads_static_downloads_url =
 downloads_terms_of_use =
@@ -98,10 +98,10 @@ download_solr_only = true
 
 ####################### Collectory ############################################
 
-collectory_hostname = 
-collectory_url = https://
-collectory_service_url = https:///ws
-collectory_base_url = https://
+collectory_hostname = collectory.living-atlas.ad
+collectory_url = https://collectory.living-atlas.ad
+collectory_service_url = https://collectory.living-atlas.ad/ws
+collectory_base_url = https://collectory.living-atlas.ad
 collectory_context_path = 
 collectory_db_host_address = localhost
 collectory_db_host = localhost
@@ -159,32 +159,32 @@ api_key_check_enabled = false
 gbifApiUrl = http://api.gbif.org/v1
 
 # Logger URL
-logger_webservice_url = https:///service
+logger_webservice_url = https://logger.living-atlas.ad/service
 
 # Species list tool
-species_list_tool_url = https://
+species_list_tool_url = https://lists.living-atlas.ad
 
 ####################### SOLR #######################
 
-solr_hostname = index.living-atlas.wk
-solr_url = https://index.living-atlas.wk:8983/solr/biocache
-solr_base_url = https://index.living-atlas.wk:8983
+solr_hostname = index.living-atlas.ad
+solr_url = https://index.living-atlas.ad:8983/solr/biocache
+solr_base_url = https://index.living-atlas.ad:8983
 solr_context_path = 
-solr_host = index.living-atlas.wk
+solr_host = index.living-atlas.ad
 solr_port = 8983
 
 solr_heap = 8g
 
-sandbox_hostname = living-atlas.wk
-sandbox_url = https://living-atlas.wk/sandbox
-sandbox_base_url = https://living-atlas.wk
+sandbox_hostname = living-atlas.ad
+sandbox_url = https://living-atlas.ad/sandbox
+sandbox_base_url = https://living-atlas.ad
 sandbox_context_path = /sandbox
 
 ################# Logger Service ############
 
-logger_hostname = 
-logger_url = https://
-logger_base_url = https://
+logger_hostname = logger.living-atlas.ad
+logger_url = https://logger.living-atlas.ad
+logger_base_url = https://logger.living-atlas.ad
 logger_context_path = 
 logger_db_name = logger
 logger_db_username = logger_user
@@ -193,8 +193,8 @@ logger_db_hostname = localhost
 
 ############### Auth Server #########
 
-auth_base_url = https://auth.living-atlas.wk
-auth_cas_url = https://auth.living-atlas.wk/cas
+auth_base_url = https://auth.living-atlas.ad
+auth_cas_url = https://auth.living-atlas.ad/cas
 
 ####### When near the GBIF building (e.g. in Europe) the GBIF nexus will likely be fastest #########
 
@@ -207,14 +207,14 @@ sds_enabled = false
 
 webserver_nginx=true
 ssl=true
-nginx_vhost_fragments_to_clear=["living-atlas.wk"]
+nginx_vhost_fragments_to_clear=["living-atlas.ad"]
 
 ############### Biocache CLI options ###############
 
 biocache_opts = -Xmx1g -Xms1g
 
 ############## Base header / footer ###############
-header_and_footer_baseurl = https://living-atlas.wk
+header_and_footer_baseurl = https://living-atlas.ad
 
 ###### favicon #######
 skin_favicon = https://www.gbif.org/favicon-16x16.png
@@ -223,32 +223,32 @@ skin_favicon = https://www.gbif.org/favicon-16x16.png
 
 ######### Species list ##############
 
-specieslist_hostname = 
-specieslist_url = https://
-specieslist_base_url = https://
+specieslist_hostname = lists.living-atlas.ad
+specieslist_url = https://lists.living-atlas.ad
+specieslist_base_url = https://lists.living-atlas.ad
 specieslist_context_path = 
 specieslist_db_hostname = localhost
 specieslist_db_name = specieslists
 specieslist_db_username = specieslists
 specieslist_db_password = password
 collectory_enable_sync = false
-biocache_base_url = https://
-bie_service_base_url = https://
+biocache_base_url = https://biocache.living-atlas.ad
+bie_service_base_url = https://bie-ws.living-atlas.ad
 field_guide_base_url =
 
 
 
 ############# BIE index ################
 
-bie_index_base_url = https://
+bie_index_base_url = https://bie-ws.living-atlas.ad
 bie_index_context_path = 
-bie_index_hostname = 
+bie_index_hostname = bie-ws.living-atlas.ad
 
 index_live_url = http://localhost:8983/solr/bie
 index_offline_url = http://localhost:8983/solr/bie-offline
 
 biocache_solr_url = http://localhost:8983/solr/biocache
-collectory_url = https://
+collectory_url = https://collectory.living-atlas.ad
 
 disable_cas = true
 bypass_cas = true
@@ -259,23 +259,23 @@ index_images = true
 
 bie_skin_layout = generic
 bie_hub = ala-bie
-bie_hub_base_url = https://
+bie_hub_base_url = https://bie.living-atlas.ad
 bie_hub_context_path = 
-bie_hub_hostname = 
-species_list_url = https://
+bie_hub_hostname = bie.living-atlas.ad
+species_list_url = https://lists.living-atlas.ad
 sightings_url =
 alerts_url =
 spatial_url =
 
-bie_base_url = https://
-ala_base_url = https://living-atlas.wk
+bie_base_url = https://bie.living-atlas.ad
+ala_base_url = https://living-atlas.ad
 
 ####### Images #######
 
-images_url = https://
-images_base_url = https://
+images_url = https://images.living-atlas.ad
+images_base_url = https://images.living-atlas.ad
 images_context_path = 
-images_hostname = 
+images_hostname = images.living-atlas.ad
 images_db_password = images
 images_db_username = images
 
@@ -283,18 +283,18 @@ images_db_username = images
 
 ####### Regions #######
 
-regions_hostname = 
-regions_base_url = https://
+regions_hostname = regions.living-atlas.ad
+regions_base_url = https://regions.living-atlas.ad
 regions_context_path = 
 
 regions_map_bounds = []
 regions_map_height =
-spatial_base_url=https://spatial.living-atlas.wk
-spatial_base_url_ws=https://spatial.living-atlas.wk/ws
+spatial_base_url=https://spatial.living-atlas.ad
+spatial_base_url_ws=https://spatial.living-atlas.ad/ws
 alerts_base_url=
-geoserver_base_url=https://spatial.living-atlas.wk/geoserver
-biocache_records_url=https://
-biocache_service_url = https://
+geoserver_base_url=https://spatial.living-atlas.ad/geoserver
+biocache_records_url=https://biocache.living-atlas.ad
+biocache_service_url = https://biocache-ws.living-atlas.ad
 
 
 

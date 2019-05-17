@@ -15,7 +15,16 @@
 [ala-demo]
 <%= LA_domain %>
 
-[ala-demo:vars]
+<% if (LA_services_machines.length > 0) { %>
+# FIXME: This service name maybe is not correct, check for instance
+# ala-install/ansible/inventories/vagrant_all or standalone playbooks
+<% } %>
+<% for(var i=0; i < LA_services_machines.length; i++) { %>
+[<%= LA_services_machines[i].service %>]
+<%= LA_services_machines[i].machine %>
+<% } %>
+
+[all:vars]
 is_vagrant=false
 # Mounted storage is usually /mnt on EC2. Create a symlink to /mnt -> /data
 data_dir=/data
@@ -36,26 +45,26 @@ biocache_db_type = cassandra3
 biocache_db_port = 9042
 cassandra_listen_host = localhost
 biocache_service_hostname = <%= LA_biocache_service_hostname %>
-biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>
-biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_hostname %>
+biocache_service_url = <%= LA_biocache_service_url %><%= LA_biocache_service_path %>
+biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %>
 biocache_service_context_path = <%= LA_biocache_service_path %>
 logging_enabled = true
 default_country =
 layers_service_url =
 layers_service_sampling = false
 enable_lists = true
-lists_service_url = <%= LA_urls_prefix %><%= LA_lists_hostname %><%= LA_lists_path %>
+lists_service_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 registry_api_key = dummy-registry-api-key
 commonname_lang = en
 media_store_local = false
-media_store_url=<%= LA_urls_prefix %><%= LA_images_hostname %><%= LA_images_path %>
+media_store_url=<%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>
 download_dir=/data/biocache-download
 
 ####################### Hub ###################################################
 
 biocache_hub_hostname = <%= LA_ala_hub_hostname %>
-biocache_hub_url = <%= LA_urls_prefix %><%= LA_ala_hub_hostname %><%= LA_ala_hub_path %>
-biocache_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_hostname %>
+biocache_hub_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
+biocache_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %>
 biocache_hub_context_path = <%= LA_ala_hub_path %>
 userdetails_url = https://<%= LA_cas_hostname %>/userdetails/userDetails
 
@@ -82,15 +91,15 @@ skin_layout = generic
 skin_fluid_layout = true
 
 use_ala_image_service = true
-image_service_url = <%= LA_urls_prefix %><%= LA_images_hostname %><%= LA_images_path %>
-image_service_viewer_url = <%= LA_urls_prefix %><%= LA_images_hostname %><%= LA_images_path %>/image/viewer?imageId=
-image_service_metadata_url = <%= LA_urls_prefix %><%= LA_images_hostname %><%= LA_images_path %>/image/details?imageId=
+image_service_url = <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>
+image_service_viewer_url = <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/image/viewer?imageId=
+image_service_metadata_url = <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/image/details?imageId=
 alwaysshow_imagetab = true
 
 use_download_plugin=true
-downloads_indexed_download_url=<%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>/occurrences/offline/download
-downloads_checklist_download_url=<%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>/occurrences/facets/download
-downloads_indexed_fields_url=<%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>/index/fields
+downloads_indexed_download_url=<%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>/occurrences/offline/download
+downloads_checklist_download_url=<%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>/occurrences/facets/download
+downloads_indexed_fields_url=<%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>/index/fields
 downloads_fieldguide_download_url =
 downloads_static_downloads_url =
 downloads_terms_of_use =
@@ -99,9 +108,9 @@ download_solr_only = true
 ####################### Collectory ############################################
 
 collectory_hostname = <%= LA_collectory_hostname %>
-collectory_url = <%= LA_urls_prefix %><%= LA_collectory_hostname %><%= LA_collectory_path %>
-collectory_service_url = <%= LA_urls_prefix %><%= LA_collectory_hostname %><%= LA_collectory_path %>/ws
-collectory_base_url = <%= LA_urls_prefix %><%= LA_collectory_hostname %>
+collectory_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
+collectory_service_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/ws
+collectory_base_url = <%= LA_urls_prefix %><%= LA_collectory_url %>
 collectory_context_path = <%= LA_collectory_path %>
 collectory_db_host_address = localhost
 collectory_db_host = localhost
@@ -159,10 +168,10 @@ api_key_check_enabled = false
 gbifApiUrl = http://api.gbif.org/v1
 
 # Logger URL
-logger_webservice_url = <%= LA_urls_prefix %><%= LA_logger_hostname %><%= LA_logger_path %>/service
+logger_webservice_url = <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/service
 
 # Species list tool
-species_list_tool_url = <%= LA_urls_prefix %><%= LA_lists_hostname %><%= LA_lists_path %>
+species_list_tool_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 
 ####################### SOLR #######################
 
@@ -183,8 +192,8 @@ sandbox_context_path = /sandbox
 ################# Logger Service ############
 
 logger_hostname = <%= LA_logger_hostname %>
-logger_url = <%= LA_urls_prefix %><%= LA_logger_hostname %><%= LA_logger_path %>
-logger_base_url = <%= LA_urls_prefix %><%= LA_logger_hostname %>
+logger_url = <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>
+logger_base_url = <%= LA_urls_prefix %><%= LA_logger_url %>
 logger_context_path = <%= LA_logger_path %>
 logger_db_name = logger
 logger_db_username = logger_user
@@ -232,23 +241,23 @@ skin_favicon = https://www.gbif.org/favicon-16x16.png
 ######### Species list ##############
 
 specieslist_hostname = <%= LA_lists_hostname %>
-specieslist_url = <%= LA_urls_prefix %><%= LA_lists_hostname %><%= LA_lists_path %>
-specieslist_base_url = <%= LA_urls_prefix %><%= LA_lists_hostname %>
+specieslist_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+specieslist_base_url = <%= LA_urls_prefix %><%= LA_lists_url %>
 specieslist_context_path = <%= LA_lists_path %>
 specieslist_db_hostname = localhost
 specieslist_db_name = specieslists
 specieslist_db_username = specieslists
 specieslist_db_password = password
 collectory_enable_sync = false
-biocache_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_hostname %><%= LA_ala_hub_path %>
-bie_service_base_url = <%= LA_urls_prefix %><%= LA_bie_index_hostname %><%= LA_bie_index_path %>
+biocache_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
+bie_service_base_url = <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
 field_guide_base_url =
 
 <% } %>
 
 ############# BIE index ################
 
-bie_index_base_url = <%= LA_urls_prefix %><%= LA_bie_index_hostname %>
+bie_index_base_url = <%= LA_urls_prefix %><%= LA_bie_index_url %>
 bie_index_context_path = <%= LA_bie_index_path %>
 bie_index_hostname = <%= LA_bie_index_hostname %>
 
@@ -256,7 +265,7 @@ index_live_url = http://localhost:8983/solr/bie
 index_offline_url = http://localhost:8983/solr/bie-offline
 
 biocache_solr_url = http://localhost:8983/solr/biocache
-collectory_url = <%= LA_urls_prefix %><%= LA_collectory_hostname %><%= LA_collectory_path %>
+collectory_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
 
 disable_cas = true
 bypass_cas = true
@@ -267,21 +276,21 @@ index_images = true
 
 bie_skin_layout = generic
 bie_hub = ala-bie
-bie_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_hostname %>
+bie_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %>
 bie_hub_context_path = <%= LA_ala_bie_path %>
 bie_hub_hostname = <%= LA_ala_bie_hostname %>
-species_list_url = <%= LA_urls_prefix %><%= LA_lists_hostname %><%= LA_lists_path %>
+species_list_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 sightings_url =
 alerts_url =
 spatial_url =
 
-bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_hostname %><%= LA_ala_bie_path %>
+bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
 ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
 
 ####### Images #######
 
 images_url = <%= LA_urls_prefix %><%= LA_images_hostname %>
-images_base_url = <%= LA_urls_prefix %><%= LA_images_hostname %>
+images_base_url = <%= LA_urls_prefix %><%= LA_images_url %>
 images_context_path = <%= LA_images_path %>
 images_hostname = <%= LA_images_hostname %>
 images_db_password = images
@@ -292,7 +301,7 @@ images_db_username = images
 ####### Regions #######
 
 regions_hostname = <%= LA_regions_hostname %>
-regions_base_url = <%= LA_urls_prefix %><%= LA_regions_hostname %>
+regions_base_url = <%= LA_urls_prefix %><%= LA_regions_url %>
 regions_context_path = <%= LA_regions_path %>
 
 regions_map_bounds = []
@@ -301,8 +310,8 @@ spatial_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>
 spatial_base_url_ws=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws
 alerts_base_url=
 geoserver_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/geoserver
-biocache_records_url=<%= LA_urls_prefix %><%= LA_ala_hub_hostname %><%= LA_ala_hub_path %>
-biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_hostname %><%= LA_biocache_service_path %>
+biocache_records_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
+biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 
 <% } %>
 

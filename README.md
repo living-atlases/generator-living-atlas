@@ -69,7 +69,7 @@ Then generate your new project:
 yo living-atlas
 ```
 
-You can use `--debug` to see some debug info.
+You can use `--debug` to see some debug info. And `--replay` to use all the previous responses and regenerate the inventories.
 
 ## Screenshots
 
