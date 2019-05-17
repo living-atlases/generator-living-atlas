@@ -56,12 +56,30 @@ const machinesAndPaths = {};
 
 const servicesAndMachines = [];
 
+const servicesRolsMap = {
+  ala_bie: "bie-hub",
+  bie_index: "bie-index",
+  biocache: "biocache-hub",
+  biocache_service: "biocache-service-clusterdb",
+  collectory: "collectory",
+  images: "image-service",
+  logger: "logger-service",
+  regions: "regions",
+  solr: "solr7-server",
+  regions: "regiones",
+  lists: "species-list"
+};
+
 const storeMachine = (name, machine) =>
   new Promise(resolve => {
     if (isCorrectDomain(machine)) {
       if (!machines.has(machine)) machines.add(machine);
       if (name !== "main") {
-        servicesAndMachines.push({ service: name, machine });
+        servicesAndMachines.push({
+          service: name,
+          machine,
+          map: servicesRolsMap[name]
+        });
       }
       if (debug) console.log(machines);
     }
@@ -153,7 +171,7 @@ function PromptUrlFor(name, path, when) {
   this.validate = input =>
     new Promise(resolve => {
       // Check if is correct better...
-      if (input.match(/(http[s]*:\/\/)[^/]*/)) {
+      if (validateDomain(input)) {
         resolve(true);
       } else {
         resolve("Please write a valid url");

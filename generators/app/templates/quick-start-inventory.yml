@@ -16,11 +16,9 @@
 <%= LA_domain %>
 
 <% if (LA_services_machines.length > 0) { %>
-# FIXME: This service name maybe is not correct, check for instance
-# ala-install/ansible/inventories/vagrant_all or standalone playbooks
 <% } %>
 <% for(var i=0; i < LA_services_machines.length; i++) { %>
-[<%= LA_services_machines[i].service %>]
+[<%= LA_services_machines[i].map %>]
 <%= LA_services_machines[i].machine %>
 <% } %>
 

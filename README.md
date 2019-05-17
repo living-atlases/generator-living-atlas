@@ -69,7 +69,7 @@ Then generate your new project:
 yo living-atlas
 ```
 
-You can use `--debug` to see some debug info. And `--replay` to use all the previous responses and regenerate the inventories.
+You can use `--debug` to see some debug info. And `--replay` to use all the previous responses and regenerate the inventoriesG.
 
 ## Screenshots
 
@@ -86,6 +86,21 @@ Differences beween two runs:
 We can use these inventories as a base for extracting documentation via `doxygen` (or similar):
 
 ![](doxygen-ansible-reference.png)
+
+### TODO
+
+- [x] Add basic services (`collectory`, `ala-hub`, etc).
+- [x] Add domain/context and service subdomains support
+- [x] Add `http`/`https` urls support (this does **not** include `ssl` certificates management)
+- [X] Add `regions` service
+- [X] Add `species-list` service
+- [X] Add `spatial` service
+- [x] Disable caches when using the same host for collectory & biocache
+- [ ] Improve README hosts
+- [ ] Improve README playbook commands
+- [ ] Add `CAS` 5 service
+- [ ] Better testing
+
 
 ## Getting To Know Yeoman
 
