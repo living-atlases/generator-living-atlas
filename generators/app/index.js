@@ -43,7 +43,7 @@ const validateDomain = (input, name, store) =>
   });
 
 /*
-  Set of used machines
+   Set of used machines
 */
 const machines = new Set();
 
@@ -94,16 +94,19 @@ const storeMachine = (name, machine) =>
     resolve(machine);
   });
 
-function PromptSubdomainFor(name, subdomain) {
+function PromptSubdomainFor(name, subdomain, when) {
   this.store = defaultStore;
   this.type = "confirm";
   const varName = `LA_${name}_uses_subdomain`;
   this.name = varName;
   this.message = a => defUseSubdomainPrompt(a, subdomain);
   this.default = a => defUseSubdomain(a);
+  if (when) {
+    this.when = when;
+  }
 }
 
-function PromptHostnameFor(name, subdomain, previous, when) {
+function PromptHostnameFor(name, subdomain, when) {
   this.store = defaultStore;
   this.type = "list";
   const varName = `LA_${name}_hostname`;
@@ -138,17 +141,21 @@ function PromptHostnameFor(name, subdomain, previous, when) {
   // this.validate = input => validateDomain(input, name, true);
 }
 
-function PromptHostnameInputFor(name) {
+function PromptHostnameInputFor(name, when) {
   this.store = defaultStore;
   this.type = "input";
   const varName = `LA_${name}_hostname`;
   this.name = varName;
   this.when = a => {
+    if (typeof when !== "undefined" && !when(a)) {
+      return false;
+    }
     if (a[varName] === "other") {
       return true;
     }
     // Store previous hostname
     storeMachine(name, a[varName]);
+    // And don't ask again
     return false;
   };
   this.validate = input => validateDomain(input, name, true);
@@ -171,6 +178,9 @@ function PromptUrlFor(name, path, when) {
     return `${http}${samplePrefix}${a.LA_domain}${sampleSuffix}`;
   };
   this.when = a => {
+    if (when && !when(a)) {
+      return false;
+    }
     const hostname = a[varHostname];
     const hostnameIsASubdomain = isASubDomain(hostname);
     const hostnameIsNotASubdomain = !hostnameIsASubdomain;
@@ -405,27 +415,31 @@ module.exports = class extends Generator {
       new PromptUrlFor("bie_index", "bie-index"),
       new PromptPathFor("bie_index", "bie-index"),
 
-      new PromptSubdomainFor("lists", "specieslists"),
-      new PromptHostnameFor("lists", "lists", a => a.LA_use_species_lists),
-      new PromptHostnameInputFor("lists"),
-      new PromptUrlFor("lists", "specieslists", a => a.LA_use_species_lists),
-      new PromptPathFor("lists", "specieslists", a => a.LA_use_species_lists),
-
       new PromptSubdomainFor("images", "images"),
       new PromptHostnameFor("images", "images"),
       new PromptHostnameInputFor("images"),
       new PromptUrlFor("images", "images"),
       new PromptPathFor("images", "images"),
 
-      new PromptSubdomainFor("regions", "regions"),
+      new PromptSubdomainFor(
+        "lists",
+        "specieslists",
+        a => a.LA_use_species_lists
+      ),
+      new PromptHostnameFor("lists", "lists", a => a.LA_use_species_lists),
+      new PromptHostnameInputFor("lists", a => a.LA_use_species_lists),
+      new PromptUrlFor("lists", "specieslists", a => a.LA_use_species_lists),
+      new PromptPathFor("lists", "specieslists", a => a.LA_use_species_lists),
+
+      new PromptSubdomainFor("regions", "regions", a => a.LA_use_regions),
       new PromptHostnameFor("regions", "regions", a => a.LA_use_regions),
-      new PromptHostnameInputFor("regions"),
+      new PromptHostnameInputFor("regions", a => a.LA_use_regions),
       new PromptUrlFor("regions", "regions", a => a.LA_use_regions),
       new PromptPathFor("regions", "regions", a => a.LA_use_regions),
 
       new PromptSubdomainFor("logger", "logger"),
       new PromptHostnameFor("logger", "logger"),
-      new PromptHostnameInputFor("logger", "logger"),
+      new PromptHostnameInputFor("logger"),
       new PromptUrlFor("logger"),
       new PromptPathFor("logger", "logger-service"),
 
