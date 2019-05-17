@@ -15,10 +15,8 @@
 [ala-demo]
 <%= LA_domain %>
 
-<% if (LA_services_machines.length > 0) { %>
-<% } %>
 <% for(var i=0; i < LA_services_machines.length; i++) { %>
-[<%= LA_services_machines[i].map %>]
+[<%= LA_services_machines[i].map.group %>]
 <%= LA_services_machines[i].machine %>
 <% } %>
 
@@ -50,8 +48,8 @@ logging_enabled = true
 default_country =
 layers_service_url =
 layers_service_sampling = false
-enable_lists = true
-lists_service_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+enable_lists = <%= LA_use_species_lists %>
+<% if (LA_use_species_lists) { %>lists_service_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
 registry_api_key = dummy-registry-api-key
 commonname_lang = en
 media_store_local = false
@@ -169,13 +167,15 @@ gbifApiUrl = http://api.gbif.org/v1
 logger_webservice_url = <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/service
 
 # Species list tool
+<% if (LA_use_species_lists) { %>
 species_list_tool_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+<% } %>
 
 ####################### SOLR #######################
 
 solr_hostname = <%= LA_solr_hostname %>
-solr_url = <%= LA_urls_prefix %><%= LA_solr_hostname %>:8983/solr/biocache
-solr_base_url = <%= LA_urls_prefix %><%= LA_solr_hostname %>:8983
+solr_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/biocache
+solr_base_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983
 solr_context_path = <%= LA_solr_path %>
 solr_host = <%= LA_solr_hostname %>
 solr_port = 8983
@@ -277,7 +277,7 @@ bie_hub = ala-bie
 bie_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %>
 bie_hub_context_path = <%= LA_ala_bie_path %>
 bie_hub_hostname = <%= LA_ala_bie_hostname %>
-species_list_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+<% if (LA_use_species_lists) { %>species_list_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %> <% } %>
 sightings_url =
 alerts_url =
 spatial_url =

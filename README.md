@@ -96,6 +96,8 @@ We can use these inventories as a base for extracting documentation via `doxygen
 - [X] Add `species-list` service
 - [X] Add `spatial` service
 - [x] Disable caches when using the same host for collectory & biocache
+- [ ] use `--limit` with hostnames
+- [ ] document `--skip`
 - [ ] Improve README hosts
 - [ ] Improve README playbook commands
 - [ ] Add `CAS` 5 service

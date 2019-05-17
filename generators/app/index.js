@@ -1,4 +1,4 @@
-/* eslint camelcase: ["error", {allow: ["^LA_*"]}], no-warning-comments: 0 */
+/* eslint camelcase: ["error", {properties: "never"}], no-warning-comments: 0 */
 
 "use strict";
 const Generator = require("yeoman-generator");
@@ -7,6 +7,7 @@ const yosay = require("onionsay");
 const parseDomain = require("parse-domain");
 
 let defaultStore = false;
+let logger;
 
 const defUseSubdomain = a => {
   return a.LA_collectory_uses_subdomain;
@@ -28,12 +29,15 @@ const defUseSubdomainPrompt = (a, service) => {
   }://${chalk.keyword("orange")("subdomain")}.${a.LA_domain} or not?`;
 };
 
-const validateDomain = input =>
+const validateDomain = (input, name, store) =>
   new Promise(resolve => {
-    if (isCorrectDomain(input) || input === "other") {
+    logger(`Validate ${input} ${name}`);
+    const isValid = isCorrectDomain(input);
+    if (isValid && store) storeMachine(name, input);
+    if (isValid || input === "other") {
       resolve(true);
     } else {
-      if (debug) console.log(input);
+      if (debug) logger(input);
       resolve("You need to provide some-example-domain.org");
     }
   });
@@ -57,23 +61,27 @@ const machinesAndPaths = {};
 const servicesAndMachines = [];
 
 const servicesRolsMap = {
-  ala_bie: "bie-hub",
-  bie_index: "bie-index",
-  biocache: "biocache-hub",
-  biocache_service: "biocache-service-clusterdb",
-  collectory: "collectory",
-  images: "image-service",
-  logger: "logger-service",
-  regions: "regions",
-  solr: "solr7-server",
-  regions: "regiones",
-  lists: "species-list"
+  ala_bie: { group: "bie-hub", playbook: "bie-hub" },
+  bie_index: { group: "bie-index", playbook: "bie-index" },
+  ala_hub: { group: "biocache-hub", playbook: "biocache-hub-standalone" },
+  biocache_service: {
+    group: "biocache-service-clusterdb",
+    playbook: "biocache-service-clusterdb"
+  },
+  collectory: { group: "collectory", playbook: "collectory-standalone" },
+  images: { group: "image-service", playbook: "image-service" },
+  logger: { group: "logger-service", playbook: "logger-standalone" },
+  regions: { group: "regions", playbook: "regions-standalone" },
+  solr: { group: "solr7-server", playbook: "solr7-standalone" },
+  lists: { group: "species-list", playbook: "species-list-standalone" }
 };
 
 const storeMachine = (name, machine) =>
   new Promise(resolve => {
+    if (debug) logger(`Store: ${name} -> ${machine}`);
     if (isCorrectDomain(machine)) {
       if (!machines.has(machine)) machines.add(machine);
+      // TODO map main in servicesRolMap also
       if (name !== "main") {
         servicesAndMachines.push({
           service: name,
@@ -81,7 +89,7 @@ const storeMachine = (name, machine) =>
           map: servicesRolsMap[name]
         });
       }
-      if (debug) console.log(machines);
+      if (debug) logger(machines);
     }
     resolve(machine);
   });
@@ -118,14 +126,16 @@ function PromptHostnameFor(name, subdomain, previous, when) {
     ) {
       choices.unshift(previousHostname);
     }
-    if (debug) console.log(choices);
+    if (debug) logger(choices);
     return choices;
   };
   if (when) {
     this.when = when;
   }
-  this.filter = input => storeMachine(name, input);
-  this.validate = input => validateDomain(input);
+  // This does not work:
+  // this.filter = input => storeMachine(name, input);
+  // https://github.com/SBoudrias/Inquirer.js/issues/383
+  // this.validate = input => validateDomain(input, name, true);
 }
 
 function PromptHostnameInputFor(name) {
@@ -133,9 +143,15 @@ function PromptHostnameInputFor(name) {
   this.type = "input";
   const varName = `LA_${name}_hostname`;
   this.name = varName;
-  this.when = a => a[varName] === "other";
-  this.filter = input => storeMachine(name, input);
-  this.validate = input => validateDomain(input);
+  this.when = a => {
+    if (a[varName] === "other") {
+      return true;
+    }
+    // Store previous hostname
+    storeMachine(name, a[varName]);
+    return false;
+  };
+  this.validate = input => validateDomain(input, name, true);
 }
 
 function PromptUrlFor(name, path, when) {
@@ -168,15 +184,7 @@ function PromptUrlFor(name, path, when) {
     if (when) return shouldIAsk && when(a);
     return shouldIAsk;
   };
-  this.validate = input =>
-    new Promise(resolve => {
-      // Check if is correct better...
-      if (validateDomain(input)) {
-        resolve(true);
-      } else {
-        resolve("Please write a valid url");
-      }
-    });
+  this.validate = input => validateDomain(input, name, false);
 }
 
 function PromptPathFor(name, path, when) {
@@ -184,19 +192,25 @@ function PromptPathFor(name, path, when) {
   const varName = `LA_${name}_path`;
   const varUrl = `LA_${name}_url`;
   const varUsesSubdomain = `LA_${name}_uses_subdomain`;
+  const varHostname = `LA_${name}_hostname`;
   this.type = "input";
   this.name = varName;
   this.message = a => {
     // Warn: dup code below
     const samplePath = a[varUsesSubdomain]
-      ? ""
+      ? "/"
       : `/${typeof path === "undefined" ? "" : path}`;
-    return `Which context path you wanna use for this service (like ${chalk.keyword(
-      "orange"
-    )(a[varUrl])}${samplePath} ?`;
+    return `Which context /path you wanna use for this service (like ${
+      a[varUrl]
+    }${chalk.keyword("orange")(samplePath)}) ?`;
   };
-  this.default = a =>
-    a[varUsesSubdomain] ? "/" : `/${typeof path === "undefined" ? "" : path}`;
+  this.default = a => {
+    const hostname = a[varHostname];
+    const rootUsed =
+      typeof machinesAndPaths[hostname] !== "undefined" &&
+      machinesAndPaths[hostname]["/"];
+    return rootUsed ? `/${typeof path === "undefined" ? "" : path}` : "/";
+  };
   if (when) {
     this.when = when;
   }
@@ -239,11 +253,12 @@ module.exports = class extends Generator {
 
     const previousConfigAll = this.config.getAll();
     previousConfig =
-      typeof previousConfigAll !== "undefined"
-        ? previousConfigAll.promptValues
-        : [];
+      typeof previousConfigAll === "undefined"
+        ? []
+        : previousConfigAll.promptValues;
     if (debug) this.log("Current config:");
-    if (debug) this.log(this.config.getAll());
+    if (debug) this.log(previousConfig);
+    logger = this.log;
   }
 
   async prompting() {
@@ -294,8 +309,7 @@ module.exports = class extends Generator {
         name: "LA_domain",
         message: "What is your LA node main domain?",
         default: answers => `${answers.LA_pkg_name}.org`,
-        filter: input => storeMachine("main", input),
-        validate: input => validateDomain(input)
+        validate: input => validateDomain(input, "main", true)
       },
       {
         store: true,
@@ -415,31 +429,13 @@ module.exports = class extends Generator {
       new PromptUrlFor("logger"),
       new PromptPathFor("logger", "logger-service"),
 
+      new PromptSubdomainFor("solr", "solr"),
+      new PromptHostnameFor("solr", "index"),
+      new PromptHostnameInputFor("solr"),
+      new PromptUrlFor("solr"),
+      new PromptPathFor("solr", "solr"),
+
       // TODO ask for spatial subdomain
-
-      {
-        store: defaultStore,
-        type: "confirm",
-        name: "LA_solr_uses_subdomain",
-        message: a => defUseSubdomainPrompt(a, "solr"),
-        default: a => defUseSubdomain(a)
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_solr_hostname",
-        message: "LA solr hostname",
-        default: a =>
-          a.LA_solr_uses_subdomain ? `index.${a.LA_domain}` : a.LA_domain
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "LA_solr_path",
-        default: "/solr",
-        when: a => !a.LA_solr_uses_subdomain
-      },
-
       {
         store: true,
         type: "input",
