@@ -31,7 +31,7 @@ const defUseSubdomainPrompt = (a, service) => {
 
 const validateDomain = (input, name, store) =>
   new Promise(resolve => {
-    logger(`Validate ${input} ${name}`);
+    if (debug) logger(`Validate ${input} ${name}`);
     const isValid = isCorrectDomain(input);
     if (isValid && store) storeMachine(name, input);
     if (isValid || input === "other") {
