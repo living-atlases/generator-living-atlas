@@ -7,7 +7,7 @@ These are some generated inventories to use to set up some machines on EC2 or ot
 To use this, add the following into your `/etc/hosts` (of your working machine, and new service machine/s) and/or in your <%= LA_domain %> `DNS`. So these hostname should be accessible from your local working machine but also remotely between each machine/s so the hostname should resolve correctly.
 
 ```<% let i=12; LA_machines.forEach(machine => { %>
-12.12.12.<%= i %>   <%= machine %><% }); i++ %>
+12.12.12.<%= i %>  <%= machine %><%; i++ }) %>
 <% if (LA_use_CAS) { %>12.12.12.<%= i %>  <%= LA_cas_hostname %><% }; i++ %>
 <% if (LA_use_spatial) { %>12.12.12.<%= i %>  <%= `spatial.${LA_domain}` %><% } %>
 ```
