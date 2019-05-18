@@ -56,7 +56,7 @@ cd /tmp # or other directory
 yo living-atlas
 ```
 
-If we publish this generator in some the future:
+If we decide to publish this generator in the future, the normal use is like:
 
 ```bash
 npm install -g yo
@@ -68,8 +68,10 @@ Then generate your new project:
 ```bash
 yo living-atlas
 ```
+### Options
 
-You can use `--debug` to see some debug info. And `--replay` to use all the previous responses and regenerate the inventoriesG.
+- You can use `--debug` to see some debug info.
+- And `--replay` to use all the previous responses and regenerate the inventories with some modification.
 
 ## Screens
 
