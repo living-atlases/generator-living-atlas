@@ -71,9 +71,11 @@ yo living-atlas
 
 You can use `--debug` to see some debug info. And `--replay` to use all the previous responses and regenerate the inventoriesG.
 
-## Screenshots
+## Screens
 
-![](yo-living-atlas.png)
+A screen recording re-running the generator but using another solr hostname and switching to use SSL (see the differences in the generated inventories):
+
+![](yo-living-atlas.gif)
 
 After running the inventories following the instructions from the generated README over two VMs (like in the Paris 2019 Workshop):
 
@@ -96,12 +98,15 @@ We can use these inventories as a base for extracting documentation via `doxygen
 - [X] Add `species-list` service
 - [X] Add `spatial` service
 - [x] Disable caches when using the same host for collectory & biocache
-- [ ] use `--limit` with hostnames
+- [x] use `--limit` with hostnames
+- [x] Improve README hosts
+- [x] Improve README playbook commands
+- [ ] Add ansible wrapper with/wo
+docopt?
 - [ ] document `--skip`
-- [ ] Improve README hosts
-- [ ] Improve README playbook commands
 - [ ] Add `CAS` 5 service
 - [ ] Better testing
+- [ ] Use git to track your inventories changes (recommended) ?
 
 
 ## Getting To Know Yeoman
