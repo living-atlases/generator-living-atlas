@@ -36,4 +36,36 @@ ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name 
 <% for(var j=0; j < LA_services_machines.length; j++) { %>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/quick-start-inventory.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
 ```
-Also there is the utility `ansiblew` an `ansible-playbook` wrapper that can help you to exec this commands and can be easily modificable by you to your needs. It depends on `python-docopt` package.
+#### ansible-playbook wrapper
+
+Also there is the utility `ansiblew` an `ansible-playbook` wrapper that can help you to exec this commands and can be easily modificable by you to your needs. It depends on `python-docopt` package. Help output:
+
+```
+$ ./ansiblew -h
+
+This is an ansible wrapper to help you to exec the different playbooks with your
+inventories.
+
+By default don't exec nothing only show the commands. With --nodryrun you can exec
+the real commands.
+
+With 'main' only operates over your main host.
+
+Usage:
+   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ main | collectory | ala_hub | biocache_service | ala_bie | bie_index | images | lists | regions | logger | solr | spatial |  all ]
+   ansiblew -h | --help
+   ansiblew -v | --version
+
+Options:
+  --nodryrun             Exec the ansible-playbook comands
+  -p --properties        Only update properties
+  -l --limit=<hosts>     Limit to some inventories hosts
+  -s --skip=<tags>       Skip tags
+  -h --help              Show help options.
+  -d --debug             Show debug info.
+  -v --version           Show ansiblew version.
+----
+ansiblew 0.1.0
+Copyright (C) 2019 living-atlases.gbif.org
+Apache 2.0 License
+```
