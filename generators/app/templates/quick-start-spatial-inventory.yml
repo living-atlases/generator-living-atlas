@@ -13,19 +13,19 @@
 ########################################################################################################################
 
 [spatial]
-spatial.<%= LA_domain %>
+<%= LA_spatial_hostname %>
 
 [geoserver]
-spatial.<%= LA_domain %>
+<%= LA_spatial_hostname %>
 
 [geonetwork]
-spatial.<%= LA_domain %>
+<%= LA_spatial_hostname %>
 
 [spatial-hub]
-spatial.<%= LA_domain %>
+<%= LA_spatial_hostname %>
 
 [spatial-service]
-spatial.<%= LA_domain %>
+<%= LA_spatial_hostname %>
 
 ###
 # Geoserver
@@ -36,9 +36,9 @@ is_vagrant=false
 local_repo_dir=~/.ala
 data_dir=/data
 
-geoserver_hostname=spatial.<%= LA_domain %>
-geoserver_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/geoserver
-geoserver_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>
+geoserver_hostname=<%= LA_spatial_hostname %>
+geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
+geoserver_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 geoserver_context_path=/geoserver
 geoserver_app=geoserver
 
@@ -72,9 +72,9 @@ is_vagrant=true
 local_repo_dir=~/.ala
 data_dir=/data
 
-geonetwork_hostname=spatial.<%= LA_domain %>
-geonetwork_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/geonetwork
-geonetwork_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>
+geonetwork_hostname=<%= LA_spatial_hostname %>
+geonetwork_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geonetwork
+geonetwork_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 geonetwork_context_path=/geonetwork
 geonetwork_app=geonetwork
 
@@ -114,12 +114,12 @@ data_dir=/data
 orgNameLong = <%= LA_project_name %>
 orgNameShort = <%= LA_project_shortname %>
 
-spatial_service_hostname=spatial.<%= LA_domain %>
-spatial_service_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws
-spatial_service_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>
+spatial_service_hostname=<%= LA_spatial_hostname %>
+spatial_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
+spatial_service_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 spatial_service_context_path=/ws
 
-layers_service_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws
+layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
 biocache_service_url=<%= LA_urls_prefix %>demo.<%= LA_domain %>/biocache-service
 
 layers_db_host=localhost
@@ -166,13 +166,13 @@ startup_lng = 0
 startup_zoom = 2
 
 spatial_hub_skin_layout=generic
-spatial_hub_hostname=spatial.<%= LA_domain %>
-spatial_hub_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/
-spatial_hub_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>
+spatial_hub_hostname=<%= LA_spatial_hostname %>
+spatial_hub_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/
+spatial_hub_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 spatial_hub_context_path=/
 
-layers_service_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws
-geoserver_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/geoserver
+layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
+geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
 
 sandbox_url=<%= LA_urls_prefix %>sandbox.<%= LA_domain %>/ala-hub
 sandbox_ui_url=<%= LA_urls_prefix %>sandbox.<%= LA_domain %>/datacheck
@@ -202,4 +202,4 @@ favicon_url=https://www.gbif.org/favicon-16x16.png
 collectory_url=<%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
 biocache_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
-sampling_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws
+sampling_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws

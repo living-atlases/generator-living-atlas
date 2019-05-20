@@ -9,7 +9,6 @@ To use this, add the following into your `/etc/hosts` (of your working machine, 
 ```<% let i=12; LA_machines.forEach(machine => { %>
 12.12.12.<%= i %>  <%= machine %><%; i++ }) %>
 <% if (LA_use_CAS) { %>12.12.12.<%= i %>  <%= LA_cas_hostname %><% }; i++ %>
-<% if (LA_use_spatial) { %>12.12.12.<%= i %>  <%= `spatial.${LA_domain}` %><% } %>
 ```
 
 You'll need to replace `12.12.12.1` etc with the IP address of some new Ubuntu 16 instance in your provider.
@@ -36,6 +35,5 @@ export AI=<location-of-your-cloned-ala-install-repo>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/quick-start-inventory.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
 <% for(var j=0; j < LA_services_machines.length; j++) { %>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/quick-start-inventory.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
-<% if (LA_use_spatial) { %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/quick-start-spatial-inventory.yml $AI/ansible/spatial.yml<% } %>
 ```
+Also there is the utility `ansiblew` an `ansible-playbook` wrapper that can help you to exec this commands and can be easily modificable by you to your needs. It depends on `python-docopt` package.

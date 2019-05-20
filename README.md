@@ -20,7 +20,7 @@ Ansible is a fantastic tool for manage LA node infrastructures. But nowadays we 
 - There is a lack of more real production-ready inventories (you have to ask for then).
 - `ala-install` has a structure that sometimes is difficult to find some samples or how to start to deploy some service (think in CAS)
 - Many times you have to check the `ansible` generated `config/*properties` for non configured or default properties, search the `ansible` role code for know how to configure these variables, re-run `ansible` with these new variables and re-check the `ansible` `/data/*/config/*properties`.
-- The demo inventory (or the last Paris workshop inventories) are a good sample but not enough for a new production LA node (lack of inventory variables documentation, missing of important services like regions or CAS)
+- The demo inventory (or the last Paris workshop inventories) are a good sample but not enough for a new production LA node (lack of inventory variables documentation, missing of important services like CAS)
 - We have a lack of info about services versions compatibility
 - Sometimes default module versions in inventories or `LATEST` nexus packages are not the correct/latest ones.
 - It would be nice to choose strategies that was usable by ALA too (not only LA nodes) - that might help maintenance.
@@ -33,7 +33,6 @@ If we think that some tool like this can be useful, we can add more functionalit
 
 - Better comments of properties in generated inventories for easy operation & tuning
 - CAS deployment
-- Allow deployment in multiple machines (right now this is only tested using two VMs)
 - Focus in have well maintained these generator and their inventories
 - Autogenerate documentation from the inventories comments with tools like `doxygen`
 - etc
@@ -103,8 +102,7 @@ We can use these inventories as a base for extracting documentation via `doxygen
 - [x] use `--limit` with hostnames
 - [x] Improve README hosts
 - [x] Improve README playbook commands
-- [ ] Add ansible wrapper with/wo
-docopt?
+- [x] Add ansible wrapper
 - [ ] document `--skip`
 - [ ] Add `CAS` 5 service
 - [ ] Better testing

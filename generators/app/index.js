@@ -61,19 +61,42 @@ const machinesAndPaths = {};
 const servicesAndMachines = [];
 
 const servicesRolsMap = {
-  ala_bie: { group: "bie-hub", playbook: "bie-hub" },
-  bie_index: { group: "bie-index", playbook: "bie-index" },
-  ala_hub: { group: "biocache-hub", playbook: "biocache-hub-standalone" },
+  main: { name: "main", group: "ala-demo", playbook: "ala-demo" },
+  ala_bie: { name: "ala_bie", group: "bie-hub", playbook: "bie-hub" },
+  bie_index: { name: "bie_index", group: "bie-index", playbook: "bie-index" },
+  ala_hub: {
+    name: "ala_hub",
+    group: "biocache-hub",
+    playbook: "biocache-hub-standalone"
+  },
   biocache_service: {
+    name: "biocache_service",
     group: "biocache-service-clusterdb",
     playbook: "biocache-service-clusterdb"
   },
-  collectory: { group: "collectory", playbook: "collectory-standalone" },
-  images: { group: "image-service", playbook: "image-service" },
-  logger: { group: "logger-service", playbook: "logger-standalone" },
-  regions: { group: "regions", playbook: "regions-standalone" },
-  solr: { group: "solr7-server", playbook: "solr7-standalone" },
-  lists: { group: "species-list", playbook: "species-list-standalone" }
+  collectory: {
+    name: "collectory",
+    group: "collectory",
+    playbook: "collectory-standalone"
+  },
+  images: { name: "images", group: "image-service", playbook: "image-service" },
+  logger: {
+    name: "logger",
+    group: "logger-service",
+    playbook: "logger-standalone"
+  },
+  regions: {
+    name: "regions",
+    group: "regions",
+    playbook: "regions-standalone"
+  },
+  solr: { name: "solr", group: "solr7-server", playbook: "solr7-standalone" },
+  lists: {
+    name: "lists",
+    group: "species-list",
+    playbook: "species-list-standalone"
+  },
+  spatial: { name: "spatial", group: "spatial", playbook: "spatial" }
 };
 
 const storeMachine = (name, machine) =>
@@ -81,7 +104,6 @@ const storeMachine = (name, machine) =>
     if (debug) logger(`Store: ${name} -> ${machine}`);
     if (isCorrectDomain(machine)) {
       if (!machines.has(machine)) machines.add(machine);
-      // TODO map main in servicesRolMap also
       if (name !== "main") {
         servicesAndMachines.push({
           service: name,
@@ -320,6 +342,7 @@ module.exports = class extends Generator {
         name: "LA_domain",
         message: "What is your LA node main domain?",
         default: answers => `${answers.LA_pkg_name}.org`,
+        filter: input => storeMachine("main", input),
         validate: input => validateDomain(input, "main", true)
       },
       {
@@ -450,13 +473,21 @@ module.exports = class extends Generator {
       new PromptUrlFor("solr"),
       new PromptPathFor("solr", "solr"),
 
-      // TODO ask for spatial subdomain
       {
         store: true,
         type: "input",
         name: "LA_cas_hostname",
-        message: "LA CAS hostname",
+        message: "LA CAS subdomain",
         default: a => `auth.${a.LA_domain}`
+      },
+      {
+        store: true,
+        type: "input",
+        name: "LA_spatial_hostname",
+        message: "LA spatial subdomain",
+        filter: input => storeMachine("spatial", input),
+        when: a => a.LA_use_spatial,
+        default: a => `spatial.${a.LA_domain}`
       }
     ]);
   }
@@ -499,6 +530,12 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath("quick-start-inventory.yml"),
       this.destinationPath(`${dest}/quick-start-inventory.yml`),
+      this.answers
+    );
+
+    this.fs.copyTpl(
+      this.templatePath("ansiblew"),
+      this.destinationPath(`${dest}/ansiblew`),
       this.answers
     );
 

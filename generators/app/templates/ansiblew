@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""This is an ansible wrapper to help you to exec the different playbooks with your
+inventories.
+
+By default don't exec nothing only show the commands. With --nodryrun you can exec
+the real commands.
+
+With 'main' only operates over your main host.
+
+Usage:
+   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ main | <% for(var j=0; j < LA_services_machines.length; j++) { %><%= LA_services_machines[j].map.name %> | <% } %> all ]
+   ansiblew -h | --help
+   ansiblew -v | --version
+
+Options:
+  --nodryrun             Exec the ansible-playbook comands
+  -p --properties        Only update properties
+  -l --limit=<hosts>     Limit to some inventories hosts
+  -s --skip=<tags>       Skip tags
+  -h --help              Show help options.
+  -d --debug             Show debug info.
+  -v --version           Show ansiblew version.
+----
+ansiblew 0.1.0
+Copyright (C) 2019 living-atlases.gbif.org
+Apache 2.0 License
+"""
+from docopt import docopt
+import os
+
+if __name__ == '__main__':
+    args = docopt(__doc__)
+
+    nodryrun = args['--nodryrun']
+    debug = args['--debug']
+    properties = args['--properties']
+    skip = args['--skip']
+    limit = args['--limit']
+    main = args['main']
+    doall = args['all']
+    alainstall = args['--alainstall']
+    cmdPrefix = "echo "
+    extras = ""
+
+    # Add here some additional param for ansible like your ssh key, like:
+    # additionalParams = "--private-key ~/.ssh/MyKey.pem"
+    additionalParams = ""
+
+    if debug:
+        print(args)
+
+    if properties:
+        extras = "%s  --tags properties" % (extras)
+    if skip:
+        extras = "%s --skip-tags %s" % (extras, skip)
+    if debug:
+        extras = "%s --vvvv" % (extras)
+    if nodryrun:
+        cmdPrefix = ""
+
+    if debug:
+        print("Extras: %s" % (extras))
+
+    if main or doall:
+        mainCmd = "%s ansible-playbook %s -u ubuntu -s -i quick-start-inventory.yml %s/ansible/ala-demo.yml %s --limit %s" % (cmdPrefix, additionalParams, alainstall, extras, limit if limit else "<%= LA_domain %>")
+        if nodryrun:
+            os.system("echo %s" % mainCmd)
+        os.system(mainCmd)
+
+    <% for(var j=0; j < LA_services_machines.length; j++) { %>if args['<%= LA_services_machines[j].map.name %>'] or doall:
+        inventory = "quick-start-inventory.yml" if '<%= LA_services_machines[j].map.name %>' != "spatial" else "quick-start-spatial-inventory.yml"
+        otherCmd = "%s ansible-playbook %s -u ubuntu -s -i %s %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s" % (cmdPrefix, additionalParams, inventory, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>")
+        if nodryrun:
+            os.system("echo %s" % otherCmd)
+        os.system(otherCmd)
+
+    <% } %>
