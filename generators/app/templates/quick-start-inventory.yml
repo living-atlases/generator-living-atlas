@@ -84,6 +84,7 @@ map_default_longitude = -3.7038
 map_default_zoom = 5
 
 skin_layout = generic
+# If you don't want fluid layout, leave this option empty
 skin_fluid_layout = true
 
 use_ala_image_service = true
