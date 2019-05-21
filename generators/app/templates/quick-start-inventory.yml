@@ -46,7 +46,8 @@ biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %>
 biocache_service_context_path = <%= LA_biocache_service_path %>
 logging_enabled = true
 default_country =
-layers_service_url =
+<% if (LA_use_spatial) { %>layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws<% } else { %>layers_service_url =<% } %>
+<% if (LA_use_spatial) { %>spatial_layers_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws/fields<% } else { %>spatial.layers.url=<% } %>
 layers_service_sampling = false
 enable_lists = <%= LA_use_species_lists %>
 <% if (LA_use_species_lists) { %>lists_service_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
@@ -54,7 +55,9 @@ registry_api_key = dummy-registry-api-key
 commonname_lang = en
 media_store_local = false
 media_store_url=<%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>
+download_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %>/biocache-download
 download_dir=/data/biocache-download
+<% if (LA_use_spatial) { %>geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver<% } %>
 
 ####################### Hub ###################################################
 
@@ -306,10 +309,12 @@ regions_context_path = <%= LA_regions_path %>
 
 regions_map_bounds = []
 regions_map_height =
-spatial_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>
-spatial_base_url_ws=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/ws
+<% if (LA_use_spatial) { %>
+spatial_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
+spatial_base_url_ws=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
 alerts_base_url=
-geoserver_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/geoserver
+geoserver_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
+<% } %>
 biocache_records_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 <% if (LA_use_spatial) { %>spatial_ws_hostname=<%= LA_spatial_hostname %><% } %>
