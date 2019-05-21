@@ -63,6 +63,7 @@ biocache_hub_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path
 biocache_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %>
 biocache_hub_context_path = <%= LA_ala_hub_path %>
 userdetails_url = https://<%= LA_cas_hostname %>/userdetails/userDetails
+userdetails_base_url = https://<%= LA_cas_hostname %>/userdetails
 
 google_apikey = AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk
 
@@ -137,14 +138,14 @@ api_key = to_be_added
 skin = ala
 
 # Map config
-collections_map_lat = 40.4168
-collections_map_lon = -3.7038
-collections_map_zoom = 5
+collections_map_lat = 16.942
+collections_map_lon = 1.261
+collections_map_zoom = 3
 
 # Project name
 orgNameShort = <%= LA_project_shortname %>
 orgNameLong = <%= LA_project_name %>
-region = Spain
+region = <%= LA_project_shortname %>
 
 # EML config
 eml_delivery_point = Smith Street
@@ -311,7 +312,7 @@ alerts_base_url=
 geoserver_base_url=<%= LA_urls_prefix %>spatial.<%= LA_domain %>/geoserver
 biocache_records_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
-
+<% if (LA_use_spatial) { %>spatial_ws_hostname=<%= LA_spatial_hostname %><% } %>
 <% } %>
 
 ##### Copied from workshop, should be in living-atlas inventory
@@ -325,3 +326,18 @@ postgis_version=2.4
 # Needed for installing on Ubuntu-18.04
 # https://github.com/AtlasOfLivingAustralia/biocache-service/issues/363
 tomcat=tomcat7
+
+##### Updated components versions
+#
+# Check: https://github.com/AtlasOfLivingAustralia/documentation/wiki/Components-versioning
+#
+
+collectory_version = LATEST
+biocache_hub_version = 3.1.0
+biocache_service_version = 2.1.15
+bie_hub_version = 1.4.15
+bie_index_version=1.4.5
+biocache_cli_version = 2.4.3
+species_list_version = 3.3-SNAPSHOT
+regions_version = 3.3-SNAPSHOT
+images_version = 0.9
