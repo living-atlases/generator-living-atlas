@@ -40,7 +40,7 @@ biocache_db_type = cassandra3
 biocache_db_port = 9042
 cassandra_listen_host = <%= LA_domain %>
 biocache_service_hostname = <%= LA_biocache_service_hostname %>
-biocache_service_url = <%= LA_biocache_service_url %><%= LA_biocache_service_path %>
+biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %>
 biocache_service_context_path = <%= LA_biocache_service_path %>
 logging_enabled = true
