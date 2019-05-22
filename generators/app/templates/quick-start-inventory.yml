@@ -36,10 +36,10 @@ name_index_dir=/data/lucene/namematching/namematching
 
 ####################### Biocache ##############################################
 
-biocache_db_host = localhost
+biocache_db_host = <%= LA_domain %>
 biocache_db_type = cassandra3
 biocache_db_port = 9042
-cassandra_listen_host = localhost
+cassandra_listen_host = <%= LA_domain %>
 biocache_service_hostname = <%= LA_biocache_service_hostname %>
 biocache_service_url = <%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %>
@@ -264,10 +264,10 @@ bie_index_base_url = <%= LA_urls_prefix %><%= LA_bie_index_url %>
 bie_index_context_path = <%= LA_bie_index_path %>
 bie_index_hostname = <%= LA_bie_index_hostname %>
 
-index_live_url = http://localhost:8983/solr/bie
-index_offline_url = http://localhost:8983/solr/bie-offline
+index_live_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/bie
+index_offline_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/bie-offline
 
-biocache_solr_url = http://localhost:8983/solr/biocache
+biocache_solr_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/biocache
 collectory_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
 
 disable_cas = true
