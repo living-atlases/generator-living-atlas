@@ -63,14 +63,14 @@ if __name__ == '__main__':
         print("Extras: %s" % (extras))
 
     if main or doall:
-        mainCmd = "%s ansible-playbook %s -u ubuntu -s -i quick-start-inventory.yml %s/ansible/ala-demo.yml %s --limit %s" % (cmdPrefix, additionalParams, alainstall, extras, limit if limit else "<%= LA_domain %>")
+        mainCmd = "%s ansible-playbook %s -u ubuntu -i quick-start-inventory.yml %s/ansible/ala-demo.yml %s --limit %s" % (cmdPrefix, additionalParams, alainstall, extras, limit if limit else "<%= LA_domain %>")
         if nodryrun:
             os.system("echo %s" % mainCmd)
         os.system(mainCmd)
 
     <% for(var j=0; j < LA_services_machines.length; j++) { %>if args['<%= LA_services_machines[j].map.name %>'] or doall:
         inventory = "quick-start-inventory.yml" if '<%= LA_services_machines[j].map.name %>' != "spatial" else "quick-start-spatial-inventory.yml"
-        otherCmd = "%s ansible-playbook %s -u ubuntu -s -i %s %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s" % (cmdPrefix, additionalParams, inventory, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>")
+        otherCmd = "%s ansible-playbook %s -u ubuntu -i %s %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s" % (cmdPrefix, additionalParams, inventory, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>")
         if nodryrun:
             os.system("echo %s" % otherCmd)
         os.system(otherCmd)
