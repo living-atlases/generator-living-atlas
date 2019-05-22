@@ -120,7 +120,7 @@ spatial_service_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 spatial_service_context_path=/ws
 
 layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
-biocache_service_url=<%= LA_urls_prefix %>demo.<%= LA_domain %>/biocache-service
+biocache_service_url=<%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 
 layers_db_host=localhost
 layers_db_port=5432
@@ -198,8 +198,15 @@ nginx_client_max_body_size=120m
 
 bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
 bie_service_base_url = <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
-favicon_url=https://www.gbif.org/favicon-16x16.png
-collectory_url=<%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
-biocache_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
+favicon_url = https://www.gbif.org/favicon-16x16.png
+collections_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
+collectory_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
+biocache_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
-sampling_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
+sampling_url = <%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
+ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
+user_details_base_url = https://<%= LA_cas_hostname %>/userdetails
+header_and_footer_baseurl = <%= LA_urls_prefix %><%= LA_domain %>
+logger_base_url = <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/service
+<% if (LA_use_species_lists) { %>lists_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
+api_key_check_url_template = https://<%= LA_cas_hostname %>/apikey/ws/check?apikey={0}
