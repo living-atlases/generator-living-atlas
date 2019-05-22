@@ -103,6 +103,7 @@ We can use these inventories as a base for extracting documentation via `doxygen
 - [x] Improve README hosts
 - [x] Improve README playbook commands
 - [x] Add ansible wrapper
+- [ ] Store = true if you running it for the first time
 - [ ] Add other administration info (technical_contact, orgEmail, etc)
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host
 - [ ] document `--skip`
