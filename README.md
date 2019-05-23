@@ -105,12 +105,12 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [X] Add `regions` service
 - [X] Add `species-list` service
 - [X] Add `spatial` service
-- [x] Disable caches when using the same host for collectory & biocache
+- [x] Disable caches when using the same host for `collectory` & `biocache`
 - [x] use `--limit` with hostnames
 - [x] Improve README hosts
 - [x] Improve README playbook commands
-- [x] Add ansible wrapper
-- [x] Add inventories to add extra vars without modifing the generated inventories
+- [x] Add `ansible` wrapper
+- [x] Add inventories to add extra vars without modify the generated inventories
 - [x] Store = true if you running it for the first time
 - [ ] Add other administration info (technical_contact, orgEmail, etc)
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host
