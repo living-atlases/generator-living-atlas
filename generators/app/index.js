@@ -282,13 +282,24 @@ module.exports = class extends Generator {
     this.argument("replay", { type: Boolean, required: false });
     debug = this.options.debug;
     replay = this.options.replay;
-    defaultStore = this.options.replay;
 
     const previousConfigAll = this.config.getAll();
     previousConfig =
       typeof previousConfigAll === "undefined"
         ? []
         : previousConfigAll.promptValues;
+
+    const firstRun = previousConfigAll.firstRun !== false;
+    if (firstRun) {
+      // Set firstRun so in the future we can check it
+      this.config.set("firstRun", false);
+    }
+
+    // We always store in the first run
+    if (debug && firstRun) {
+      this.log("Running generator for the first time in this location");
+    }
+    defaultStore = firstRun || this.options.replay;
     if (debug) this.log("Current config:");
     if (debug) this.log(previousConfig);
     logger = this.log;
@@ -534,7 +545,7 @@ module.exports = class extends Generator {
     );
 
     if (!this.fs.exists(`${dest}/quick-start-local-extras.yml`)) {
-      // When only create the extras and debug inventory in the first run
+      // When only create the extras inventory in the first run
       this.fs.copyTpl(
         this.templatePath("quick-start-local-extras.yml"),
         this.destinationPath(`${dest}/quick-start-local-extras.yml`),
@@ -543,7 +554,7 @@ module.exports = class extends Generator {
     }
 
     if (!this.fs.exists(`${dest}/quick-start-spatial-local-extras.yml`)) {
-      // When only create the extras and debug inventory in the first run
+      // When only create the extras inventory in the first run
       this.fs.copyTpl(
         this.templatePath("quick-start-spatial-local-extras.yml"),
         this.destinationPath(`${dest}/quick-start-spatial-local-extras.yml`),
