@@ -215,10 +215,15 @@ function PromptUrlFor(name, path, when) {
     if (hostnameIsASubdomain) {
       a[varName] = a[varHostname];
     }
-    const usedMachine =
-      typeof machinesAndPaths[hostname] !== "undefined" &&
-      machinesAndPaths[hostname].length > 0;
+    const usedMachine = typeof machinesAndPaths[hostname] !== "undefined";
+    if (debug) logger(machinesAndPaths[hostname]);
     const shouldIAsk = hostnameIsNotASubdomain || usedMachine;
+    if (debug) {
+      logger(
+        `hostname: ${hostname} hostnameIsASubdomain: ${hostnameIsASubdomain}`
+      );
+    }
+    if (debug) logger(`usedMachine: ${usedMachine} shouldIAsk: ${shouldIAsk}`);
     if (when) return shouldIAsk && when(a);
     return shouldIAsk;
   };
