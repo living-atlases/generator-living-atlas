@@ -533,6 +533,24 @@ module.exports = class extends Generator {
       this.answers
     );
 
+    if (!this.fs.exists(`${dest}/quick-start-local-extras.yml`)) {
+      // When only create the extras and debug inventory in the first run
+      this.fs.copyTpl(
+        this.templatePath("quick-start-local-extras.yml"),
+        this.destinationPath(`${dest}/quick-start-local-extras.yml`),
+        this.answers
+      );
+    }
+
+    if (!this.fs.exists(`${dest}/quick-start-spatial-local-extras.yml`)) {
+      // When only create the extras and debug inventory in the first run
+      this.fs.copyTpl(
+        this.templatePath("quick-start-spatial-local-extras.yml"),
+        this.destinationPath(`${dest}/quick-start-spatial-local-extras.yml`),
+        this.answers
+      );
+    }
+
     this.fs.copyTpl(
       this.templatePath("ansiblew"),
       this.destinationPath(`${dest}/ansiblew`),

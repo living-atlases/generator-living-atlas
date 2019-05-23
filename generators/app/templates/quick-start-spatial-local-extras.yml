@@ -1,0 +1,18 @@
+#
+# This is a inventory with extras variables so heere you can override the
+# generated configurations with other variables without modifing the other
+# inventories. So when you rerun the generator in the future, you don't
+# loose your changes.
+#
+
+[all:vars]
+
+favicon_url = https://www.gbif.org/favicon.ico
+skin_favicon = https://www.gbif.org/favicon.ico
+
+[spatial-hub:vars]
+
+# Here we override the default 0,0 coordinates
+startup_lat = 39.8581
+startup_lng = -4.0226
+startup_zoom = 3

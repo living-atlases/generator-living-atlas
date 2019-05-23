@@ -90,6 +90,13 @@ We can use these inventories as a base for extracting documentation via `doxygen
 
 ![](doxygen-ansible-reference.png)
 
+
+### Rerunning the generator
+
+You rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you whan to add a new service, or using a new version of this generator).
+
+We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.
+
 ### TODO
 
 - [x] Add basic services (`collectory`, `ala-hub`, etc).
@@ -103,6 +110,7 @@ We can use these inventories as a base for extracting documentation via `doxygen
 - [x] Improve README hosts
 - [x] Improve README playbook commands
 - [x] Add ansible wrapper
+- [x] Add inventories to add extra vars without modifing the generated inventories
 - [ ] Store = true if you running it for the first time
 - [ ] Add other administration info (technical_contact, orgEmail, etc)
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host

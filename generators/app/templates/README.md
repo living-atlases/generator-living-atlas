@@ -32,9 +32,9 @@ export AI=<location-of-your-cloned-ala-install-repo>
 
 #  For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
 
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/quick-start-inventory.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
-<% for(var j=0; j < LA_services_machines.length; j++) { %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/quick-start-inventory.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/quick-start-inventory.yml -i <%= LA_pkg_name %>/quick-start-local-extras.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
+<% for(var j=0; j < LA_services_machines.length; j++) { let isSpatialInv = LA_services_machines[j].map.name === 'spatial' ? "-spatial": ""; %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/quick-start<%= isSpatialInv %>-inventory.yml -i <%= LA_pkg_name %>/quick-start<%= isSpatialInv %>-local-extras.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
 ```
 #### ansible-playbook wrapper
 
@@ -69,3 +69,9 @@ ansiblew 0.1.0
 Copyright (C) 2019 living-atlases.gbif.org
 Apache 2.0 License
 ```
+
+### Rerunning the generator
+
+You rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you whan to add a new service, or using a new version of this generator).
+
+We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.
