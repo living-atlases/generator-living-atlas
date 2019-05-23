@@ -143,14 +143,19 @@ function PromptHostnameFor(name, subdomain, when) {
       choices = [...machines, "other"];
     }
     // Add previous selected hostname at the start of the array
-    const hasPrevious = typeof previousConfig !== "undefined";
+    const hasPrevious = typeof previousConfig[varName] !== "undefined";
     const previousHostname = hasPrevious ? previousConfig[varName] : null;
-    if (
-      replay &&
-      typeof previousHostname !== "undefined" &&
-      !choices.includes(previousHostname)
-    ) {
-      if (previousHostname) choices.unshift(previousHostname);
+    if (debug) logger(`hasPrevious: ${hasPrevious} ${previousHostname}`);
+    if (replay && hasPrevious) {
+      if (choices.includes(previousHostname)) {
+        // Remove and later put in the first position
+        for (var i = 0; i < choices.length; i++) {
+          if (choices[i] === previousHostname) {
+            choices.splice(i, 1);
+          }
+        }
+      }
+      choices.unshift(previousHostname);
     }
     if (debug) logger(choices);
     return choices;
