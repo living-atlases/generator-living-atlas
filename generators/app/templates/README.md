@@ -72,6 +72,6 @@ Apache 2.0 License
 
 ### Rerunning the generator
 
-You rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you whan to add a new service, or using a new version of this generator).
+You can rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
 We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.

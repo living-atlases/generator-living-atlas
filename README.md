@@ -93,7 +93,7 @@ We can use these inventories as a base for extracting documentation via `doxygen
 
 ### Rerunning the generator
 
-You rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you whan to add a new service, or using a new version of this generator).
+You can rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
 We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.
 
@@ -111,21 +111,17 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [x] Improve README playbook commands
 - [x] Add ansible wrapper
 - [x] Add inventories to add extra vars without modifing the generated inventories
-- [ ] Store = true if you running it for the first time
+- [x] Store = true if you running it for the first time
 - [ ] Add other administration info (technical_contact, orgEmail, etc)
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host
 - [ ] document `--skip`
 - [ ] Add `CAS` 5 service
 - [ ] Better testing
-- [ ] Use git to track your inventories changes (recommended) ?
+- [ ] Recommend to use git to track your inventories changes
 
+## About Yeoman
 
-## Getting To Know Yeoman
-
- * Yeoman has a heart of gold.
- * Yeoman is a person with feelings and opinions, but is very easy to work with.
- * Yeoman can be too opinionated at times but is easily convinced not to be.
- * Feel free to [learn more about Yeoman](http://yeoman.io/).
+ * [Learn more about Yeoman](http://yeoman.io/).
 
 ## License
 
