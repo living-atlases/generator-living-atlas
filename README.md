@@ -112,7 +112,7 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [x] Add `ansible` wrapper
 - [x] Add inventories to add extra vars without modify the generated inventories
 - [x] Store = true if you running it for the first time
-- [ ] Add other administration info (technical_contact, orgEmail, etc)
+- [x] Add other administration info (technical_contact, orgEmail, etc)
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host
 - [ ] document `--skip`
 - [ ] Add `CAS` 5 service

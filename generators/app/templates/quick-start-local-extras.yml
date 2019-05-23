@@ -9,4 +9,5 @@
 
 favicon_url = https://www.gbif.org/favicon.ico
 skin_favicon = https://www.gbif.org/favicon.ico
-
+technical_contact = support@<%= LA_domain %>
+orgEmail = info@<%= LA_domain %>
