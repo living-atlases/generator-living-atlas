@@ -1,4 +1,5 @@
-# generator-living-atlas [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-living-atlas [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
+
 > An experimental Yeoman Generator for Living Atlas Ansible Inventories
 
 ## Intro
@@ -114,6 +115,7 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [x] Store = true if you running it for the first time
 - [x] Add other administration info (technical_contact, orgEmail, etc)
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host
+- [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [ ] document `--skip`
 - [ ] Add `CAS` 5 service
 - [ ] Better testing
