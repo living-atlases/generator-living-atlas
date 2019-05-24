@@ -115,9 +115,11 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [x] Store = true if you running it for the first time
 - [x] Add other administration info (technical_contact, orgEmail, etc)
 - [x] Recommend to use git to track your inventories changes
+- [x] Add `biocache-backend` and `biocache-cli` playbook and `cassandra` host selection
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host
 - [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [ ] document `--skip`
+- [ ] add `--tags` to ansible wrapper
 - [ ] Add `CAS` 5 service
 - [ ] Better testing
 

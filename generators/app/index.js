@@ -23,10 +23,12 @@ const isASubDomain = domain =>
   isCorrectDomain(domain) &&
   parseDomain(domain, parseDomainOpts).subdomain !== "";
 
+const em = text => chalk.keyword("orange")(text);
+
 const defUseSubdomainPrompt = (a, service) => {
-  return `Will the ${chalk.keyword("orange")(service)} module use a http${
+  return `Will the ${em(service)} module use a http${
     a.LA_enable_ssl ? "s" : ""
-  }://${chalk.keyword("orange")("subdomain")}.${a.LA_domain} or not?`;
+  }://${em("subdomain")}.${a.LA_domain} or not?`;
 };
 
 const validateDomain = (input, name, store) =>
@@ -73,6 +75,16 @@ const servicesRolsMap = {
     name: "biocache_service",
     group: "biocache-service-clusterdb",
     playbook: "biocache-service-clusterdb"
+  },
+  biocache_backend: {
+    name: "biocache_backend",
+    group: "biocache",
+    playbook: "biocache-backend"
+  },
+  biocache_cli: {
+    name: "biocache_cli",
+    group: "biocache-cli",
+    playbook: "biocache-cli"
   },
   collectory: {
     name: "collectory",
@@ -121,7 +133,7 @@ function PromptSubdomainFor(name, subdomain, when) {
   this.type = "confirm";
   const varName = `LA_${name}_uses_subdomain`;
   this.name = varName;
-  this.message = a => defUseSubdomainPrompt(a, subdomain);
+  this.message = a => defUseSubdomainPrompt(a, name);
   this.default = a => defUseSubdomain(a);
   if (when) {
     this.when = when;
@@ -134,7 +146,7 @@ function PromptHostnameFor(name, subdomain, when) {
   const varName = `LA_${name}_hostname`;
   const varUsesSubdomain = `LA_${name}_uses_subdomain`;
   this.name = varName;
-  this.message = `LA ${subdomain} hostname ?`;
+  this.message = `LA ${em(name)} hostname ?`;
   this.choices = a => {
     let choices;
     if (a[varUsesSubdomain]) {
@@ -198,7 +210,7 @@ function PromptUrlFor(name, path, when) {
   const varUsesSubdomain = `LA_${name}_uses_subdomain`;
   const varHostname = `LA_${name}_hostname`;
   this.name = varName;
-  this.message = `LA ${name} base url?`;
+  this.message = `LA ${em(name)} base url?`;
   this.default = a => {
     const http = a.LA_urls_prefix;
     const usesSubdomain = a[varUsesSubdomain];
@@ -245,9 +257,11 @@ function PromptPathFor(name, path, when) {
     const samplePath = a[varUsesSubdomain]
       ? "/"
       : `/${typeof path === "undefined" ? "" : path}`;
-    return `Which context /path you wanna use for this service (like ${
-      a[varUrl]
-    }${chalk.keyword("orange")(samplePath)}) ?`;
+    return `Which context ${em(
+      "/path"
+    )} you wanna use for this service (like ${em(a[varUrl])}${em(
+      samplePath
+    )}) ?`;
   };
   this.default = a => {
     const hostname = a[varHostname];
@@ -321,9 +335,7 @@ module.exports = class extends Generator {
     // Have Yeoman greet the user.
     this.log(
       yosay(
-        `Welcome to the ${chalk.keyword("orange")(
-          "Living Atlas"
-        )} Quick-Start Ansible Generator`
+        `Welcome to the ${em("Living Atlas")} Quick-Start Ansible Generator`
       )
     );
 
@@ -332,14 +344,14 @@ module.exports = class extends Generator {
         store: true,
         type: "input",
         name: "LA_project_name",
-        message: "Your LA Project Long Name:",
+        message: `Your LA Project ${em("Long Name")}:`,
         default: "Living Atlas of Wakanda"
       },
       {
         store: true,
         type: "input",
         name: "LA_project_shortname",
-        message: "Your LA Project Shortname:",
+        message: `Your LA Project ${em("Shortname")}:`,
         default: answers =>
           answers.LA_project_name.replace(/Living Atlas of /g, "LA ")
       },
@@ -347,9 +359,9 @@ module.exports = class extends Generator {
         store: true,
         type: "input",
         name: "LA_pkg_name",
-        message: "Your LA short-lowercase-name:",
+        message: `Your LA ${em("short-lowercase-name")}:`,
         default: answers =>
-          answers.LA_project_name.toLowerCase().replace(/' '/g, "-"),
+          answers.LA_project_name.toLowerCase().replace(/ /g, "-"),
         validate: input =>
           new Promise(resolve => {
             if (input.match(/^[a-z0-9-]+$/g)) {
@@ -363,7 +375,7 @@ module.exports = class extends Generator {
         store: true,
         type: "input",
         name: "LA_domain",
-        message: "What is your LA node main domain?",
+        message: `What is your LA node ${em("main domain")}?`,
         default: answers => `${answers.LA_pkg_name}.org`,
         filter: input => storeMachine("main", input),
         validate: input => validateDomain(input, "main", true)
@@ -372,37 +384,39 @@ module.exports = class extends Generator {
         store: true,
         type: "confirm",
         name: "LA_use_spatial",
-        message: "Use spatial service?",
+        message: `Use ${em("spatial")} service?`,
         default: false
       },
       {
         store: true,
         type: "confirm",
         name: "LA_use_regions",
-        message: "Use regions service?",
+        message: `Use ${em("regions")} service?`,
         default: false
       },
       {
         store: true,
         type: "confirm",
         name: "LA_use_species_lists",
-        message: "Use specieslists service?",
+        message: `Use ${em("specieslists")} service?`,
         default: false
       },
       {
         store: true,
         type: "confirm",
         name: "LA_use_CAS",
-        message:
-          "Use CAS Auth service? (WIP: Right now it only sets auth urls)",
+        message: `Use ${em(
+          "CAS"
+        )} Auth service? (WIP: Right now it only sets auth urls)`,
         default: false
       },
       {
         store: true,
         type: "confirm",
         name: "LA_enable_ssl",
-        message:
-          "Enable SSL? (Warn: this only set the urls correctly, but it doesn't manage the certicates)",
+        message: `Enable ${em(
+          "SSL"
+        )}? (Warn: this only set the urls correctly, but it doesn't manage the certicates)`,
         default: false
       },
       {
@@ -422,11 +436,11 @@ module.exports = class extends Generator {
         type: "list",
         name: "LA_collectory_uses_subdomain",
         message: a =>
-          `Will the ${chalk.keyword("orange")("collectory")} service use a ${
-            a.LA_urls_prefix
-          }${chalk.keyword("orange")("subdomain")}.${a.LA_domain} or a ${
-            a.LA_urls_prefix
-          }${a.LA_domain}${chalk.keyword("orange")("/service-path")} ?`,
+          `Will the ${em("collectory")} service use a ${a.LA_urls_prefix}${em(
+            "subdomain"
+          )}.${a.LA_domain} or a ${a.LA_urls_prefix}${a.LA_domain}${em(
+            "/service-path"
+          )} ?`,
         choices: [
           { name: "subdomain", value: true },
           { name: "service-path", value: false }
@@ -500,14 +514,27 @@ module.exports = class extends Generator {
         store: true,
         type: "input",
         name: "LA_cas_hostname",
-        message: "LA CAS subdomain",
+        message: `LA ${em("CAS")} subdomain`,
         default: a => `auth.${a.LA_domain}`
       },
       {
         store: true,
         type: "input",
+        name: "LA_biocache_backend_hostname",
+        message: `LA ${em("biocache-backend")} hostname`,
+        filter: input =>
+          new Promise(resolve => {
+            storeMachine("biocache_backend", input).then(input =>
+              storeMachine("biocache_cli", input).then(input => resolve(input))
+            );
+          }),
+        default: a => `${a.LA_domain}`
+      },
+      {
+        store: true,
+        type: "input",
         name: "LA_spatial_hostname",
-        message: "LA spatial subdomain",
+        message: `LA ${em("spatial")} subdomain`,
         filter: input => storeMachine("spatial", input),
         when: a => a.LA_use_spatial,
         default: a => `spatial.${a.LA_domain}`
@@ -516,8 +543,9 @@ module.exports = class extends Generator {
         store: true,
         type: "confirm",
         name: "LA_use_git",
-        message:
-          "Use git in your inventories to track changes? (Very recommended)",
+        message: `Use ${em(
+          "git"
+        )} in your generated inventories to track their changes? (Very recommended)`,
         default: true
       }
     ]);
@@ -528,6 +556,8 @@ module.exports = class extends Generator {
       "collectory",
       "ala_hub",
       "biocache_service",
+      "biocache_backend",
+      "biocache_cli",
       "ala_bie",
       "bie_index",
       "images",
@@ -535,6 +565,9 @@ module.exports = class extends Generator {
       "lists",
       "regions"
     ];
+
+    this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
+
     services.forEach(service => {
       const path = this.answers[`LA_${service}_path`];
       if (path === "/") {
