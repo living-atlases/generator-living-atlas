@@ -20,7 +20,7 @@ If the generated inventories failed to deploy, give us details of:
 
 **Problem description**:
 
-- Expected behaviour and what happened instead: ¹
+- Expected behavior and what happened instead: ¹
 - Logs. If logs are very long, attach them in .zip file or use a paste service: ¹
 
 ¹ **Required**
