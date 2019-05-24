@@ -129,6 +129,10 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - As we are using the [https://github.com/AtlasOfLivingAustralia/ala-install/blob/master/ansible/ala-demo.yml](ansible/ala-demo.yml) playbook, if you are using more that two hosts (the minimal is one for main services, and another for spatial services), some services will be also configured in the main machine. As a workaround, while we fix this, you can use a different playbook for your main machine with the correct limited roles.
 - We are waiting that [some small PR](https://github.com/AtlasOfLivingAustralia/ala-install/pulls) in `ala-install` are merged. So maybe you'll find some default `ala.org.au` configuration vars instead of the correct ones.
 
+## Any problem with this generator?
+
+Please [add an issue](https://github.com/vjrj/generator-living-atlas/issues/new) give us details of your problem and we'll try to help you and to improve the generator. Thanks!
+
 ## About Yeoman
 
  * [Learn more about Yeoman](http://yeoman.io/).
