@@ -32,9 +32,9 @@ export AI=<location-of-your-cloned-ala-install-repo>
 
 #  For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
 
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/quick-start-inventory.yml -i <%= LA_pkg_name %>/quick-start-local-extras.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/<%= LA_pkg_name %>-inventory.yml -i <%= LA_pkg_name %>/<%= LA_pkg_name %>-local-extras.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
 <% for(var j=0; j < LA_services_machines.length; j++) { let isSpatialInv = LA_services_machines[j].map.name === 'spatial' ? "-spatial": ""; %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/quick-start<%= isSpatialInv %>-inventory.yml -i <%= LA_pkg_name %>/quick-start<%= isSpatialInv %>-local-extras.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/<%= LA_pkg_name %><%= isSpatialInv %>-inventory.yml -i <%= LA_pkg_name %>/<%= LA_pkg_name %><%= isSpatialInv %>-local-extras.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
 ```
 #### ansible-playbook wrapper
 
@@ -74,4 +74,4 @@ Apache 2.0 License
 
 You can rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
-We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.
+We recommend to override and set variables adding then to `<%= LA_pkg_name %>-local-extras.yml` and `<%= LA_pkg_name %>-spatial-local-extras.yml` without modify the generated `<%= LA_pkg_name %>-inventory.yml` and `<%= LA_pkg_name %>-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.

@@ -42,6 +42,7 @@ if __name__ == '__main__':
     alainstall = args['--alainstall']
     cmdPrefix = "echo "
     extras = ""
+    pkg = "<%= LA_pkg_name %>"
 
     # Add here some additional param for ansible like your ssh key, like:
     # additionalParams = "--private-key ~/.ssh/MyKey.pem"
@@ -63,15 +64,15 @@ if __name__ == '__main__':
         print("Extras: %s" % (extras))
 
     if main or doall:
-        extraInventories = "-i quick-start-local-extras.yml"
-        mainCmd = "%s ansible-playbook %s -u ubuntu -i quick-start-inventory.yml -i %s %s/ansible/ala-demo.yml %s --limit %s" % (cmdPrefix, additionalParams, extraInventories, alainstall, extras, limit if limit else "<%= LA_domain %>")
+        extraInventories = "-i %s-local-extras.yml" % pkg
+        mainCmd = "%s ansible-playbook %s -u ubuntu -i %s-inventory.yml %s %s/ansible/ala-demo.yml %s --limit %s" % (cmdPrefix, additionalParams, pkg, extraInventories, alainstall, extras, limit if limit else "<%= LA_domain %>")
         if nodryrun:
             os.system("echo %s" % mainCmd)
         os.system(mainCmd)
 
     <% for(var j=0; j < LA_services_machines.length; j++) { %>if args['<%= LA_services_machines[j].map.name %>'] or doall:
-        inventory = "<%= LA_services_machines[j].map.name != 'spatial' ? 'quick-start-inventory.yml' : 'quick-start-spatial-inventory.yml' %>"
-        extraInventories = "-i <%= LA_services_machines[j].map.name != 'spatial' ? 'quick-start-local-extras.yml' : 'quick-start-spatial-local-extras.yml' %>"
+        inventory = "<%= LA_services_machines[j].map.name != 'spatial' ? `${LA_pkg_name}-inventory.yml`: `${LA_pkg_name}-spatial-inventory.yml` %>"
+        extraInventories = "-i <%= LA_services_machines[j].map.name != 'spatial' ? `${LA_pkg_name}-local-extras.yml` : `${LA_pkg_name}-spatial-local-extras.yml` %>"
         otherCmd = "%s ansible-playbook %s -u ubuntu -i %s %s %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s" % (cmdPrefix, additionalParams, inventory, extraInventories, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>")
         if nodryrun:
             os.system("echo %s" % otherCmd)

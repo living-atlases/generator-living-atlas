@@ -539,6 +539,7 @@ module.exports = class extends Generator {
     this.answers.LA_machines = machines;
     this.answers.LA_services_machines = servicesAndMachines;
     const dest = this.answers.LA_pkg_name;
+    const filePrefix = dest;
 
     if (debug) this.log(this.answers);
 
@@ -548,26 +549,48 @@ module.exports = class extends Generator {
       this.answers
     );
 
-    this.fs.copyTpl(
-      this.templatePath("quick-start-inventory.yml"),
-      this.destinationPath(`${dest}/quick-start-inventory.yml`),
-      this.answers
-    );
+    // Migrate old quick-start generated inventory files to pkg_name named
+    const templateFiles = [
+      "inventory.yml",
+      "local-extras.yml",
+      "spatial-inventory.yml",
+      "spatial-local-extras.yml"
+    ];
+    for (var i = 0; i < templateFiles.length; i++) {
+      const currentFile = `${dest}/quick-start-${templateFiles[i]}`;
+      if (this.fs.exists(currentFile)) {
+        this.fs.move(currentFile, `${dest}/${filePrefix}-${templateFiles[i]}`);
+      }
+    }
 
-    if (!this.fs.exists(`${dest}/quick-start-local-extras.yml`)) {
+    if (!this.fs.exists(`${dest}/${filePrefix}-local-extras.yml`)) {
       // When only create the extras inventory in the first run
       this.fs.copyTpl(
-        this.templatePath("quick-start-local-extras.yml"),
-        this.destinationPath(`${dest}/quick-start-local-extras.yml`),
+        this.templatePath(`quick-start-local-extras.yml`),
+        this.destinationPath(`${dest}/${filePrefix}-local-extras.yml`),
         this.answers
       );
     }
 
-    if (!this.fs.exists(`${dest}/quick-start-spatial-local-extras.yml`)) {
+    if (!this.fs.exists(`${dest}/${filePrefix}-spatial-local-extras.yml`)) {
       // When only create the extras inventory in the first run
       this.fs.copyTpl(
-        this.templatePath("quick-start-spatial-local-extras.yml"),
-        this.destinationPath(`${dest}/quick-start-spatial-local-extras.yml`),
+        this.templatePath(`quick-start-spatial-local-extras.yml`),
+        this.destinationPath(`${dest}/${filePrefix}-spatial-local-extras.yml`),
+        this.answers
+      );
+    }
+
+    this.fs.copyTpl(
+      this.templatePath(`quick-start-inventory.yml`),
+      this.destinationPath(`${dest}/${filePrefix}-inventory.yml`),
+      this.answers
+    );
+
+    if (this.answers.LA_use_spatial) {
+      this.fs.copyTpl(
+        this.templatePath("quick-start-spatial-inventory.yml"),
+        this.destinationPath(`${dest}/${filePrefix}-spatial-inventory.yml`),
         this.answers
       );
     }
@@ -577,14 +600,6 @@ module.exports = class extends Generator {
       this.destinationPath(`${dest}/ansiblew`),
       this.answers
     );
-
-    if (this.answers.LA_use_spatial) {
-      this.fs.copyTpl(
-        this.templatePath("quick-start-spatial-inventory.yml"),
-        this.destinationPath(`${dest}/quick-start-spatial-inventory.yml`),
-        this.answers
-      );
-    }
   }
 
   install() {
