@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "chalk": "^2.1.0",
+    "child_process": "^1.0.2",
     "onionsay": "github:theonion/onionsay",
     "parse-domain": "^2.1.7",
     "yeoman-generator": "^2.0.1",

@@ -143,7 +143,9 @@ function PromptHostnameFor(name, subdomain, when) {
       choices = [...machines, "other"];
     }
     // Add previous selected hostname at the start of the array
-    const hasPrevious = typeof previousConfig[varName] !== "undefined";
+    const hasPrevious =
+      typeof previousConfig !== "undefined" &&
+      typeof previousConfig[varName] !== "undefined";
     const previousHostname = hasPrevious ? previousConfig[varName] : null;
     if (debug) logger(`hasPrevious: ${hasPrevious} ${previousHostname}`);
     if (replay && hasPrevious) {
@@ -509,6 +511,14 @@ module.exports = class extends Generator {
         filter: input => storeMachine("spatial", input),
         when: a => a.LA_use_spatial,
         default: a => `spatial.${a.LA_domain}`
+      },
+      {
+        store: true,
+        type: "confirm",
+        name: "LA_use_git",
+        message:
+          "Use git in your inventories to track changes? (Very recommended)",
+        default: true
       }
     ]);
   }
@@ -603,10 +613,41 @@ module.exports = class extends Generator {
   }
 
   install() {
-    // Should be useful in the future:
+    const dest = this.answers.LA_pkg_name;
+    const useGit = this.answers.LA_use_git;
+    const gitOpts = {
+      cwd: this.destinationRoot(dest),
+      shell: true,
+      stdio: null
+    };
+
+    // Should be useful in the future but we don't have dependencies in the
+    // generated code (more than ansible):
     // this.installDependencies();
-    // clone ala-install
-    //
-    // Maybe here we can check for some ansible install dependency
+
+    if (useGit) {
+      let cmdResult = this.spawnCommandSync("which", ["git"], gitOpts);
+
+      if (cmdResult.status === 0) {
+        cmdResult = this.spawnCommandSync("git", ["status"], gitOpts);
+
+        if (cmdResult !== 0) {
+          cmdResult = this.spawnCommandSync("git", ["init"], gitOpts);
+          if (cmdResult === 0) {
+            // TODO: git add does not work?
+            cmdResult = this.spawnCommandSync("git", ["add", "--all"], gitOpts);
+            this.spawnCommandSync(
+              "git",
+              ["commit", "-am", '"Initial commit"'],
+              gitOpts
+            );
+          }
+        }
+      } else {
+        logger(
+          "Error: Please install git to track changes in your inventories"
+        );
+      }
+    }
   }
 };

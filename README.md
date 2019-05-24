@@ -114,12 +114,12 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [x] Add inventories to add extra vars without modify the generated inventories
 - [x] Store = true if you running it for the first time
 - [x] Add other administration info (technical_contact, orgEmail, etc)
+- [x] Recommend to use git to track your inventories changes
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host
 - [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [ ] document `--skip`
 - [ ] Add `CAS` 5 service
 - [ ] Better testing
-- [ ] Recommend to use git to track your inventories changes
 
 ## Caveats
 
