@@ -7,10 +7,10 @@
 * [But why this?](#but-why-this)
 * [Can these quick-start inventories solve all this?](#can-these-quick-start-inventories-solve-all-this)
 * [Installation](#installation)
-   * [Options](#options)
+* [Options](#options)
 * [Screens](#screens)
-   * [Rerunning the generator](#rerunning-the-generator)
-   * [TODO](#todo)
+* [Rerunning the generator](#rerunning-the-generator)
+* [TODO](#todo)
 * [Caveats](#caveats)
 * [Any problem with this generator?](#any-problem-with-this-generator)
 * [About Yeoman](#about-yeoman)
@@ -82,7 +82,8 @@ Then generate your new project:
 ```bash
 yo living-atlas
 ```
-### Options
+
+## Options
 
 - You can use `--debug` to see some debug info.
 - And `--replay` to use all the previous responses and regenerate the inventories with some modification.
@@ -106,13 +107,13 @@ We can use these inventories as a base for extracting documentation via `doxygen
 ![](doxygen-ansible-reference.png)
 
 
-### Rerunning the generator
+## Rerunning the generator
 
 You can rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
 We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.
 
-### TODO
+## TODO
 
 - [x] Add basic services (`collectory`, `ala-hub`, etc).
 - [x] Add domain/context and service subdomains support
