@@ -2,6 +2,20 @@
 
 > An experimental Yeoman Generator for Living Atlas Ansible Inventories
 
+
+* [Intro](#intro)
+* [But why this?](#but-why-this)
+* [Can these quick-start inventories solve all this?](#can-these-quick-start-inventories-solve-all-this)
+* [Installation](#installation)
+   * [Options](#options)
+* [Screens](#screens)
+   * [Rerunning the generator](#rerunning-the-generator)
+   * [TODO](#todo)
+* [Caveats](#caveats)
+* [Any problem with this generator?](#any-problem-with-this-generator)
+* [About Yeoman](#about-yeoman)
+* [License](#license)
+
 ## Intro
 
 This is a super simple `yeoman` generator, a proof of concept trying to facilitate a quick start with Living Atlas `ansible` inventories.
