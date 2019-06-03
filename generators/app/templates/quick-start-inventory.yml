@@ -283,10 +283,16 @@ bie_hub = ala-bie
 bie_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %>
 bie_hub_context_path = <%= LA_ala_bie_path %>
 bie_hub_hostname = <%= LA_ala_bie_hostname %>
-<% if (LA_use_species_lists) { %>species_list_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %> <% } %>
+<% if (LA_use_species_lists) { %>species_list_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+lists_base_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
 sightings_url =
 alerts_url =
+alerts_base_url=
+<% if (LA_use_spatial) { %>
+spatial_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
+spatial_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %><% } else { %>
 spatial_url =
+spatial_base_url =<% } %>
 
 bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
 ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
