@@ -100,7 +100,7 @@ webserver_nginx=true
 robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
 robots_disallow_useragents=["SemrushBot", "Mappy", "BUbiNG"]
 
-ssl=false
+ssl=<%= LA_enable_ssl %>
 
 ###
 # Spatial service
@@ -150,7 +150,7 @@ webserver_nginx=true
 robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
 robots_disallow_useragents=["SemrushBot", "Mappy", "BUbiNG"]
 
-ssl=false
+ssl=<%= LA_enable_ssl %>
 
 ###
 # Spatial hub
@@ -187,7 +187,7 @@ webserver_nginx=true
 robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
 robots_disallow_useragents=["SemrushBot", "Mappy", "BUbiNG"]
 
-ssl=false
+ssl=<%= LA_enable_ssl %>
 
 nginx_client_max_body_size=120m
 

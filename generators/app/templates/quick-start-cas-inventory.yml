@@ -161,7 +161,7 @@ apikey_version=1.3
 cas_version=5.3.3-1-SNAPSHOT
 cas_management_version=5.3.1-1-SNAPSHOT
 
-ssl=false
+ssl=<%= LA_enable_ssl %>
 
 cas_tickets_host=localhost
 cas_tickets_db=cas-ticket-registry
