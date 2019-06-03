@@ -132,6 +132,7 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [x] Recommend to use git to track your inventories changes
 - [x] Add `biocache-backend` and `biocache-cli` playbook and `cassandra` host selection
 - [x] Add `CAS` 5 service
+- [ ] Fix `apikey_db_dump` location relative to `ala-install`
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
 - [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [ ] Document `--skip`
