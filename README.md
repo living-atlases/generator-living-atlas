@@ -118,9 +118,9 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [x] Add basic services (`collectory`, `ala-hub`, etc).
 - [x] Add domain/context and service subdomains support
 - [x] Add `http`/`https` urls support (this does **not** include `ssl` certificates management)
-- [X] Add `regions` service
-- [X] Add `species-list` service
-- [X] Add `spatial` service
+- [x] Add `regions` service
+- [x] Add `species-list` service
+- [x] Add `spatial` service
 - [x] Disable caches when using the same host for `collectory` & `biocache`
 - [x] use `--limit` with hostnames
 - [x] Improve README hosts
@@ -131,11 +131,12 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 - [x] Add other administration info (technical_contact, orgEmail, etc)
 - [x] Recommend to use git to track your inventories changes
 - [x] Add `biocache-backend` and `biocache-cli` playbook and `cassandra` host selection
-- [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host
+- [x] Add `CAS` 5 service
+- [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
 - [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
-- [ ] document `--skip`
-- [ ] add `--tags` to ansible wrapper
-- [ ] Add `CAS` 5 service
+- [ ] Document `--skip`
+- [ ] Add `--tags` to ansible wrapper
+- [ ] Generation of passwords on first run and increase security by default
 - [ ] Better testing
 
 ## Caveats

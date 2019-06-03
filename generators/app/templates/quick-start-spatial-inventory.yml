@@ -6,10 +6,6 @@
 # Domain Name System (DNS) web service (e.g. Route53) or by adding an entry into /etc/hosts of the
 # target VM.
 #
-# To use this, run the following command.
-#
-# ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/inventories/spatial.<%= LA_pkg_name %>.yml ansible/spatial.yml
-#
 ########################################################################################################################
 
 [all:vars]

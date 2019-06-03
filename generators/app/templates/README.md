@@ -8,7 +8,6 @@ To use this, add the following into your `/etc/hosts` (of your working machine, 
 
 ```<% let i=12; LA_machines.forEach(machine => { %>
 12.12.12.<%= i %>  <%= machine %><%; i++ }) %>
-<% if (LA_use_CAS) { %>12.12.12.<%= i %>  <%= LA_cas_hostname %><% }; i++ %>
 ```
 
 You'll need to replace `12.12.12.1` etc with the IP address of some new Ubuntu 16 instance in your provider.
@@ -31,10 +30,21 @@ With access to this machine/s you can run ansible:
 export AI=<location-of-your-cloned-ala-install-repo>
 
 #  For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
-
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/<%= LA_pkg_name %>-inventory.yml -i <%= LA_pkg_name %>/<%= LA_pkg_name %>-local-extras.yml $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
-<% for(var j=0; j < LA_services_machines.length; j++) { let isSpatialInv = LA_services_machines[j].map.name === 'spatial' ? "-spatial": ""; %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -i <%= LA_pkg_name %>/<%= LA_pkg_name %><%= isSpatialInv %>-inventory.yml -i <%= LA_pkg_name %>/<%= LA_pkg_name %><%= isSpatialInv %>-local-extras.yml $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
+<% let baseInv=`-i ${LA_pkg_name}/${LA_pkg_name}-inventory.yml -i ${LA_pkg_name}/${LA_pkg_name}-local-extras.yml`; %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
+<% for(var j=0; j < LA_services_machines.length; j++) {
+let isSpatialInv = LA_services_machines[j].map.name === 'spatial';
+let isCasInv = LA_services_machines[j].map.name === 'cas';
+let extraInv;
+if (isSpatialInv) {
+    extraInv = `-i ${LA_pkg_name}/${LA_pkg_name}-spatial-inventory.yml -i ${LA_pkg_name}/${LA_pkg_name}-spatial-local-extras.yml`;
+}
+if (isCasInv) {
+    extraInv = `-i ${LA_pkg_name}/${LA_pkg_name}-cas-inventory.yml -i ${LA_pkg_name}/${LA_pkg_name}-cas-local-extras.yml`;
+}
+%>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%= extraInv %> $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
 ```
 #### ansible-playbook wrapper
 

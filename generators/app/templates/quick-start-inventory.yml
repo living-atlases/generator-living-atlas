@@ -8,8 +8,6 @@
 # You'll need to replace "12.12.12.12" with the IP address of your newly created
 # Ubuntu 16 instance. For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
 #
-# ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu -s -i <%= LA_pkg_name %>/inventories/<%= LA_pkg_name %>.yml ansible/ala-demo.yml
-#
 ########################################################################################################################
 
 [all:vars]
@@ -68,8 +66,8 @@ biocache_hub_hostname = <%= LA_ala_hub_hostname %>
 biocache_hub_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %>
 biocache_hub_context_path = <%= LA_ala_hub_path %>
-userdetails_url = https://<%= LA_cas_hostname %>/userdetails/userDetails
-userdetails_base_url = https://<%= LA_cas_hostname %>/userdetails
+userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails
+userdetails_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
 
 google_apikey = AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk
 
@@ -120,7 +118,7 @@ collectory_db_host_address = localhost
 collectory_db_host = localhost
 collectory_db_user = collectory
 collectory_db_password = password
-bypass_cas = true
+bypass_cas = <%= LA_use_CAS %>
 
 # API key that support registry updates
 api_key = dummy-registry-api-key
@@ -135,7 +133,7 @@ orgNameShort = <%= LA_project_shortname %>
 uri_filter_pattern = /dummy
 
 # Security bypass
-security_bypass = true
+security_bypass = <%= LA_use_CAS %>
 
 # External API access
 api_key = to_be_added
@@ -208,8 +206,8 @@ logger_db_hostname = localhost
 
 ############### Auth Server #########
 
-auth_base_url = https://<%= LA_cas_hostname %>
-auth_cas_url = https://<%= LA_cas_hostname %>/cas
+auth_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>
+auth_cas_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/cas
 
 ####### When near the GBIF building (e.g. in Europe) the GBIF nexus will likely be fastest #########
 
@@ -273,8 +271,8 @@ index_offline_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/bie-offlin
 biocache_solr_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/biocache
 collectory_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
 
-disable_cas = true
-bypass_cas = true
+disable_cas = <%= LA_use_CAS %>
+bypass_cas = <%= LA_use_CAS %>
 
 index_images = true
 

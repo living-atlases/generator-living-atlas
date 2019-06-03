@@ -108,7 +108,8 @@ const servicesRolsMap = {
     group: "species-list",
     playbook: "species-list-standalone"
   },
-  spatial: { name: "spatial", group: "spatial", playbook: "spatial" }
+  spatial: { name: "spatial", group: "spatial", playbook: "spatial" },
+  cas: { name: "cas", group: "cas-servers", playbook: "aws-cas-5" }
 };
 
 const storeMachine = (name, machine) =>
@@ -405,9 +406,7 @@ module.exports = class extends Generator {
         store: true,
         type: "confirm",
         name: "LA_use_CAS",
-        message: `Use ${em(
-          "CAS"
-        )} Auth service? (WIP: Right now it only sets auth urls)`,
+        message: `Use ${em("CAS")} Auth service?`,
         default: false
       },
       {
@@ -515,6 +514,7 @@ module.exports = class extends Generator {
         type: "input",
         name: "LA_cas_hostname",
         message: `LA ${em("CAS")} subdomain`,
+        filter: input => storeMachine("cas", input),
         default: a => `auth.${a.LA_domain}`
       },
       {
@@ -615,11 +615,26 @@ module.exports = class extends Generator {
       );
     }
 
-    if (!this.fs.exists(`${dest}/${filePrefix}-spatial-local-extras.yml`)) {
+    if (
+      this.answers.LA_use_spatial &&
+      !this.fs.exists(`${dest}/${filePrefix}-spatial-local-extras.yml`)
+    ) {
       // When only create the extras inventory in the first run
       this.fs.copyTpl(
         this.templatePath(`quick-start-spatial-local-extras.yml`),
         this.destinationPath(`${dest}/${filePrefix}-spatial-local-extras.yml`),
+        this.answers
+      );
+    }
+
+    if (
+      this.answers.LA_use_CAS &&
+      !this.fs.exists(`${dest}/${filePrefix}-cas-local-extras.yml`)
+    ) {
+      // When only create the extras inventory in the first run
+      this.fs.copyTpl(
+        this.templatePath(`quick-start-cas-local-extras.yml`),
+        this.destinationPath(`${dest}/${filePrefix}-cas-local-extras.yml`),
         this.answers
       );
     }
@@ -634,6 +649,14 @@ module.exports = class extends Generator {
       this.fs.copyTpl(
         this.templatePath("quick-start-spatial-inventory.yml"),
         this.destinationPath(`${dest}/${filePrefix}-spatial-inventory.yml`),
+        this.answers
+      );
+    }
+
+    if (this.answers.LA_use_CAS) {
+      this.fs.copyTpl(
+        this.templatePath("quick-start-cas-inventory.yml"),
+        this.destinationPath(`${dest}/${filePrefix}-cas-inventory.yml`),
         this.answers
       );
     }
