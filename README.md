@@ -47,7 +47,7 @@ No. This is only a *Proof of Concept* that tries to mitigate some of the previou
 If we think that some tool like this can be useful, we can add more functionality like:
 
 - Better comments of properties in generated inventories for easy operation & tuning
-- CAS deployment
+- ~CAS deployment~ done ✓
 - Focus in have well maintained these generator and their inventories
 - Autogenerate documentation from the inventories comments with tools like `doxygen`
 - etc
