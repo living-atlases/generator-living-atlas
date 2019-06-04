@@ -22,3 +22,10 @@ pac4j_cookie_encryption_key=
 
 cas_webflow_signing_key=
 cas_webflow_encryption_key=
+
+# This is used to create the apikey database (or to use an existing dump)
+# Comment this after first successful run and with /apikeys service running
+# so the database of apikeys is not dropped or recreated
+#
+# Also you have to correct the path to the ansible ala-install repo
+apikey_db_dump={{inventory_dir}}/../roles/apikey/files/apikey_schema.sql

@@ -121,7 +121,6 @@ apikey_hostname=<%= LA_cas_hostname %>
 apikey_context_path=apikey
 apikey_base_url=<%= LA_urls_prefix %><%= LA_cas_hostname %>
 apikey_url=<%= LA_urls_prefix %><%= LA_cas_hostname %>/apikey
-apikey_db_dump={{inventory_dir}}/../roles/apikey/files/apikey_schema.sql
 
 apikey_db_name=apikey
 apikey_db_username=apikey
