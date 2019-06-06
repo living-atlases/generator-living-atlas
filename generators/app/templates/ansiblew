@@ -14,7 +14,7 @@ Usage:
    ansiblew -v | --version
 
 Options:
-  --nodryrun             Exec the ansible-playbook comands
+  --nodryrun             Exec the ansible-playbook commands
   -p --properties        Only update properties
   -l --limit=<hosts>     Limit to some inventories hosts
   -s --skip=<tags>       Skip tags

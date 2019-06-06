@@ -116,10 +116,11 @@ We recommend to override and set variables adding then to `quick-start-local-ext
 
 ## Ansible wrapper
 
-Furthermore, an ansible wrapper is generated to facilitate the use of the inventories, very useful for starting deployments. This is the help of the wrapper:
+Furthermore the utility `ansiblew` is generated, an `ansible-playbook` wrapper that can help you to use the inventories and can be easily modificable by you to your needs. It depends on `python-docopt` package. Help output:
 
 ```
-./ansiblew --help
+$ ./ansiblew --help
+
 This is an ansible wrapper to help you to exec the different playbooks with your
 inventories.
 
@@ -134,7 +135,7 @@ Usage:
    ansiblew -v | --version
 
 Options:
-  --nodryrun             Exec the ansible-playbook comands
+  --nodryrun             Exec the ansible-playbook commands
   -p --properties        Only update properties
   -l --limit=<hosts>     Limit to some inventories hosts
   -s --skip=<tags>       Skip tags

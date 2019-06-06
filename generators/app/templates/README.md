@@ -51,7 +51,7 @@ ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%= ext
 Also there is the utility `ansiblew` an `ansible-playbook` wrapper that can help you to exec this commands and can be easily modificable by you to your needs. It depends on `python-docopt` package. Help output:
 
 ```
-$ ./ansiblew -h
+$ ./ansiblew --help
 
 This is an ansible wrapper to help you to exec the different playbooks with your
 inventories.
@@ -62,12 +62,12 @@ the real commands.
 With 'main' only operates over your main host.
 
 Usage:
-   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ main | collectory | ala_hub | biocache_service | ala_bie | bie_index | images | lists | regions | logger | solr | spatial |  all ]
+   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ main | collectory | ala_hub | biocache_service | ala_bie | bie_index | images | lists | regions | logger | solr | cas | biocache_backend | biocache_cli | spatial |  all ]
    ansiblew -h | --help
    ansiblew -v | --version
 
 Options:
-  --nodryrun             Exec the ansible-playbook comands
+  --nodryrun             Exec the ansible-playbook commands
   -p --properties        Only update properties
   -l --limit=<hosts>     Limit to some inventories hosts
   -s --skip=<tags>       Skip tags
@@ -78,6 +78,23 @@ Options:
 ansiblew 0.1.0
 Copyright (C) 2019 living-atlases.gbif.org
 Apache 2.0 License
+```
+So you can install the CAS service or the spatial service with commands like:
+
+```bash
+./ansiblew --alainstall=../ala-install cas --nodryrun
+```
+
+and
+
+```bash
+./ansiblew --alainstall=../ala-install spatial --nodryrun
+```
+
+or all the services with something like:
+
+```bash
+./ansiblew --alainstall=../ala-install all --nodryrun
 ```
 
 ### Rerunning the generator
