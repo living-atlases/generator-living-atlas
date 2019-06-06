@@ -10,6 +10,7 @@
 * [Options](#options)
 * [Screens](#screens)
 * [Rerunning the generator](#rerunning-the-generator)
+* [Ansible Wrapper](#ansible-wrapper)
 * [TODO](#todo)
 * [Caveats](#caveats)
 * [Any problem with this generator?](#any-problem-with-this-generator)
@@ -112,6 +113,39 @@ We can use these inventories as a base for extracting documentation via `doxygen
 You can rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
 We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.
+
+## Ansible wrapper
+
+Furthermore, an ansible wrapper is generated to facilitate the use of the inventories, very useful for starting deployments. This is the help of the wrapper:
+
+```
+./ansiblew --help
+This is an ansible wrapper to help you to exec the different playbooks with your
+inventories.
+
+By default don't exec nothing only show the commands. With --nodryrun you can exec
+the real commands.
+
+With 'main' only operates over your main host.
+
+Usage:
+   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ main | collectory | ala_hub | biocache_service | ala_bie | bie_index | images | lists | regions | logger | solr | cas | biocache_backend | biocache_cli | spatial |  all ]
+   ansiblew -h | --help
+   ansiblew -v | --version
+
+Options:
+  --nodryrun             Exec the ansible-playbook comands
+  -p --properties        Only update properties
+  -l --limit=<hosts>     Limit to some inventories hosts
+  -s --skip=<tags>       Skip tags
+  -h --help              Show help options.
+  -d --debug             Show debug info.
+  -v --version           Show ansiblew version.
+----
+ansiblew 0.1.0
+Copyright (C) 2019 living-atlases.gbif.org
+Apache 2.0 License
+```
 
 ## TODO
 
