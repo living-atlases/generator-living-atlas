@@ -156,7 +156,7 @@ So you can install the CAS service or the spatial service with commands like:
 and
 
 ```bash
-./ansiblew --alainstall=../ala-install-up-to-date spatial --nodryrun
+./ansiblew --alainstall=../ala-install spatial --nodryrun
 ```
 
 or all the services with something like:
