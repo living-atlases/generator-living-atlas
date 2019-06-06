@@ -147,6 +147,24 @@ Copyright (C) 2019 living-atlases.gbif.org
 Apache 2.0 License
 ```
 
+So you can install the CAS service or the spatial service with commands like:
+
+```bash
+./ansiblew --alainstall=../ala-install cas --nodryrun
+```
+
+and
+
+```bash
+./ansiblew --alainstall=../ala-install-up-to-date spatial --nodryrun
+```
+
+or all the services with something like:
+
+```bash
+./ansiblew --alainstall=../ala-install all --nodryrun
+```
+
 ## TODO
 
 - [x] Add basic services (`collectory`, `ala-hub`, etc).
