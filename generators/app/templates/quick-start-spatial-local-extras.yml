@@ -1,5 +1,5 @@
 #
-# This is a inventory with extras variables so heere you can override the
+# This is a inventory with extras variables so here you can override the
 # generated configurations with other variables without modifing the other
 # inventories. So when you rerun the generator in the future, you don't
 # loose your changes.
