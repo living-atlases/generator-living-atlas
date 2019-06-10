@@ -118,7 +118,7 @@ collectory_db_host_address = localhost
 collectory_db_host = localhost
 collectory_db_user = collectory
 collectory_db_password = password
-bypass_cas = <%= LA_use_CAS %>
+bypass_cas = <%= !LA_use_CAS %>
 
 # API key that support registry updates
 api_key = dummy-registry-api-key
@@ -133,7 +133,7 @@ orgNameShort = <%= LA_project_shortname %>
 uri_filter_pattern = /dummy
 
 # Security bypass
-security_bypass = <%= LA_use_CAS %>
+security_bypass = <%= !LA_use_CAS %>
 
 # External API access
 api_key = to_be_added
@@ -271,8 +271,8 @@ index_offline_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/bie-offlin
 biocache_solr_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/biocache
 collectory_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
 
-disable_cas = <%= LA_use_CAS %>
-bypass_cas = <%= LA_use_CAS %>
+disable_cas = <%= !LA_use_CAS %>
+bypass_cas = <%= !LA_use_CAS %>
 
 index_images = true
 
