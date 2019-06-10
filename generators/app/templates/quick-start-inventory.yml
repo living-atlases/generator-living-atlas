@@ -180,8 +180,8 @@ species_list_tool_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_pat
 ####################### SOLR #######################
 
 solr_hostname = <%= LA_solr_hostname %>
-solr_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/biocache
-solr_base_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983
+solr_url = http://<%= LA_solr_url %>:8983/solr/biocache
+solr_base_url = http://<%= LA_solr_url %>:8983
 solr_context_path = <%= LA_solr_path %>
 solr_host = <%= LA_solr_hostname %>
 solr_port = 8983
@@ -265,10 +265,10 @@ bie_index_base_url = <%= LA_urls_prefix %><%= LA_bie_index_url %>
 bie_index_context_path = <%= LA_bie_index_path %>
 bie_index_hostname = <%= LA_bie_index_hostname %>
 
-index_live_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/bie
-index_offline_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/bie-offline
+index_live_url = http://<%= LA_solr_url %>:8983/solr/bie
+index_offline_url = http://<%= LA_solr_url %>:8983/solr/bie-offline
 
-biocache_solr_url = <%= LA_urls_prefix %><%= LA_solr_url %>:8983/solr/biocache
+biocache_solr_url = http://<%= LA_solr_url %>:8983/solr/biocache
 collectory_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
 
 disable_cas = <%= !LA_use_CAS %>
