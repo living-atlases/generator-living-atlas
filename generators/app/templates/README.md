@@ -30,7 +30,7 @@ With access to this machine/s you can run ansible:
 export AI=<location-of-your-cloned-ala-install-repo>
 
 #  For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
-<% let baseInv=`-i ${LA_pkg_name}/${LA_pkg_name}-inventory.yml -i ${LA_pkg_name}/${LA_pkg_name}-local-extras.yml`; %>
+<% let baseInv=`-i ${LA_pkg_name}-inventory.yml -i ${LA_pkg_name}-local-extras.yml`; %>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
 <% for(var j=0; j < LA_services_machines.length; j++) {
@@ -38,13 +38,13 @@ let isSpatialInv = LA_services_machines[j].map.name === 'spatial';
 let isCasInv = LA_services_machines[j].map.name === 'cas';
 let extraInv;
 if (isSpatialInv) {
-    extraInv = `-i ${LA_pkg_name}/${LA_pkg_name}-spatial-inventory.yml -i ${LA_pkg_name}/${LA_pkg_name}-spatial-local-extras.yml`;
+    extraInv = `-i ${LA_pkg_name}-spatial-inventory.yml -i ${LA_pkg_name}-spatial-local-extras.yml`;
 }
 if (isCasInv) {
-    extraInv = `-i ${LA_pkg_name}/${LA_pkg_name}-cas-inventory.yml -i ${LA_pkg_name}/${LA_pkg_name}-cas-local-extras.yml`;
+    extraInv = `-i ${LA_pkg_name}-cas-inventory.yml -i ${LA_pkg_name}-cas-local-extras.yml --extra-vars "ala_install_repo=$AI"`;
 }
 %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%= extraInv %> $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%- extraInv %> $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
 ```
 #### ansible-playbook wrapper
 
