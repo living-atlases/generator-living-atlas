@@ -228,6 +228,11 @@ caches_layers_enabled=false
 <% } %>
 webserver_nginx=true
 ssl=<%= LA_enable_ssl %>
+<% if (LA_enable_ssl) { %>
+ssl_certificate_server_dir=/etc/ssl/
+ssl_cert_file=certs/ssl-cert-snakeoil.pem
+ssl_key_file=private/ssl-cert-snakeoil.key
+<% } %>
 nginx_vhost_fragments_to_clear=["<%= LA_domain %>"]
 
 ############### Biocache CLI options ###############
