@@ -210,3 +210,4 @@ header_and_footer_baseurl = <%= LA_urls_prefix %><%= LA_domain %>
 logger_base_url = <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/service
 <% if (LA_use_species_lists) { %>lists_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
 api_key_check_url_template = https://<%= LA_cas_hostname %>/apikey/ws/check?apikey={0}
+biocollect_url =
