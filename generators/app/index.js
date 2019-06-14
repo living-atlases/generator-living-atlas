@@ -213,12 +213,11 @@ function PromptUrlFor(name, path, when) {
   this.name = varName;
   this.message = `LA ${em(name)} base url?`;
   this.default = a => {
-    const http = a.LA_urls_prefix;
     const usesSubdomain = a[varUsesSubdomain];
     const samplePrefix = usesSubdomain ? `${path}.` : "";
     // Was: const sampleSuffix = usesSubdomain ? "/" : `/${path}`;
     const sampleSuffix = "";
-    return `${http}${samplePrefix}${a.LA_domain}${sampleSuffix}`;
+    return `${samplePrefix}${a.LA_domain}${sampleSuffix}`;
   };
   this.when = a => {
     if (when && !when(a)) {
@@ -265,11 +264,14 @@ function PromptPathFor(name, path, when) {
     )}) ?`;
   };
   this.default = a => {
-    const hostname = a[varHostname];
-    const rootUsed =
-      typeof machinesAndPaths[hostname] !== "undefined" &&
-      machinesAndPaths[hostname]["/"];
-    return rootUsed ? `/${typeof path === "undefined" ? "" : path}` : "/";
+    if (a[varUsesSubdomain]) {
+      const hostname = a[varHostname];
+      const rootUsed =
+        typeof machinesAndPaths[hostname] !== "undefined" &&
+        machinesAndPaths[hostname]["/"];
+      return rootUsed ? `/${typeof path === "undefined" ? "" : path}` : "/";
+    }
+    return typeof path === "undefined" ? "" : `/${path}`;
   };
   if (when) {
     this.when = when;
@@ -386,36 +388,34 @@ module.exports = class extends Generator {
         type: "confirm",
         name: "LA_use_spatial",
         message: `Use ${em("spatial")} service?`,
-        default: false
+        default: true
       },
       {
         store: true,
         type: "confirm",
         name: "LA_use_regions",
         message: `Use ${em("regions")} service?`,
-        default: false
+        default: true
       },
       {
         store: true,
         type: "confirm",
         name: "LA_use_species_lists",
         message: `Use ${em("specieslists")} service?`,
-        default: false
+        default: true
       },
       {
         store: true,
         type: "confirm",
         name: "LA_use_CAS",
         message: `Use ${em("CAS")} Auth service?`,
-        default: false
+        default: true
       },
       {
         store: true,
         type: "confirm",
         name: "LA_enable_ssl",
-        message: `Enable ${em(
-          "SSL"
-        )}? (Warn: this only set the urls correctly, but it doesn't manage the certicates)`,
+        message: `Enable ${em("SSL")}?`,
         default: false
       },
       {
