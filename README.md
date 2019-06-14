@@ -19,13 +19,13 @@
 
 ## Intro
 
-This is a simple [yeoman](http://yeoman.io/) generator, so, just asking some simple questions about your [Living Atlases](https://living-atlases.gbif.org/) Node, you will get a functional configuration for setup your Virtual Machines (VMs) based in `ansible`.
+This is a simple [yeoman](http://yeoman.io/) generator, so, just asking some simple questions about your [Living Atlases](https://living-atlases.gbif.org/) Node, you will get a functional configuration for setup your Virtual Machines (VMs) using `ansible`.
 
 The main goal of this utility is to allow you to configure, install & maintain a [Living Atlas](https://living-atlases.gbif.org/) infrastructure in a fast & smoothly way.
 
 In others words, with the `ansible` inventories produced by this `yeoman` generator and the [ala-install](https://github.com/AtlasOfLivingAustralia/ala-install/) `ansible` playbooks you should deploy the main LA services quickly and without too much pain.
 
-Also, thanks to `yeoman`, you can rerun the assistant enabling, for instance, some new module in the future, reusing your previous settings and comparing the differences (see the [screenshots](#screens)).
+Also, thanks to `yeoman`, you can rerun the assistant, for instance, enabling some new module in the future, or enabling SSL, etc and reusing your previous settings and comparing the differences (see the [screenshots](#screens)).
 
 ## Installation
 
@@ -35,7 +35,7 @@ First, install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [np
 npm install -g yo
 ```
 
-Wait!, this generator is experimental and it's not published in `npm`. So if you want to test it, you can clone this repo and just use it like:
+Wait!, as this `generator-living-atlas` is still experimental, it's not published in `npm`. So if you want to test it, you can clone this repo and just use it like:
 
 ```bash
 cd this-cloned-repo
@@ -60,7 +60,7 @@ yo living-atlas
 ## Options
 
 - Use `--replay` to reuse all the previous responses and regenerate the inventories with some new modification (or improvements if you update this repo). More info below.
-- Also, you can use `--debug` to see some debug info.
+- Also, you can use `--debug` to see some verbose debug info.
 
 ## Screens
 
@@ -83,7 +83,7 @@ We can use these inventories as a base for extracting documentation via `doxygen
 
 ## Rerunning the generator
 
-You can rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
+You can rerun the generator with the option `yo living-atlas --replay` to reuse all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
 We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.  The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.yml` files to add new vars, etc.
 
@@ -123,7 +123,7 @@ Copyright (C) 2019 living-atlases.gbif.org
 Apache 2.0 License
 ```
 
-So you can install the CAS service or the spatial service with commands like:
+So you can install the CAS service or the spatial service with simple commands like:
 
 ```bash
 ./ansiblew --alainstall=../ala-install cas --nodryrun
@@ -141,7 +141,7 @@ or all the services with something like:
 ./ansiblew --alainstall=../ala-install all --nodryrun
 ```
 
-Without `--nodryrun` you will get only the full `ansible-playbook` command to use these inventories.
+Without `--nodryrun` you will get only the full `ansible-playbook` command to use these inventories .
 
 ## TODO
 
