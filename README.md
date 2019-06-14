@@ -189,7 +189,7 @@ or all the services with something like:
 - [x] Add `ssl` self signed certs support when ssl enabled
 - [x] Document `letsencrypt` usage
 - [x] Improve generator for only a domain and `/context` use
-- [ ] Add local-extras.sample that can be rewritten
+- [x] Add `local-extras.sample` files that can be updated in the future without lost local changes in `local-extras.yml` files
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
 - [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [ ] Document `--skip`

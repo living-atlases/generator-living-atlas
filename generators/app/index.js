@@ -615,26 +615,47 @@ module.exports = class extends Generator {
       );
     }
 
-    if (
-      this.answers.LA_use_spatial &&
-      !this.fs.exists(`${dest}/${filePrefix}-spatial-local-extras.yml`)
-    ) {
-      // When only create the extras inventory in the first run
+    // .sample is always updated with new versions
+    this.fs.copyTpl(
+      this.templatePath(`quick-start-local-extras.yml`),
+      this.destinationPath(`${dest}/${filePrefix}-local-extras.sample`),
+      this.answers
+    );
+
+    if (this.answers.LA_use_spatial) {
+      if (!this.fs.exists(`${dest}/${filePrefix}-spatial-local-extras.yml`)) {
+        // When only create the extras inventory in the first run
+        this.fs.copyTpl(
+          this.templatePath(`quick-start-spatial-local-extras.yml`),
+          this.destinationPath(
+            `${dest}/${filePrefix}-spatial-local-extras.yml`
+          ),
+          this.answers
+        );
+      }
+      // .sample is always updated with new versions
       this.fs.copyTpl(
         this.templatePath(`quick-start-spatial-local-extras.yml`),
-        this.destinationPath(`${dest}/${filePrefix}-spatial-local-extras.yml`),
+        this.destinationPath(
+          `${dest}/${filePrefix}-spatial-local-extras.sample`
+        ),
         this.answers
       );
     }
 
-    if (
-      this.answers.LA_use_CAS &&
-      !this.fs.exists(`${dest}/${filePrefix}-cas-local-extras.yml`)
-    ) {
-      // When only create the extras inventory in the first run
+    if (this.answers.LA_use_CAS) {
+      if (!this.fs.exists(`${dest}/${filePrefix}-cas-local-extras.yml`)) {
+        // When only create the extras inventory in the first run
+        this.fs.copyTpl(
+          this.templatePath(`quick-start-cas-local-extras.yml`),
+          this.destinationPath(`${dest}/${filePrefix}-cas-local-extras.yml`),
+          this.answers
+        );
+      }
+      // .sample is always updated with new versions
       this.fs.copyTpl(
         this.templatePath(`quick-start-cas-local-extras.yml`),
-        this.destinationPath(`${dest}/${filePrefix}-cas-local-extras.yml`),
+        this.destinationPath(`${dest}/${filePrefix}-cas-local-extras.sample`),
         this.answers
       );
     }
