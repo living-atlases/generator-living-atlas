@@ -1,11 +1,9 @@
 # generator-living-atlas [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
 
-> An experimental Yeoman Generator for Living Atlas Ansible Inventories
+> A Yeoman Generator for Living Atlas Ansible Inventories
 
 
 * [Intro](#intro)
-* [But why this?](#but-why-this)
-* [Can these quick-start inventories solve all this?](#can-these-quick-start-inventories-solve-all-this)
 * [Installation](#installation)
 * [Options](#options)
 * [Screens](#screens)
@@ -14,64 +12,39 @@
 * [TODO](#todo)
 * [Caveats](#caveats)
 * [Any problem with this generator?](#any-problem-with-this-generator)
+* [But why this?](#but-why-this)
+* [Can these quick-start inventories solve all this?](#can-these-quick-start-inventories-solve-all-this)
 * [About Yeoman](#about-yeoman)
 * [License](#license)
 
 ## Intro
 
-This is a super simple `yeoman` generator, a proof of concept trying to facilitate a quick start with Living Atlas `ansible` inventories.
+This is a simple [yeoman](http://yeoman.io/) generator, so, just asking some simple questions about your [Living Atlases](https://living-atlases.gbif.org/) Node, you will get a functional configuration for setup your Virtual Machines (VMs) based in `ansible`.
 
-So with the inventories produced by this `yeoman` generator and the [ala-install](https://github.com/AtlasOfLivingAustralia/ala-install/) `ansible` playbooks you should deploy a demo with the main LA services quickly and without too much pain.
+The main goal of this utility is to allow you to configure, install & maintain a [Living Atlas](https://living-atlases.gbif.org/) infrastructure in a fast & smoothly way.
 
-Also, thanks to `yeoman`, you can rerun the assistant enabling, for instance, some new module reusing your previous settings and comparing the differences (see the screenshots).
+In others words, with the `ansible` inventories produced by this `yeoman` generator and the [ala-install](https://github.com/AtlasOfLivingAustralia/ala-install/) `ansible` playbooks you should deploy the main LA services quickly and without too much pain.
 
-## But why this?
-
-Ansible is a fantastic tool for manage LA node infrastructures. But nowadays we have some problems with our current `ala-install` inventories/roles & documentation that make their use difficult by newcomers nodes, but also for other non-Australian nodes maintenance:
-- There are many config properties that are not documented and this makes quite difficult to tune a LA node
-- Sometimes the `/data/*/config/*properties` are well commented but not their source inventories
-- From time to time new properties appears but others not ALA nodes don’t notice
-- We end using several self-made inventories, duplicate properties (like orgName, urls, etc), and many times this is a source of problems (like [code duplication](https://en.wikipedia.org/wiki/Duplicate_code)). Some minor sample:
-![](dups.png)
-- There is a lack of more real production-ready inventories (you have to ask for then).
-- `ala-install` has a structure that sometimes is difficult to find some samples or how to start to deploy some service (think in CAS)
-- Many times you have to check the `ansible` generated `config/*properties` for non configured or default properties, search the `ansible` role code for know how to configure these variables, re-run `ansible` with these new variables and re-check the `ansible` `/data/*/config/*properties`.
-- The demo inventory (or the last Paris workshop inventories) are a good sample but not enough for a new production LA node (lack of inventory variables documentation, missing of important services like CAS)
-- We have a lack of info about services versions compatibility
-- Sometimes default module versions in inventories or `LATEST` nexus packages are not the correct/latest ones.
-- It would be nice to choose strategies that was usable by ALA too (not only LA nodes) - that might help maintenance.
-
-## Can these quick-start inventories solve all this?
-
-No. This is only a *Proof of Concept* that tries to mitigate some of the previous problems.
-
-If we think that some tool like this can be useful, we can add more functionality like:
-
-- Better comments of properties in generated inventories for easy operation & tuning
-- ~CAS deployment~ done ✓
-- Focus in have well maintained these generator and their inventories
-- Autogenerate documentation from the inventories comments with tools like `doxygen`
-- etc
-
-or maybe this experiment suggests us other path to follow.
+Also, thanks to `yeoman`, you can rerun the assistant enabling, for instance, some new module in the future, reusing your previous settings and comparing the differences (see the [screenshots](#screens)).
 
 ## Installation
 
-First, install [Yeoman](http://yeoman.io) and generator-living-atlas using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
+First, install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
 npm install -g yo
 ```
 
-Wait!, this generator is experimental and it's not published in npm. So if you want to test it, you can clone this repo and:
+Wait!, this generator is experimental and it's not published in `npm`. So if you want to test it, you can clone this repo and just use it like:
 
 ```bash
+cd this-cloned-repo
 npm link
 cd /tmp # or other directory
 yo living-atlas
 ```
 
-If we decide to publish this generator in the future, the normal use is like:
+If we decide to publish this generator in the future, the normal use will be like:
 
 ```bash
 npm install -g yo
@@ -86,8 +59,8 @@ yo living-atlas
 
 ## Options
 
-- You can use `--debug` to see some debug info.
-- And `--replay` to use all the previous responses and regenerate the inventories with some modification.
+- Use `--replay` to reuse all the previous responses and regenerate the inventories with some new modification (or improvements if you update this repo). More info below.
+- Also, you can use `--debug` to see some debug info.
 
 ## Screens
 
@@ -112,11 +85,13 @@ We can use these inventories as a base for extracting documentation via `doxygen
 
 You can rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
-We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.
+We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.  The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.yml` files to add new vars, etc.
 
 ## Ansible wrapper
 
-Furthermore the utility `ansiblew` is generated, an `ansible-playbook` wrapper that can help you to use the inventories and can be easily modificable by you to your needs. It depends on `python-docopt` package. Help output:
+Furthermore the utility `ansiblew` is generated, an `ansible-playbook` wrapper that can help you to use the inventories and can be easily modificable by you to your needs. It depends on `python-docopt` package (`sudo apt install python-docopt` in debian and derivatives).
+
+Help output:
 
 ```
 $ ./ansiblew --help
@@ -166,11 +141,13 @@ or all the services with something like:
 ./ansiblew --alainstall=../ala-install all --nodryrun
 ```
 
+Without `--nodryrun` you will get only the full `ansible-playbook` command to use these inventories.
+
 ## TODO
 
 - [x] Add basic services (`collectory`, `ala-hub`, etc).
 - [x] Add domain/context and service subdomains support
-- [x] Add `http`/`https` urls support (this does **not** include `ssl` certificates management)
+- [x] Add `http`/`https` urls support
 - [x] Add `regions` service
 - [x] Add `species-list` service
 - [x] Add `spatial` service
@@ -205,6 +182,36 @@ or all the services with something like:
 ## Any problem with this generator?
 
 Please [add an issue](https://github.com/vjrj/generator-living-atlas/issues/new) give us details of your problem and we'll try to help you and to improve the generator. Thanks!
+
+## But why this?
+
+Ansible is a fantastic tool for manage LA node infrastructures. But nowadays we have some problems with our current `ala-install` inventories/roles & documentation that make their use difficult by newcomers nodes, but also for other non-Australian nodes maintenance:
+- There are many config properties that are not documented and this makes quite difficult to tune a LA node
+- Sometimes the `/data/*/config/*properties` are well commented but not their source inventories
+- From time to time new properties appears but others not ALA nodes don’t notice
+- We end using several self-made inventories, duplicate properties (like orgName, urls, etc), and many times this is a source of problems (like [code duplication](https://en.wikipedia.org/wiki/Duplicate_code)). Some minor sample:
+![](dups.png)
+- There is a lack of more real production-ready inventories (you have to ask for then).
+- `ala-install` has a structure that sometimes is difficult to find some samples or how to start to deploy some service (think in CAS)
+- Many times you have to check the `ansible` generated `config/*properties` for non configured or default properties, search the `ansible` role code for know how to configure these variables, re-run `ansible` with these new variables and re-check the `ansible` `/data/*/config/*properties`.
+- The demo inventory (or the last Paris workshop inventories) are a good sample but not enough for a new production LA node (lack of inventory variables documentation, missing of important services like CAS)
+- We have a lack of info about services versions compatibility
+- Sometimes default module versions in inventories or `LATEST` nexus packages are not the correct/latest ones.
+- It would be nice to choose strategies that was usable by ALA too (not only LA nodes) - that might help maintenance.
+
+## Can these quick-start inventories solve all this?
+
+No. This is only a *Proof of Concept* that tries to mitigate some of the previous problems.
+
+If we think that some tool like this can be useful, we can add more functionality like:
+
+- Better comments of properties in generated inventories for easy operation & tuning
+- ~CAS deployment~ done ✓
+- Focus in have well maintained these generator and their inventories
+- Autogenerate documentation from the inventories comments with tools like `doxygen`
+- etc
+
+or maybe this experiment suggests us other path to follow.
 
 ## About Yeoman
 
