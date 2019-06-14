@@ -25,7 +25,7 @@ The main goal of this utility is to allow you to configure, install & maintain a
 
 In others words, with the `ansible` inventories produced by this `yeoman` generator and the [ala-install](https://github.com/AtlasOfLivingAustralia/ala-install/) `ansible` playbooks you should deploy the main LA services quickly and without too much pain.
 
-Also, thanks to `yeoman`, you can rerun the assistant, for instance, enabling some new module in the future, or enabling SSL, etc and reusing your previous settings and comparing the differences (see the [screenshots](#screens)).
+Also, thanks to `yeoman`, you can rerun this generator, for instance, enabling some new module in the future, or enabling SSL, etc and reusing your previous settings and comparing the differences (see the [screenshots](#screens)).
 
 ## Installation
 
@@ -35,7 +35,7 @@ First, install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [np
 npm install -g yo
 ```
 
-Wait!, as this `generator-living-atlas` is still experimental, it's not published in `npm`. So if you want to test it, you can clone this repo and just use it like:
+Wait!, as this `generator-living-atlas` is still somehow experimental, it's not published in `npm`. So if you want to test it, you can clone this repo and just use it like:
 
 ```bash
 cd this-cloned-repo
