@@ -44,6 +44,8 @@ cd /tmp # or other directory
 yo living-atlas
 ```
 
+As this is a `yeoman` development environment you can get some `EPERM` or `EACCESS` errors, so check the [yeoman setup guide](https://yeoman.io/codelab/setup.html) for proper configuration.
+
 If we decide to publish this generator in the future, the normal use will be like:
 
 ```bash
