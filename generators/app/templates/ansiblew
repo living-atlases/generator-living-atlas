@@ -82,7 +82,7 @@ if __name__ == '__main__':
            extraInv = `-i ${LA_pkg_name}-cas-inventory.yml -i ${LA_pkg_name}-cas-local-extras.yml`
         }%>if args['<%= LA_services_machines[j].map.name %>'] or doall:
         extraInventories = "<%= extraInv %>"
-        otherCmd = "%s ansible-playbook %s -u ubuntu %s %s %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s  --extra-vars 'ala_install_repo=%s'" % (cmdPrefix, additionalParams, baseInventories, extraInventories, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>", baseInventories)
+        otherCmd = "%s ansible-playbook %s -u ubuntu %s %s %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s  --extra-vars 'ala_install_repo=%s'" % (cmdPrefix, additionalParams, baseInventories, extraInventories, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>", alainstall)
         if nodryrun:
             os.system("echo %s" % otherCmd)
         os.system(otherCmd)
