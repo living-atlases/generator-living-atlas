@@ -125,7 +125,7 @@ We recommend to override and set variables adding then to `<%= LA_pkg_name %>-lo
 <% if (LA_use_species_lists) { %>- Species list: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 - Species list administration: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>/admin<% } %>
 <% if (LA_use_regions) { %>- Regions: <%= LA_urls_prefix %><%= LA_regions_url %>
-- Regions administration: <%= LA_urls_prefix %><%= LA_regions_url %>/admin<% } %>
+- Regions administration: <%= LA_urls_prefix %><%= LA_regions_url %>/alaAdmin<% } %>
 <% if (LA_use_spatial) { %>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_hostname %>
 - Spatial Webservice: <%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
 - Spatial Geoserver: <%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver/<% } %>
