@@ -102,3 +102,34 @@ or all the services with something like:
 You can rerun the generator with the option `--replay` to use all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
 We recommend to override and set variables adding then to `<%= LA_pkg_name %>-local-extras.yml` and `<%= LA_pkg_name %>-spatial-local-extras.yml` without modify the generated `<%= LA_pkg_name %>-inventory.yml` and `<%= LA_pkg_name %>-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes. The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.yml` files to add new vars, etc.
+
+### Urls of your LA node
+
+- Main landing page: <%= LA_urls_prefix %><%= LA_domain %>
+- Collections: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
+- Collections administration: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/admin
+- Biocache (occurrences): <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
+- Biocache administration: <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>/admin
+- Biocache webservice: <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
+- Species: <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
+- Species webservice: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
+- Species webservice administration: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>/admin
+- SOLR non-public web interface: http://<%= LA_solr_url %>:8983 (You should use ssh port redirection to access this)
+<% if (LA_use_CAS) { %>- CAS Auth system: https://<%= LA_cas_hostname %>/cas
+- User details: https://<%= LA_cas_hostname %>/userdetails
+- User details administration: https://<%= LA_cas_hostname %>/userdetails/admin
+- Apikey management: https://<%= LA_cas_hostname %>/apikey/
+- CAS management administration: https://<%= LA_cas_hostname %>/cas-management/<% } %>
+- Logger: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/
+- Logger administration: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/admin
+<% if (LA_use_species_lists) { %>- Species list: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+- Species list administration: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>/admin<% } %>
+<% if (LA_use_regions) { %>- Regions: <%= LA_urls_prefix %><%= LA_regions_url %>
+- Regions administration: <%= LA_urls_prefix %><%= LA_regions_url %>/admin<% } %>
+<% if (LA_use_spatial) { %>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_hostname %>
+- Spatial Webservice: <%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
+- Spatial Geoserver: <%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver/<% } %>
+
+### TODO
+
+[ ] Whitelist your IPs in the logger admin interface to allow correct log recollection
