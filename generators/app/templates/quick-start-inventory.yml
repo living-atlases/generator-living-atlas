@@ -358,3 +358,6 @@ biocache_cli_version = 2.4.3
 species_list_version = 3.3-SNAPSHOT
 regions_version = 3.3-SNAPSHOT
 images_version = 0.9
+
+# workaround for: https://github.com/AtlasOfLivingAustralia/ala-install/issues/291                                                                            │······························
+namedata_datestamp=20171012
