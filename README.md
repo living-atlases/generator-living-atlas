@@ -169,11 +169,11 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 - [x] Document `letsencrypt` usage
 - [x] Improve generator for only a domain and `/context` use
 - [x] Add `local-extras.sample` files that can be updated in the future without lost local changes in `local-extras.yml` files
+- [x] Generation of passwords on first run and increase security by default
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
-- [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [ ] Document `--skip`
+- [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [ ] Add `--tags` to ansible wrapper
-- [ ] Generation of passwords on first run and increase security by default
 - [ ] Better testing
 
 ## Caveats

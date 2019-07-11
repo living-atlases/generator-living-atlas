@@ -5,6 +5,7 @@ const Generator = require("yeoman-generator");
 const chalk = require("chalk");
 const yosay = require("onionsay");
 const parseDomain = require("parse-domain");
+const niceware = require("niceware");
 
 let defaultStore = false;
 let logger;
@@ -16,6 +17,7 @@ const defUseSubdomain = a => {
 let debug = false;
 let replay = false;
 let previousConfig;
+let firstRun;
 
 const parseDomainOpts = {};
 const isCorrectDomain = domain => parseDomain(domain, parseDomainOpts) !== null;
@@ -318,7 +320,7 @@ module.exports = class extends Generator {
         ? []
         : previousConfigAll.promptValues;
 
-    const firstRun = previousConfigAll.firstRun !== false;
+    firstRun = previousConfigAll.firstRun !== false;
     if (firstRun) {
       // Set firstRun so in the future we can check it
       this.config.set("firstRun", false);
@@ -584,6 +586,17 @@ module.exports = class extends Generator {
     const dest = this.answers.LA_pkg_name;
     const filePrefix = dest;
 
+    if (firstRun ||
+        !this.fs.exists(`${dest}/${filePrefix}-local-passwords.yml`)) {
+      // We'll generate some easy but strong passwords for our new database, etc
+
+      this.answers.LA_passwords = [];
+      for (let num = 0; num < 20; num++) {
+        this.answers.LA_passwords.push(
+          niceware.generatePassphrase(4).join(""));
+      }
+    }
+
     if (debug) this.log(this.answers);
 
     this.fs.copyTpl(
@@ -678,6 +691,14 @@ module.exports = class extends Generator {
       this.fs.copyTpl(
         this.templatePath("quick-start-cas-inventory.yml"),
         this.destinationPath(`${dest}/${filePrefix}-cas-inventory.yml`),
+        this.answers
+      );
+    }
+
+    if (!this.fs.exists(`${dest}/${filePrefix}-local-passwords.yml`)) {
+      this.fs.copyTpl(
+        this.templatePath(`quick-start-local-passwords.yml`),
+        this.destinationPath(`${dest}/${filePrefix}-local-passwords.yml`),
         this.answers
       );
     }
