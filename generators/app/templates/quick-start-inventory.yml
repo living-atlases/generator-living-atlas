@@ -130,7 +130,6 @@ orgNameLong = <%= LA_project_name %>
 orgNameShort = <%= LA_project_shortname %>
 
 # CAS
-uri_filter_pattern = /dummy
 
 # Security bypass
 security_bypass = <%= !LA_use_CAS %>
