@@ -179,7 +179,7 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 ## Caveats
 
 - Currently running several services in the same machine and the same domain doesn't configure correctly `nginx` `vhosts`. See [this enhancement issue](https://github.com/AtlasOfLivingAustralia/ala-install/issues/256) in `ala-install`. As a workaround you can copy and configure the generated `vhosts` in `/etc/nginx/sites-available` with different names so they are not overwritten by `ansible`.
-- As we are using the [https://github.com/AtlasOfLivingAustralia/ala-install/blob/master/ansible/ala-demo.yml](ansible/ala-demo.yml) playbook, if you are using more that two hosts (the minimal is one for main services, and another for spatial services), some services will be also configured in the main machine. As a workaround, while we fix this, you can use a different playbook for your main machine with the correct limited roles.
+- As we are using the [ansible/ala-demo.yml](https://github.com/AtlasOfLivingAustralia/ala-install/blob/master/ansible/ala-demo.yml) playbook, if you are using more that two hosts (the minimal is one for main services, and another for spatial services), some services will be also configured in the main machine. As a workaround, while we fix this, you can use a different playbook for your main machine with the correct limited roles.
 
 ## Any problem with this generator?
 
