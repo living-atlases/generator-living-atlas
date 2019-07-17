@@ -25,11 +25,11 @@
     "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-config-xo": "^0.25.0",
-    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "husky": "^1.2.0",
     "jest": "^24.8.0",
-    "lint-staged": "^8.1.0",
-    "prettier": "^1.15.2",
+    "lint-staged": "^8.2.1",
+    "prettier": "^1.18.2",
     "yeoman-assert": "^3.1.0",
     "yeoman-test": "^1.7.0"
   },
@@ -41,7 +41,7 @@
     "child_process": "^1.0.2",
     "niceware": "^1.0.7",
     "onionsay": "github:theonion/onionsay",
-    "parse-domain": "^2.1.7",
+    "parse-domain": "^2.3.1",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   },
