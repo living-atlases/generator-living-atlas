@@ -61,7 +61,7 @@ webserver_nginx=true
 robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
 robots_disallow_useragents=["SemrushBot", "Mappy", "BUbiNG"]
 
-ssl=false
+ssl=<%= LA_enable_ssl %>
 
 ###
 # Geonetwork
