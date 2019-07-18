@@ -87,6 +87,8 @@ We can use these inventories as a base for extracting documentation via `doxygen
 
 You can rerun the generator with the option `yo living-atlas --replay` to reuse all the previous responses and regenerate the inventories with some modification (if for instance you want to add a new service, or using a new version of this generator with improvements).
 
+With `--replay-dont-ask` you can regenerate the playbooks with previous answers without asking again. This is useful for new versions of this generator, or if you manual edit `.yo-rc.json` where your answers are stored or automated process (like ci integrations).
+
 We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modify the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes.  The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.yml` files to add new vars, etc.
 
 ## Ansible wrapper
@@ -170,6 +172,7 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 - [x] Improve generator for only a domain and `/context` use
 - [x] Add `local-extras.sample` files that can be updated in the future without lost local changes in `local-extras.yml` files
 - [x] Generation of passwords on first run and increase security by default
+- [x] Added option `--replay-dont-ask` to regenerate the playbooks with previous answers without asking again
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
 - [ ] Document `--skip`
 - [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts

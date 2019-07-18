@@ -16,6 +16,7 @@ const defUseSubdomain = a => {
 
 let debug = false;
 let replay = false;
+let dontAsk = false;
 let previousConfig;
 let firstRun;
 
@@ -66,8 +67,11 @@ const servicesAndMachines = [];
 
 const servicesRolsMap = {
   main: { name: "main", group: "ala-demo", playbook: "ala-demo" },
-  ala_bie: { name: "ala_bie", group: "bie-hub", playbook: "bie-hub" },
-  bie_index: { name: "bie_index", group: "bie-index", playbook: "bie-index" },
+  collectory: {
+    name: "collectory",
+    group: "collectory",
+    playbook: "collectory-standalone"
+  },
   ala_hub: {
     name: "ala_hub",
     group: "biocache-hub",
@@ -78,6 +82,26 @@ const servicesRolsMap = {
     group: "biocache-service-clusterdb",
     playbook: "biocache-service-clusterdb"
   },
+  ala_bie: { name: "ala_bie", group: "bie-hub", playbook: "bie-hub" },
+  bie_index: { name: "bie_index", group: "bie-index", playbook: "bie-index" },
+  images: { name: "images", group: "image-service", playbook: "image-service" },
+  lists: {
+    name: "lists",
+    group: "species-list",
+    playbook: "species-list-standalone"
+  },
+  regions: {
+    name: "regions",
+    group: "regions",
+    playbook: "regions-standalone"
+  },
+  logger: {
+    name: "logger",
+    group: "logger-service",
+    playbook: "logger-standalone"
+  },
+  solr: { name: "solr", group: "solr7-server", playbook: "solr7-standalone" },
+  cas: { name: "cas", group: "cas-servers", playbook: "aws-cas-5" },
   biocache_backend: {
     name: "biocache_backend",
     group: "biocache",
@@ -88,30 +112,7 @@ const servicesRolsMap = {
     group: "biocache-cli",
     playbook: "biocache-cli"
   },
-  collectory: {
-    name: "collectory",
-    group: "collectory",
-    playbook: "collectory-standalone"
-  },
-  images: { name: "images", group: "image-service", playbook: "image-service" },
-  logger: {
-    name: "logger",
-    group: "logger-service",
-    playbook: "logger-standalone"
-  },
-  regions: {
-    name: "regions",
-    group: "regions",
-    playbook: "regions-standalone"
-  },
-  solr: { name: "solr", group: "solr7-server", playbook: "solr7-standalone" },
-  lists: {
-    name: "lists",
-    group: "species-list",
-    playbook: "species-list-standalone"
-  },
-  spatial: { name: "spatial", group: "spatial", playbook: "spatial" },
-  cas: { name: "cas", group: "cas-servers", playbook: "aws-cas-5" }
+  spatial: { name: "spatial", group: "spatial", playbook: "spatial" }
 };
 
 const storeMachine = (name, machine) =>
@@ -311,8 +312,11 @@ module.exports = class extends Generator {
 
     this.argument("debug", { type: Boolean, required: false });
     this.argument("replay", { type: Boolean, required: false });
+    this.argument("replay-dont-ask", { type: Boolean, required: false });
+
     debug = this.options.debug;
-    replay = this.options.replay;
+    replay = this.options.replay || this.options["replay-dont-ask"];
+    dontAsk = this.options["replay-dont-ask"];
 
     const previousConfigAll = this.config.getAll();
     previousConfig =
@@ -344,213 +348,240 @@ module.exports = class extends Generator {
       )
     );
 
-    this.answers = await this.prompt([
-      {
-        store: true,
-        type: "input",
-        name: "LA_project_name",
-        message: `Your LA Project ${em("Long Name")}:`,
-        default: "Living Atlas of Wakanda"
-      },
-      {
-        store: true,
-        type: "input",
-        name: "LA_project_shortname",
-        message: `Your LA Project ${em("Shortname")}:`,
-        default: answers =>
-          answers.LA_project_name.replace(/Living Atlas of /g, "LA ")
-      },
-      {
-        store: true,
-        type: "input",
-        name: "LA_pkg_name",
-        message: `Your LA ${em("short-lowercase-name")}:`,
-        default: answers =>
-          answers.LA_project_name.toLowerCase().replace(/ /g, "-"),
-        validate: input =>
-          new Promise(resolve => {
-            if (input.match(/^[a-z0-9-]+$/g)) {
-              resolve(true);
-            } else {
-              resolve("You need to provide some-example-short-name");
-            }
-          })
-      },
-      {
-        store: true,
-        type: "input",
-        name: "LA_domain",
-        message: `What is your LA node ${em("main domain")}?`,
-        default: answers => `${answers.LA_pkg_name}.org`,
-        filter: input => storeMachine("main", input),
-        validate: input => validateDomain(input, "main", true)
-      },
-      {
-        store: true,
-        type: "confirm",
-        name: "LA_use_spatial",
-        message: `Use ${em("spatial")} service?`,
-        default: true
-      },
-      {
-        store: true,
-        type: "confirm",
-        name: "LA_use_regions",
-        message: `Use ${em("regions")} service?`,
-        default: true
-      },
-      {
-        store: true,
-        type: "confirm",
-        name: "LA_use_species_lists",
-        message: `Use ${em("specieslists")} service?`,
-        default: true
-      },
-      {
-        store: true,
-        type: "confirm",
-        name: "LA_use_CAS",
-        message: `Use ${em("CAS")} Auth service?`,
-        default: true
-      },
-      {
-        store: true,
-        type: "confirm",
-        name: "LA_enable_ssl",
-        message: `Enable ${em("SSL")}?`,
-        default: false
-      },
-      {
-        store: defaultStore,
-        type: "input",
-        name: "check-ssl",
-        message: "",
-        default: "",
-        when: a =>
-          new Promise(resolve => {
-            a.LA_urls_prefix = a.LA_enable_ssl ? "https://" : "http://";
-            resolve(false);
-          })
-      },
-      {
-        store: defaultStore,
-        type: "list",
-        name: "LA_collectory_uses_subdomain",
-        message: a =>
-          `Will the ${em("collectory")} service use a ${a.LA_urls_prefix}${em(
-            "subdomain"
-          )}.${a.LA_domain} or a ${a.LA_urls_prefix}${a.LA_domain}${em(
-            "/service-path"
-          )} ?`,
-        choices: [
-          { name: "subdomain", value: true },
-          { name: "service-path", value: false }
-        ]
-      },
+    this.answers = dontAsk
+      ? previousConfig
+      : await this.prompt([
+          {
+            store: true,
+            type: "input",
+            name: "LA_project_name",
+            message: `Your LA Project ${em("Long Name")}:`,
+            default: "Living Atlas of Wakanda"
+          },
+          {
+            store: true,
+            type: "input",
+            name: "LA_project_shortname",
+            message: `Your LA Project ${em("Shortname")}:`,
+            default: answers =>
+              answers.LA_project_name.replace(/Living Atlas of /g, "LA ")
+          },
+          {
+            store: true,
+            type: "input",
+            name: "LA_pkg_name",
+            message: `Your LA ${em("short-lowercase-name")}:`,
+            default: answers =>
+              answers.LA_project_name.toLowerCase().replace(/ /g, "-"),
+            validate: input =>
+              new Promise(resolve => {
+                if (input.match(/^[a-z0-9-]+$/g)) {
+                  resolve(true);
+                } else {
+                  resolve("You need to provide some-example-short-name");
+                }
+              })
+          },
+          {
+            store: true,
+            type: "input",
+            name: "LA_domain",
+            message: `What is your LA node ${em("main domain")}?`,
+            default: answers => `${answers.LA_pkg_name}.org`,
+            filter: input => storeMachine("main", input),
+            validate: input => validateDomain(input, "main", true)
+          },
+          {
+            store: true,
+            type: "confirm",
+            name: "LA_use_spatial",
+            message: `Use ${em("spatial")} service?`,
+            default: true
+          },
+          {
+            store: true,
+            type: "confirm",
+            name: "LA_use_regions",
+            message: `Use ${em("regions")} service?`,
+            default: true
+          },
+          {
+            store: true,
+            type: "confirm",
+            name: "LA_use_species_lists",
+            message: `Use ${em("specieslists")} service?`,
+            default: true
+          },
+          {
+            store: true,
+            type: "confirm",
+            name: "LA_use_CAS",
+            message: `Use ${em("CAS")} Auth service?`,
+            default: true
+          },
+          {
+            store: true,
+            type: "confirm",
+            name: "LA_enable_ssl",
+            message: `Enable ${em("SSL")}?`,
+            default: false
+          },
+          {
+            store: defaultStore,
+            type: "input",
+            name: "check-ssl",
+            message: "",
+            default: ""
+          },
+          {
+            store: defaultStore,
+            type: "list",
+            name: "LA_collectory_uses_subdomain",
+            message: a =>
+              `Will the ${em("collectory")} service use a ${
+                a.LA_urls_prefix
+              }${em("subdomain")}.${a.LA_domain} or a ${a.LA_urls_prefix}${
+                a.LA_domain
+              }${em("/service-path")} ?`,
+            choices: [
+              { name: "subdomain", value: true },
+              { name: "service-path", value: false }
+            ]
+          },
 
-      new PromptHostnameFor("collectory", "collectory"),
-      new PromptHostnameInputFor("collectory"),
-      new PromptUrlFor("collectory", "collectory"),
-      new PromptPathFor("collectory", "collectory"),
+          new PromptHostnameFor("collectory", "collectory"),
+          new PromptHostnameInputFor("collectory"),
+          new PromptUrlFor("collectory", "collectory"),
+          new PromptPathFor("collectory", "collectory"),
 
-      new PromptSubdomainFor("ala_hub", "biocache"),
-      new PromptHostnameFor("ala_hub", "biocache"),
-      new PromptHostnameInputFor("ala_hub"),
-      new PromptUrlFor("ala_hub", "ala-hub"),
-      new PromptPathFor("ala_hub", "ala-hub"),
+          new PromptSubdomainFor("ala_hub", "biocache"),
+          new PromptHostnameFor("ala_hub", "biocache"),
+          new PromptHostnameInputFor("ala_hub"),
+          new PromptUrlFor("ala_hub", "ala-hub"),
+          new PromptPathFor("ala_hub", "ala-hub"),
 
-      new PromptSubdomainFor("biocache_service", "biocache-service"),
-      new PromptHostnameFor("biocache_service", "biocache-ws"),
-      new PromptHostnameInputFor("biocache_service"),
-      new PromptUrlFor("biocache_service", "biocache-service"),
-      new PromptPathFor("biocache_service", "biocache-service"),
+          new PromptSubdomainFor("biocache_service", "biocache-service"),
+          new PromptHostnameFor("biocache_service", "biocache-ws"),
+          new PromptHostnameInputFor("biocache_service"),
+          new PromptUrlFor("biocache_service", "biocache-service"),
+          new PromptPathFor("biocache_service", "biocache-service"),
 
-      new PromptSubdomainFor("ala_bie", "bie"),
-      new PromptHostnameFor("ala_bie", "bie"),
-      new PromptHostnameInputFor("ala_bie"),
-      new PromptUrlFor("ala_bie", "ala-bie"),
-      new PromptPathFor("ala_bie", "ala-bie"),
+          new PromptSubdomainFor("ala_bie", "bie"),
+          new PromptHostnameFor("ala_bie", "bie"),
+          new PromptHostnameInputFor("ala_bie"),
+          new PromptUrlFor("ala_bie", "ala-bie"),
+          new PromptPathFor("ala_bie", "ala-bie"),
 
-      new PromptSubdomainFor("bie_index", "bie-service"),
-      new PromptHostnameFor("bie_index", "bie-ws"),
-      new PromptHostnameInputFor("bie_index"),
-      new PromptUrlFor("bie_index", "bie-index"),
-      new PromptPathFor("bie_index", "bie-index"),
+          new PromptSubdomainFor("bie_index", "bie-service"),
+          new PromptHostnameFor("bie_index", "bie-ws"),
+          new PromptHostnameInputFor("bie_index"),
+          new PromptUrlFor("bie_index", "bie-index"),
+          new PromptPathFor("bie_index", "bie-index"),
 
-      new PromptSubdomainFor("images", "images"),
-      new PromptHostnameFor("images", "images"),
-      new PromptHostnameInputFor("images"),
-      new PromptUrlFor("images", "images"),
-      new PromptPathFor("images", "images"),
+          new PromptSubdomainFor("images", "images"),
+          new PromptHostnameFor("images", "images"),
+          new PromptHostnameInputFor("images"),
+          new PromptUrlFor("images", "images"),
+          new PromptPathFor("images", "images"),
 
-      new PromptSubdomainFor(
-        "lists",
-        "specieslists",
-        a => a.LA_use_species_lists
-      ),
-      new PromptHostnameFor("lists", "lists", a => a.LA_use_species_lists),
-      new PromptHostnameInputFor("lists", a => a.LA_use_species_lists),
-      new PromptUrlFor("lists", "specieslists", a => a.LA_use_species_lists),
-      new PromptPathFor("lists", "specieslists", a => a.LA_use_species_lists),
+          new PromptSubdomainFor(
+            "lists",
+            "specieslists",
+            a => a.LA_use_species_lists
+          ),
+          new PromptHostnameFor("lists", "lists", a => a.LA_use_species_lists),
+          new PromptHostnameInputFor("lists", a => a.LA_use_species_lists),
+          new PromptUrlFor(
+            "lists",
+            "specieslists",
+            a => a.LA_use_species_lists
+          ),
+          new PromptPathFor(
+            "lists",
+            "specieslists",
+            a => a.LA_use_species_lists
+          ),
 
-      new PromptSubdomainFor("regions", "regions", a => a.LA_use_regions),
-      new PromptHostnameFor("regions", "regions", a => a.LA_use_regions),
-      new PromptHostnameInputFor("regions", a => a.LA_use_regions),
-      new PromptUrlFor("regions", "regions", a => a.LA_use_regions),
-      new PromptPathFor("regions", "regions", a => a.LA_use_regions),
+          new PromptSubdomainFor("regions", "regions", a => a.LA_use_regions),
+          new PromptHostnameFor("regions", "regions", a => a.LA_use_regions),
+          new PromptHostnameInputFor("regions", a => a.LA_use_regions),
+          new PromptUrlFor("regions", "regions", a => a.LA_use_regions),
+          new PromptPathFor("regions", "regions", a => a.LA_use_regions),
 
-      new PromptSubdomainFor("logger", "logger"),
-      new PromptHostnameFor("logger", "logger"),
-      new PromptHostnameInputFor("logger"),
-      new PromptUrlFor("logger"),
-      new PromptPathFor("logger", "logger-service"),
+          new PromptSubdomainFor("logger", "logger"),
+          new PromptHostnameFor("logger", "logger"),
+          new PromptHostnameInputFor("logger"),
+          new PromptUrlFor("logger"),
+          new PromptPathFor("logger", "logger-service"),
 
-      new PromptSubdomainFor("solr", "solr"),
-      new PromptHostnameFor("solr", "index"),
-      new PromptHostnameInputFor("solr"),
-      new PromptUrlFor("solr"),
-      new PromptPathFor("solr", "solr"),
+          new PromptSubdomainFor("solr", "solr"),
+          new PromptHostnameFor("solr", "index"),
+          new PromptHostnameInputFor("solr"),
+          new PromptUrlFor("solr"),
+          new PromptPathFor("solr", "solr"),
 
-      {
-        store: true,
-        type: "input",
-        name: "LA_cas_hostname",
-        message: `LA ${em("CAS")} subdomain`,
-        filter: input => storeMachine("cas", input),
-        default: a => `auth.${a.LA_domain}`
-      },
-      {
-        store: true,
-        type: "input",
-        name: "LA_biocache_backend_hostname",
-        message: `LA ${em("biocache-backend")} hostname`,
-        filter: input =>
-          new Promise(resolve => {
-            storeMachine("biocache_backend", input).then(input =>
-              storeMachine("biocache_cli", input).then(input => resolve(input))
-            );
-          }),
-        default: a => `${a.LA_domain}`
-      },
-      {
-        store: true,
-        type: "input",
-        name: "LA_spatial_hostname",
-        message: `LA ${em("spatial")} subdomain`,
-        filter: input => storeMachine("spatial", input),
-        when: a => a.LA_use_spatial,
-        default: a => `spatial.${a.LA_domain}`
-      },
-      {
-        store: true,
-        type: "confirm",
-        name: "LA_use_git",
-        message: `Use ${em(
-          "git"
-        )} in your generated inventories to track their changes? (Very recommended)`,
-        default: true
-      }
-    ]);
+          {
+            store: true,
+            type: "input",
+            name: "LA_cas_hostname",
+            message: `LA ${em("CAS")} subdomain`,
+            filter: input => storeMachine("cas", input),
+            default: a => `auth.${a.LA_domain}`
+          },
+          {
+            store: true,
+            type: "input",
+            name: "LA_biocache_backend_hostname",
+            message: `LA ${em("biocache-backend")} hostname`,
+            filter: input =>
+              new Promise(resolve => {
+                storeMachine("biocache_backend", input).then(input =>
+                  storeMachine("biocache_cli", input).then(input =>
+                    resolve(input)
+                  )
+                );
+              }),
+            default: a => `${a.LA_domain}`
+          },
+          {
+            store: true,
+            type: "input",
+            name: "LA_spatial_hostname",
+            message: `LA ${em("spatial")} subdomain`,
+            filter: input => storeMachine("spatial", input),
+            when: a => a.LA_use_spatial,
+            default: a => `spatial.${a.LA_domain}`
+          },
+          {
+            store: true,
+            type: "confirm",
+            name: "LA_use_git",
+            message: `Use ${em(
+              "git"
+            )} in your generated inventories to track their changes? (Very recommended)`,
+            default: true
+          }
+        ]);
+
+    this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
+
+    this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
+      ? "https://"
+      : "http://";
+
+    if (dontAsk) {
+      Object.keys(servicesRolsMap).forEach(service => {
+        if (debug) this.log(this.answers);
+        const hostVar =
+          service === "main" ? `LA_domain` : `LA_${service}_hostname`;
+        const hostname = this.answers[hostVar];
+        if (debug) this.log(`${hostVar} -> ${hostname}`);
+        storeMachine(service, hostname);
+      });
+
+      /* This.log(machines);
+       * this.log(servicesAndMachines); */
+    }
   }
 
   writing() {
@@ -568,8 +599,6 @@ module.exports = class extends Generator {
       "regions"
     ];
 
-    this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
-
     services.forEach(service => {
       const path = this.answers[`LA_${service}_path`];
       if (path === "/") {
@@ -586,14 +615,15 @@ module.exports = class extends Generator {
     const dest = this.answers.LA_pkg_name;
     const filePrefix = dest;
 
-    if (firstRun ||
-        !this.fs.exists(`${dest}/${filePrefix}-local-passwords.yml`)) {
+    if (
+      firstRun ||
+      !this.fs.exists(`${dest}/${filePrefix}-local-passwords.yml`)
+    ) {
       // We'll generate some easy but strong passwords for our new database, etc
 
       this.answers.LA_passwords = [];
       for (let num = 0; num < 20; num++) {
-        this.answers.LA_passwords.push(
-          niceware.generatePassphrase(4).join(""));
+        this.answers.LA_passwords.push(niceware.generatePassphrase(4).join(""));
       }
     }
 
