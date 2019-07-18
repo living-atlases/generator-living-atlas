@@ -38,7 +38,6 @@ const validateDomain = (input, name, store) =>
   new Promise(resolve => {
     if (debug) logger(`Validate ${input} ${name}`);
     const isValid = isCorrectDomain(input);
-    if (isValid && store) storeMachine(name, input);
     if (isValid || input === "other") {
       resolve(true);
     } else {
@@ -115,22 +114,22 @@ const servicesRolsMap = {
   spatial: { name: "spatial", group: "spatial", playbook: "spatial" }
 };
 
-const storeMachine = (name, machine) =>
-  new Promise(resolve => {
-    if (debug) logger(`Store: ${name} -> ${machine}`);
-    if (isCorrectDomain(machine)) {
-      if (!machines.has(machine)) machines.add(machine);
-      if (name !== "main") {
-        servicesAndMachines.push({
-          service: name,
-          machine,
-          map: servicesRolsMap[name]
-        });
-      }
-      if (debug) logger(machines);
+const mapMachine = (name, machine) => {
+  if (debug) logger(`Store: ${name} -> ${machine}`);
+  if (isCorrectDomain(machine)) {
+    if (!machines.has(machine)) machines.add(machine);
+    if (name !== "main") {
+      servicesAndMachines.push({
+        service: name,
+        machine,
+        map: servicesRolsMap[name]
+      });
     }
-    resolve(machine);
-  });
+    if (debug) logger(machines);
+  } else {
+    logger(`WARN: Wrong hostname ${machine}`);
+  }
+};
 
 function PromptSubdomainFor(name, subdomain, when) {
   this.store = defaultStore;
@@ -181,10 +180,6 @@ function PromptHostnameFor(name, subdomain, when) {
   if (when) {
     this.when = when;
   }
-  // This does not work:
-  // this.filter = input => storeMachine(name, input);
-  // https://github.com/SBoudrias/Inquirer.js/issues/383
-  // this.validate = input => validateDomain(input, name, true);
 }
 
 function PromptHostnameInputFor(name, when) {
@@ -199,8 +194,6 @@ function PromptHostnameInputFor(name, when) {
     if (a[varName] === "other") {
       return true;
     }
-    // Store previous hostname
-    storeMachine(name, a[varName]);
     // And don't ask again
     return false;
   };
@@ -329,20 +322,20 @@ module.exports = class extends Generator {
       // Set firstRun so in the future we can check it
       this.config.set("firstRun", false);
     }
+    logger = this.log;
 
     // We always store in the first run
     if (debug && firstRun) {
-      this.log("Running generator for the first time in this location");
+      logger("Running generator for the first time in this location");
     }
     defaultStore = firstRun || this.options.replay;
-    if (debug) this.log("Current config:");
-    if (debug) this.log(previousConfig);
-    logger = this.log;
+    if (debug) logger("Current config:");
+    if (debug) logger(previousConfig);
   }
 
   async prompting() {
     // Have Yeoman greet the user.
-    this.log(
+    logger(
       yosay(
         `Welcome to the ${em("Living Atlas")} Quick-Start Ansible Generator`
       )
@@ -388,7 +381,6 @@ module.exports = class extends Generator {
             name: "LA_domain",
             message: `What is your LA node ${em("main domain")}?`,
             default: answers => `${answers.LA_pkg_name}.org`,
-            filter: input => storeMachine("main", input),
             validate: input => validateDomain(input, "main", true)
           },
           {
@@ -525,7 +517,6 @@ module.exports = class extends Generator {
             type: "input",
             name: "LA_cas_hostname",
             message: `LA ${em("CAS")} subdomain`,
-            filter: input => storeMachine("cas", input),
             default: a => `auth.${a.LA_domain}`
           },
           {
@@ -533,14 +524,6 @@ module.exports = class extends Generator {
             type: "input",
             name: "LA_biocache_backend_hostname",
             message: `LA ${em("biocache-backend")} hostname`,
-            filter: input =>
-              new Promise(resolve => {
-                storeMachine("biocache_backend", input).then(input =>
-                  storeMachine("biocache_cli", input).then(input =>
-                    resolve(input)
-                  )
-                );
-              }),
             default: a => `${a.LA_domain}`
           },
           {
@@ -548,7 +531,6 @@ module.exports = class extends Generator {
             type: "input",
             name: "LA_spatial_hostname",
             message: `LA ${em("spatial")} subdomain`,
-            filter: input => storeMachine("spatial", input),
             when: a => a.LA_use_spatial,
             default: a => `spatial.${a.LA_domain}`
           },
@@ -564,24 +546,21 @@ module.exports = class extends Generator {
         ]);
 
     this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
-
+    this.answers.LA_main_hostname = this.answers.LA_domain;
     this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
       ? "https://"
       : "http://";
 
-    if (dontAsk) {
-      Object.keys(servicesRolsMap).forEach(service => {
-        if (debug) this.log(this.answers);
-        const hostVar =
-          service === "main" ? `LA_domain` : `LA_${service}_hostname`;
-        const hostname = this.answers[hostVar];
-        if (debug) this.log(`${hostVar} -> ${hostname}`);
-        storeMachine(service, hostname);
-      });
+    Object.keys(servicesRolsMap).forEach(service => {
+      if (debug) logger(this.answers);
+      const hostVar = `LA_${service}_hostname`;
+      const hostname = this.answers[hostVar];
+      if (debug) logger(`${hostVar} -> ${hostname}`);
+      mapMachine(service, hostname);
+    });
 
-      /* This.log(machines);
-       * this.log(servicesAndMachines); */
-    }
+    if (debug) logger(machines);
+    if (debug) logger(servicesAndMachines);
   }
 
   writing() {
