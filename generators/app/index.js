@@ -363,7 +363,9 @@ module.exports = class extends Generator {
             store: true,
             type: "input",
             name: "LA_pkg_name",
-            message: `Your LA ${em("short-lowercase-name")}:`,
+            message: `Your LA ${em(
+              "short-lowercase-name"
+            )} (we'll put your inventories in that directory):`,
             default: answers =>
               answers.LA_project_name.toLowerCase().replace(/ /g, "-"),
             validate: input =>
@@ -417,13 +419,6 @@ module.exports = class extends Generator {
             name: "LA_enable_ssl",
             message: `Enable ${em("SSL")}?`,
             default: false
-          },
-          {
-            store: defaultStore,
-            type: "input",
-            name: "check-ssl",
-            message: "",
-            default: ""
           },
           {
             store: defaultStore,
