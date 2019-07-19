@@ -431,6 +431,18 @@ module.exports = class extends Generator {
           },
           {
             store: defaultStore,
+            type: "input",
+            name: "check-ssl",
+            message: "",
+            default: "",
+            when: a =>
+              new Promise(resolve => {
+                a.LA_urls_prefix = a.LA_enable_ssl ? "https://" : "http://";
+                resolve(false);
+              })
+          },
+          {
+            store: defaultStore,
             type: "list",
             name: "LA_collectory_uses_subdomain",
             message: a =>
@@ -561,11 +573,11 @@ module.exports = class extends Generator {
 
     this.answers.LA_main_hostname = this.answers.LA_domain;
     this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
-    this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
-      ? "https://"
-      : "http://";
 
     if (dontAsk) {
+      this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
+        ? "https://"
+        : "http://";
       Object.keys(servicesRolsMap).forEach(service => {
         if (debug) logger(this.answers);
         const hostVar = `LA_${service}_hostname`;
