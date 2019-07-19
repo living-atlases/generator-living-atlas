@@ -330,19 +330,20 @@ module.exports = class extends Generator {
       this.config.set("firstRun", false);
     }
 
+    logger = this.log;
+
     // We always store in the first run
     if (debug && firstRun) {
-      this.log("Running generator for the first time in this location");
+      logger("Running generator for the first time in this location");
     }
     defaultStore = firstRun || this.options.replay;
-    if (debug) this.log("Current config:");
-    if (debug) this.log(previousConfig);
-    logger = this.log;
+    if (debug) logger("Current config:");
+    if (debug) logger(previousConfig);
   }
 
   async prompting() {
     // Have Yeoman greet the user.
-    this.log(
+    logger(
       yosay(
         `Welcome to the ${em("Living Atlas")} Quick-Start Ansible Generator`
       )
@@ -558,24 +559,23 @@ module.exports = class extends Generator {
           }
         ]);
 
+    this.answers.LA_main_hostname = this.answers.LA_domain;
     this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
-
     this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
       ? "https://"
       : "http://";
 
     if (dontAsk) {
       Object.keys(servicesRolsMap).forEach(service => {
-        if (debug) this.log(this.answers);
-        const hostVar =
-          service === "main" ? `LA_domain` : `LA_${service}_hostname`;
+        if (debug) logger(this.answers);
+        const hostVar = `LA_${service}_hostname`;
         const hostname = this.answers[hostVar];
-        if (debug) this.log(`${hostVar} -> ${hostname}`);
+        if (debug) logger(`${hostVar} -> ${hostname}`);
         storeMachine(service, hostname);
       });
 
-      /* This.log(machines);
-       * this.log(servicesAndMachines); */
+      if (debug) logger(machines);
+      if (debug) logger(servicesAndMachines);
     }
   }
 
@@ -622,7 +622,7 @@ module.exports = class extends Generator {
       }
     }
 
-    if (debug) this.log(this.answers);
+    if (debug) logger(this.answers);
 
     this.fs.copyTpl(
       this.templatePath("README.md"),
