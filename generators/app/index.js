@@ -29,7 +29,11 @@ const isASubDomain = domain =>
 const em = text => chalk.keyword("orange")(text);
 
 const defUseSubdomainPrompt = (a, service) => {
-  return `Will the ${em(service)} module use a http${
+  var desc =
+    servicesRolsMap[service].desc.length > 0
+      ? ` (${servicesRolsMap[service].desc})`
+      : "";
+  return `Will the ${em(service)} module${desc} use a http${
     a.LA_enable_ssl ? "s" : ""
   }://${em("subdomain")}.${a.LA_domain} or not?`;
 };
@@ -49,7 +53,7 @@ const validateDomain = (input, name, store) =>
 
 /*
    Set of used machines
-*/
+ */
 const machines = new Set();
 
 /*
@@ -60,59 +64,98 @@ const machines = new Set();
    so we can check that in a same machine we don't configure two servers
    with the same domain and the same path
 
-*/
+ */
 const machinesAndPaths = {};
 
 const servicesAndMachines = [];
 
 const servicesRolsMap = {
-  main: { name: "main", group: "ala-demo", playbook: "ala-demo" },
+  main: { name: "main", group: "ala-demo", playbook: "ala-demo", desc: "" },
   collectory: {
     name: "collectory",
     group: "collectory",
-    playbook: "collectory-standalone"
+    playbook: "collectory-standalone",
+    desc: "biodiversity collections"
   },
   ala_hub: {
     name: "ala_hub",
     group: "biocache-hub",
-    playbook: "biocache-hub-standalone"
+    playbook: "biocache-hub-standalone",
+    desc: "occurrences search frontend"
   },
   biocache_service: {
     name: "biocache_service",
     group: "biocache-service-clusterdb",
-    playbook: "biocache-service-clusterdb"
+    playbook: "biocache-service-clusterdb",
+    desc: "occurrences web service"
   },
-  ala_bie: { name: "ala_bie", group: "bie-hub", playbook: "bie-hub" },
-  bie_index: { name: "bie_index", group: "bie-index", playbook: "bie-index" },
-  images: { name: "images", group: "image-service", playbook: "image-service" },
+  ala_bie: {
+    name: "ala_bie",
+    group: "bie-hub",
+    playbook: "bie-hub",
+    desc: "species search frontend"
+  },
+  bie_index: {
+    name: "bie_index",
+    group: "bie-index",
+    playbook: "bie-index",
+    desc: "species web service"
+  },
+  images: {
+    name: "images",
+    group: "image-service",
+    playbook: "image-service",
+    desc: ""
+  },
   lists: {
     name: "lists",
     group: "species-list",
-    playbook: "species-list-standalone"
+    playbook: "species-list-standalone",
+    desc: ""
   },
   regions: {
     name: "regions",
     group: "regions",
-    playbook: "regions-standalone"
+    playbook: "regions-standalone",
+    desc: "regional data frontend"
   },
   logger: {
     name: "logger",
     group: "logger-service",
-    playbook: "logger-standalone"
+    playbook: "logger-standalone",
+    desc: "event logging"
   },
-  solr: { name: "solr", group: "solr7-server", playbook: "solr7-standalone" },
-  cas: { name: "cas", group: "cas-servers", playbook: "aws-cas-5" },
+  solr: {
+    name: "solr",
+    group: "solr7-server",
+    playbook: "solr7-standalone",
+    desc: "indexing"
+  },
+  cas: {
+    name: "cas",
+    group: "cas-servers",
+    playbook: "aws-cas-5",
+    desc: "authentication system"
+  },
   biocache_backend: {
     name: "biocache_backend",
     group: "biocache",
-    playbook: "biocache-backend"
+    playbook: "biocache-backend",
+    desc: "cassandra"
   },
   biocache_cli: {
     name: "biocache_cli",
     group: "biocache-cli",
-    playbook: "biocache-cli"
+    playbook: "biocache-cli",
+    desc:
+      "manages the loading, sampling, processing and indexing of occurrence records"
   },
-  spatial: { name: "spatial", group: "spatial", playbook: "spatial" }
+  spatial: {
+    name: "spatial",
+    group: "spatial",
+    playbook: "spatial",
+    desc: "spatial front-end"
+  }
 };
 
 const storeMachine = (name, machine) =>
@@ -579,6 +622,9 @@ module.exports = class extends Generator {
         ? "https://"
         : "http://";
       Object.keys(servicesRolsMap).forEach(service => {
+        if (service === "spatial" && !this.answers.LA_use_spatial) return;
+        if (service === "regions" && !this.answers.LA_use_regions) return;
+        if (service === "lists" && !this.answers.LA_use_species_lists) return;
         if (debug) logger(this.answers);
         const hostVar = `LA_${service}_hostname`;
         const hostname = this.answers[hostVar];

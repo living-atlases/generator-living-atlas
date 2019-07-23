@@ -173,6 +173,7 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 - [x] Add `local-extras.sample` files that can be updated in the future without lost local changes in `local-extras.yml` files
 - [x] Generation of passwords on first run and increase security by default
 - [x] Added option `--replay-dont-ask` to regenerate the playbooks with previous answers without asking again
+- [x] Improble BIE/biocache etc descriptions (records, species)
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
 - [ ] Document `--skip`
 - [ ] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
