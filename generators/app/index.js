@@ -134,7 +134,7 @@ const servicesRolsMap = {
   cas: {
     name: "cas",
     group: "cas-servers",
-    playbook: "aws-cas-5",
+    playbook: "cas5-standalone",
     desc: "authentication system"
   },
   biocache_backend: {
