@@ -25,6 +25,9 @@ cas_webflow_encryption_key=
 
 # Set this keys/secrets with valid keys to enable it in your CAS login menu
 
+# http://www.pac4j.org/docs/clients.html
+# https://apereo.github.io/cas/5.1.x/installation/OAuth-OpenId-Authentication.html
+
 # pac4j_facebook_consumer_key=to_be_added_in_the_near_future
 # pac4j_facebook_consumer_secret=to_be_added_in_the_near_future
 
@@ -34,9 +37,6 @@ cas_webflow_encryption_key=
 # pac4j_google_consumer_key=to_be_added_in_the_near_future
 # pac4j_google_consumer_secret=to_be_added_in_the_near_future
 
-# pac4j_github_consumer_key=to_be_added_in_the_near_future
-# pac4j_github_consumer_secret=to_be_added_in_the_near_future
-
 # pac4j_linkedin_consumer_key=to_be_added_in_the_near_future
 # pac4j_linkedin_consumer_secret=to_be_added_in_the_near_future
 
@@ -45,6 +45,15 @@ cas_webflow_encryption_key=
 
 # pac4j_yahoo_consumer_key=to_be_added_in_the_near_future
 # pac4j_yahoo_consumer_secret=to_be_added_in_the_near_future
+
+# Sample of Oauth configuration:
+# Go to your Github organization settings, add a Oauth App
+# with:
+# Homepage url: https://<%= LA_cas_hostname %>/
+# Authorization callback URL: https:///<%= LA_cas_hostname %>/cas/login
+# put here the key and secret, and rerun the playbook
+# pac4j_github_consumer_key=to_be_added_in_the_near_future
+# pac4j_github_consumer_secret=to_be_added_in_the_near_future
 
 # Warning:
 # This is used to create the apikey database (or to use an existing dump)

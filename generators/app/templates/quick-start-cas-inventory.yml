@@ -80,8 +80,8 @@ cas_webflow_encryption_key=
 # Homepage url: https://<%= LA_cas_hostname %>/
 # Authorization callback URL: https:///<%= LA_cas_hostname %>/cas/login
 # put here the key and secret, and rerun the playbook
-pac4j_github_consumer_key=to_be_added_in_the_near_future
-pac4j_github_consumer_secret=to_be_added_in_the_near_future
+# pac4j_github_consumer_key=to_be_added_in_the_near_future
+# pac4j_github_consumer_secret=to_be_added_in_the_near_future
 
 userdetails_base_url=<%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
 user_create_password=to_be_added_in_the_near_future
