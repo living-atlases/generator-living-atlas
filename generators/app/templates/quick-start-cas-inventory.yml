@@ -48,41 +48,6 @@ pac4j_cookie_encryption_key=
 cas_webflow_signing_key=
 cas_webflow_encryption_key=
 
-# http://www.pac4j.org/docs/clients.html
-# https://apereo.github.io/cas/5.1.x/installation/OAuth-OpenId-Authentication.html
-
-# Update better this key/secret keys in your cas-local-extras.yml inventory
-
-# pac4j_facebook_consumer_key=to_be_added_in_the_near_future
-# pac4j_facebook_consumer_secret=to_be_added_in_the_near_future
-
-# pac4j_twitter_consumer_key=to_be_added_in_the_near_future
-# pac4j_twitter_consumer_secret=to_be_added_in_the_near_future
-
-# pac4j_google_consumer_key=to_be_added_in_the_near_future
-# pac4j_google_consumer_secret=to_be_added_in_the_near_future
-
-# pac4j_github_consumer_key=to_be_added_in_the_near_future
-# pac4j_github_consumer_secret=to_be_added_in_the_near_future
-
-# pac4j_linkedin_consumer_key=to_be_added_in_the_near_future
-# pac4j_linkedin_consumer_secret=to_be_added_in_the_near_future
-
-# pac4j_windows_consumer_key=to_be_added_in_the_near_future
-# pac4j_windows_consumer_secret=to_be_added_in_the_near_future
-
-# pac4j_yahoo_consumer_key=to_be_added_in_the_near_future
-# pac4j_yahoo_consumer_secret=to_be_added_in_the_near_future
-
-# Sample of Oauth configuration:
-# Go to your Github organization settings, add a Oauth App
-# with:
-# Homepage url: https://<%= LA_cas_hostname %>/
-# Authorization callback URL: https:///<%= LA_cas_hostname %>/cas/login
-# put here the key and secret, and rerun the playbook
-# pac4j_github_consumer_key=to_be_added_in_the_near_future
-# pac4j_github_consumer_secret=to_be_added_in_the_near_future
-
 userdetails_base_url=<%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
 user_create_password=to_be_added_in_the_near_future
 endpoints_enabled=true
