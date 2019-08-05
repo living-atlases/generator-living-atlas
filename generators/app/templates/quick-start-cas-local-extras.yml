@@ -56,9 +56,3 @@ cas_webflow_encryption_key=
 # pac4j_github_consumer_key=to_be_added_in_the_near_future
 # pac4j_github_consumer_secret=to_be_added_in_the_near_future
 
-# Warning:
-# This is used to create the apikey database (or to use an existing dump)
-# Comment this after first successful run and with /apikeys service running
-# so the database of apikeys is not dropped or recreated
-#
-apikey_db_dump={{ala_install_repo}}/ansible/roles/apikey/files/apikey_schema.sql
