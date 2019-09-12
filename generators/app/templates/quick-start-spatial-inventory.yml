@@ -165,7 +165,7 @@ startup_lat = 0
 startup_lng = 0
 startup_zoom = 2
 
-spatial_hub_skin_layout=generic
+spatial_hub_skin_layout=portal
 spatial_hub_hostname=<%= LA_spatial_hostname %>
 spatial_hub_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/
 spatial_hub_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>

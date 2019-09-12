@@ -49,7 +49,7 @@ logging_enabled = true
 default_country =
 <% if (LA_use_spatial) { %>layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws<% } else { %>layers_service_url =<% } %>
 <% if (LA_use_spatial) { %>spatial_layers_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws/fields<% } else { %>spatial.layers.url=<% } %>
-layers_service_sampling = false
+layers_service_sampling = <%= LA_use_spatial %>
 enable_lists = <%= LA_use_species_lists %>
 <% if (LA_use_species_lists) { %>lists_service_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
 registry_api_key = dummy-registry-api-key
