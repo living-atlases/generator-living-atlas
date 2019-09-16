@@ -355,7 +355,7 @@ bie_hub_version = 1.4.15
 bie_index_version=1.4.5
 biocache_cli_version = 2.4.4
 species_list_version = 3.3
-regions_version = 3.3-SNAPSHOT
+regions_version = 3.3
 images_version = 0.9.2
 
 # workaround for: https://github.com/AtlasOfLivingAustralia/ala-install/issues/291                                                                            │······························
