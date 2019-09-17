@@ -61,7 +61,8 @@ yo living-atlas
 
 ## Options
 
-- Use `--replay` to reuse all the previous responses and regenerate the inventories with some new modifications (or improvements if you update this repo). More info below.
+- Use `yo living-atlas --replay` to reuse all the previous responses and regenerate the inventories with some new modifications (or improvements if you update this repo). More info below.
+- Use `yo living-atlas --replay-dont-ask` if you only want to repeat the inventories generation (for instance, with a new version of this generator to get some update, or when you edit carefully the `../.yo-rc.json` answers file to, for instance, enable ssl or some service, and only want to regenerate the inventories with the changes).
 - Also, you can use `--debug` to see some verbose debug info.
 
 ## Screens
@@ -176,7 +177,7 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 - [x] Improble BIE/biocache etc descriptions (records, species)
 - [x] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [x] Set `collectory_app = ala-collectory` in main playbook
-- [ ] Use `biocache-db` instead of missing playbook
+- [x] Use `biocache-db` instead of missing playbook
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
 - [ ] Document `--skip`
 - [ ] Add `--tags` to ansible wrapper
