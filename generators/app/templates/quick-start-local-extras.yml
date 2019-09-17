@@ -11,6 +11,10 @@ favicon_url = https://www.gbif.org/favicon.ico
 skin_favicon = https://www.gbif.org/favicon.ico
 technical_contact = support@<%= LA_domain %>
 orgEmail = info@<%= LA_domain %>
+
+# default for English or pt_BR, fr, es, de, etc
+spatial_hub_locale = default
+
 <% if (LA_enable_ssl) { %>
 #
 # Put here the correct location for your SSL certs. Now the inventories are
