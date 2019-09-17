@@ -14,7 +14,7 @@ You'll need to replace `12.12.12.1` etc with the IP address of some new Ubuntu 1
 
 These machines should have an user `ubuntu` with `sudo` permissions.
 
-You should generate and use some ssh key and copy `~/.ssh/MyKey.pub` in thouse machines under `~ubuntu/.ssh/authorized_keys` (via `ssh-copy-id` for avoid issues).
+You should generate and use some ssh key and copy `~/.ssh/MyKey.pub` in those machines under `~ubuntu/.ssh/authorized_keys` (via `ssh-copy-id` for avoid issues).
 
 You can test your initial setup with some `ssh` command like:
 ```
