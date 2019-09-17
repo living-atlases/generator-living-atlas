@@ -56,3 +56,6 @@ cas_webflow_encryption_key=
 # pac4j_github_consumer_key=to_be_added_in_the_near_future
 # pac4j_github_consumer_secret=to_be_added_in_the_near_future
 
+# Use boostrap container or container-fluid
+# We don't use fluid because `userdetails` has a wrong margin with fluid
+skin_fluid_layout = false
