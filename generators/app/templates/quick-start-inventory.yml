@@ -119,6 +119,7 @@ collectory_db_host = localhost
 collectory_db_user = collectory
 collectory_db_password = password
 bypass_cas = <%= !LA_use_CAS %>
+collectory_app=ala-collectory
 
 # API key that support registry updates
 api_key = dummy-registry-api-key
@@ -355,7 +356,7 @@ bie_hub_version = 1.4.15
 bie_index_version=1.4.5
 biocache_cli_version = 2.4.4
 species_list_version = 3.3
-regions_version = 3.3
+regions_version = 3.3.4
 images_version = 0.9.2
 
 # workaround for: https://github.com/AtlasOfLivingAustralia/ala-install/issues/291                                                                            │······························
