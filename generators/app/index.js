@@ -140,7 +140,7 @@ const servicesRolsMap = {
   biocache_backend: {
     name: "biocache_backend",
     group: "biocache",
-    playbook: "biocache-backend",
+    playbook: "biocache-db",
     desc: "cassandra"
   },
   biocache_cli: {
