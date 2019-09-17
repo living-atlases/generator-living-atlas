@@ -199,7 +199,7 @@ Ansible is a fantastic tool for manage LA node infrastructures. But nowadays we 
 - From time to time new properties appear but other non-ALA nodes don’t notice
 - We end up using several self-made inventories, duplicate properties (like orgName, urls, etc), and many times this is a source of problems (like [code duplication](https://en.wikipedia.org/wiki/Duplicate_code)). Some minor sample:
 ![](dups.png)
-- There is a lack of more real production-ready inventories (you have to ask for then).
+- There is a lack of more real production-ready inventories (you have to ask for them).
 - `ala-install` has a structure that sometimes is difficult to find some samples or how to start to deploy some service (think of CAS)
 - Many times you have to check the `ansible` generated `config/*properties` for non configured or default properties, search the `ansible` role code to know how to configure these variables, re-run `ansible` with these new variables and re-check the `ansible` `/data/*/config/*properties`.
 - The demo inventory (or the last Paris workshop inventories) are a good sample but not enough for a new production LA node (lack of inventory variables documentation, missing important services like CAS)
