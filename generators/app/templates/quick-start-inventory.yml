@@ -52,6 +52,7 @@ default_country =
 <% if (LA_use_spatial) { %>spatial_layers_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws/fields<% } else { %>spatial.layers.url=<% } %>
 layers_service_sampling = <%= LA_use_spatial %>
 enable_lists = <%= LA_use_species_lists %>
+include_species_lists = <%= LA_use_species_lists %>
 <% if (LA_use_species_lists) { %>lists_service_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
 registry_api_key = dummy-registry-api-key
 commonname_lang = en
@@ -289,6 +290,7 @@ bie_hub = ala-bie
 bie_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %>
 bie_hub_context_path = <%= LA_ala_bie_path %>
 bie_hub_hostname = <%= LA_ala_bie_hostname %>
+bie_service_enabled = true
 <% if (LA_use_species_lists) { %>species_list_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 lists_base_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
 sightings_url =
