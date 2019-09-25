@@ -24,10 +24,22 @@ download_support_email_enabled = false
 download_support_email = support@<%= LA_domain %>
 
 default_country =
-commonname_lang = es
+commonname_lang = en
 
 # default for English or pt_BR, fr, es, de, etc
 spatial_hub_locale = default
+
+# BIE local vars
+default_map_lat =
+default_map_lon =
+vernacular_language = en
+
+# SOLR local vars
+# solr_heap=16g
+# If solr_bind_jetty_host is false other hosts can connect to solr instance
+# (so you should use a firewall to prevent connections from the outside
+# Set to true if only allow connections from the same solr host
+solr_bind_jetty_host = true
 
 <% if (LA_enable_ssl) { %>
 #
