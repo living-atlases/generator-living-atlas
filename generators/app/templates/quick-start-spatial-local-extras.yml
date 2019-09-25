@@ -18,3 +18,11 @@ orgEmail = info@<%= LA_domain %>
 startup_lat = 39.8581
 startup_lng = -4.0226
 startup_zoom = 3
+
+[geoserver:vars]
+
+[layers-service:vars]
+
+[spatial-analysis:vars]
+
+[layers-db:vars]   

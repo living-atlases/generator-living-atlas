@@ -65,3 +65,27 @@ solr_bind_jetty_host = true
 # https://certbot.eff.org/docs/using.html#renewing-certificates
 #
 <% } %>
+
+[collectory:vars]
+
+[biocache-hub:vars]
+
+[biocache-service-clusterdb:vars]
+
+[biocache-cli:vars]
+
+[bie-hub:vars]
+
+[bie-index:vars]
+
+[regions:vars]
+
+[image-service:vars]
+
+[species-list:vars]
+
+[logger-service:vars]
+
+[solr7-server:vars]
+
+
