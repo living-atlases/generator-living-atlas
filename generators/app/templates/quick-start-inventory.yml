@@ -37,7 +37,7 @@ nameindex_to_use = custom
 
 ####################### Biocache ##############################################
 
-biocache_db_host = <%= LA_domain %>
+biocache_db_host = <%= LA_biocache_backend_hostname %>
 biocache_db_type = cassandra3
 biocache_db_port = 9042
 cassandra_listen_host = <%= LA_biocache_backend_hostname %>
@@ -353,11 +353,11 @@ tomcat=tomcat7
 #
 
 collectory_version = LATEST
-biocache_hub_version = 3.1.0
-biocache_service_version = 2.1.15
+biocache_hub_version = 3.2.2
+biocache_service_version = 2.2.0
 bie_hub_version = 1.4.19
 bie_index_version=1.4.8
-biocache_cli_version = 2.4.4
+biocache_cli_version = 2.4.5
 species_list_version = 3.3
 regions_version = 3.3.4
 images_version = 0.9.2
