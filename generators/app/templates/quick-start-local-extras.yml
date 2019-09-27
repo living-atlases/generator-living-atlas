@@ -10,6 +10,8 @@
 favicon_url = https://www.gbif.org/favicon.ico
 skin_favicon = https://www.gbif.org/favicon.ico
 technical_contact = support@<%= LA_domain %>
+# Set here your privacy policy
+# privacy_policy_url=
 
 # Use for downloads in biocache
 organizationName = <%= LA_project_name %>
@@ -25,6 +27,7 @@ download_support_email = support@<%= LA_domain %>
 
 default_country =
 commonname_lang = en
+# geocode_region = AU
 
 # default for English or pt_BR, fr, es, de, etc
 spatial_hub_locale = default
