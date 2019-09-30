@@ -235,7 +235,7 @@ ssl_certificate_server_dir=/etc/ssl/
 ssl_cert_file=certs/ssl-cert-snakeoil.pem
 ssl_key_file=private/ssl-cert-snakeoil.key
 <% } %>
-nginx_vhost_fragments_to_clear=["<%= LA_domain %>"]
+nginx_vhost_fragments_to_clear = <%- JSON.stringify(LA_nginx_vhosts)%>
 
 ############### Biocache CLI options ###############
 

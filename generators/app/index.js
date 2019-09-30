@@ -668,6 +668,8 @@ module.exports = class extends Generator {
     const dest = this.answers.LA_pkg_name;
     const filePrefix = dest;
 
+    this.answers.LA_nginx_vhosts = [...new Set(machines)];
+
     if (
       firstRun ||
       !this.fs.exists(`${dest}/${filePrefix}-local-passwords.yml`)

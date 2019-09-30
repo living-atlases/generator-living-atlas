@@ -178,6 +178,7 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 - [x] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
 - [x] Set `collectory_app = ala-collectory` in main playbook
 - [x] Use `biocache-db` instead of missing playbook
+- [x] Clean nginx fragments for each hostname
 - [ ] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
 - [ ] Document `--skip`
 - [ ] Add `--tags` to ansible wrapper
