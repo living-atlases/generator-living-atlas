@@ -95,7 +95,6 @@ skin_layout = generic
 skin_fluid_layout = true
 
 use_ala_image_service = true
-image_service_url = <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>
 image_service_viewer_url = <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/image/viewer?imageId=
 image_service_metadata_url = <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/image/details?imageId=
 alwaysshow_imagetab = true
@@ -307,12 +306,14 @@ ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
 
 ####### Images #######
 
-images_url = <%= LA_urls_prefix %><%= LA_images_hostname %>
-images_base_url = <%= LA_urls_prefix %><%= LA_images_url %>
-images_context_path = <%= LA_images_path %>
-images_hostname = <%= LA_images_hostname %>
-images_db_password = images
-images_db_username = images
+image_service_url = <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>
+image_service_base_url = <%= LA_urls_prefix %><%= LA_images_url %>
+image_service_context_path = <%= LA_images_path %>
+image_service_hostname = <%= LA_images_hostname %>
+image_service_db_name=images
+image_service_db_password=images
+image_service_db_username=images
+image_service_port=9101
 
 <% if (LA_use_regions) { %>
 
@@ -360,7 +361,7 @@ bie_index_version=1.4.8
 biocache_cli_version = 2.4.5
 species_list_version = 3.3
 regions_version = 3.3.4
-images_version = 0.9.2
+image_service_version=1.0.9
 
-# workaround for: https://github.com/AtlasOfLivingAustralia/ala-install/issues/291                                                                            │······························
+# workaround for: https://github.com/AtlasOfLivingAustralia/ala-install/issues/291
 namedata_datestamp=20171012
