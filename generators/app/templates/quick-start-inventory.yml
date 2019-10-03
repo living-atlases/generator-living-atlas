@@ -336,6 +336,17 @@ biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA
 <% if (LA_use_spatial) { %>spatial_ws_hostname=<%= LA_spatial_hostname %><% } %>
 <% } %>
 
+<% if (LA_use_webapi) { %>
+webapi_hostname = <%= LA_webapi_hostname %>
+webapi_base_url = <%= LA_urls_prefix %><%= LA_webapi_url %>
+webapi_url = <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>
+webapi_context_path = <%= LA_webapi_path %>
+webapi_db_hostname = localhost
+webapi_db_name = webapi
+webapi_db_username = webapi
+webapi_db_password = webapi
+
+<% } %>
 ##### Copied from workshop, should be in living-atlas inventory
 
 postgresql_username=postgres
@@ -347,6 +358,8 @@ postgis_version=2.4
 # Needed for installing on Ubuntu-18.04
 # https://github.com/AtlasOfLivingAustralia/biocache-service/issues/363
 tomcat=tomcat7
+# Used by webapi
+tomcat_user=tomcat7
 
 ##### Updated components versions
 #

@@ -24,6 +24,11 @@ orgFax =
 orgEmail = info@<%= LA_domain %>
 download_support_email_enabled = false
 download_support_email = support@<%= LA_domain %>
+email_sender = support@<%= LA_domain %>
+mail.smtp.host = locahost
+mail.smtp.port = 25
+# Used by webapi
+mail_host = locahost
 
 default_country =
 commonname_lang = en
@@ -90,5 +95,8 @@ solr_bind_jetty_host = true
 [logger-service:vars]
 
 [solr7-server:vars]
+
+[webapi_standalone:vars]
+
 
 

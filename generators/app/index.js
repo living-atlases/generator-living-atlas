@@ -155,6 +155,12 @@ const servicesRolsMap = {
     group: "spatial",
     playbook: "spatial",
     desc: "spatial front-end"
+  },
+  webapi: {
+    name: "webapi",
+    group: "webapi_standalone",
+    playbook: "webapi_standalone",
+    desc: "API front-end"
   }
 };
 
@@ -461,6 +467,13 @@ module.exports = class extends Generator {
           {
             store: true,
             type: "confirm",
+            name: "LA_use_webapi",
+            message: `Use ${em("webapi")} service (similar to api.ala.org.au)?`,
+            default: false
+          },
+          {
+            store: true,
+            type: "confirm",
             name: "LA_use_CAS",
             message: `Use ${em("CAS")} Auth service?`,
             default: true
@@ -565,6 +578,12 @@ module.exports = class extends Generator {
           new PromptUrlFor("logger"),
           new PromptPathFor("logger", "logger-service"),
 
+          new PromptSubdomainFor("webapi", "webapi", a => a.LA_use_webapi),
+          new PromptHostnameFor("webapi", "api", a => a.LA_use_webapi),
+          new PromptHostnameInputFor("webapi", a => a.LA_use_webapi),
+          new PromptUrlFor("webapi", "webapi", a => a.LA_use_webapi),
+          new PromptPathFor("webapi", "webapi", a => a.LA_use_webapi),
+
           new PromptSubdomainFor("solr", "solr"),
           new PromptHostnameFor("solr", "index"),
           new PromptHostnameInputFor("solr"),
@@ -618,6 +637,10 @@ module.exports = class extends Generator {
     this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
 
     if (dontAsk) {
+      // Compatible with old generated inventories and don-ask
+      if (typeof this.answers.LA_use_webapi === "undefined")
+        this.answers.LA_use_webapi = false;
+
       this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
         ? "https://"
         : "http://";
@@ -625,6 +648,7 @@ module.exports = class extends Generator {
         if (service === "spatial" && !this.answers.LA_use_spatial) return;
         if (service === "regions" && !this.answers.LA_use_regions) return;
         if (service === "lists" && !this.answers.LA_use_species_lists) return;
+        if (service === "webapi" && !this.answers.LA_use_webapi) return;
         if (debug) logger(this.answers);
         const hostVar = `LA_${service}_hostname`;
         const hostname = this.answers[hostVar];
@@ -649,7 +673,8 @@ module.exports = class extends Generator {
       "images",
       "logger",
       "lists",
-      "regions"
+      "regions",
+      "webapi"
     ];
 
     services.forEach(service => {
