@@ -70,7 +70,12 @@ const machinesAndPaths = {};
 const servicesAndMachines = [];
 
 const servicesRolsMap = {
-  main: { name: "main", group: "ala-demo", playbook: "ala-demo", desc: "" },
+  main: {
+    name: "main",
+    group: "ala-demo",
+    playbook: "ala-demo-basic",
+    desc: ""
+  },
   collectory: {
     name: "collectory",
     group: "collectory",
