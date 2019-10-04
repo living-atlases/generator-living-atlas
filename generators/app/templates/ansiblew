@@ -18,6 +18,7 @@ Options:
   -p --properties        Only update properties
   -l --limit=<hosts>     Limit to some inventories hosts
   -s --skip=<tags>       Skip tags
+  -t --tags=<tags>       Limit to tags
   -h --help              Show help options.
   -d --debug             Show debug info.
   -v --version           Show ansiblew version.
@@ -36,6 +37,7 @@ if __name__ == '__main__':
     debug = args['--debug']
     properties = args['--properties']
     skip = args['--skip']
+    tags = args['--tags']
     limit = args['--limit']
     main = args['main']
     doall = args['all']
@@ -55,6 +57,8 @@ if __name__ == '__main__':
         extras = "%s  --tags properties" % (extras)
     if skip:
         extras = "%s --skip-tags %s" % (extras, skip)
+    if tags:
+        extras = "%s --tags %s" % (extras, tags)
     if debug:
         extras = "%s -vvvv" % (extras)
     if nodryrun:
