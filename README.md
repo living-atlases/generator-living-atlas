@@ -182,8 +182,8 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 - [x] Update to use the new image-service (grails3)
 - [x] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
 - [x] Add `--tags` to ansible wrapper
+- [x] Generate CAS salt
 - [ ] Improve questions when not using subdomains using and /context instead
-- [ ] Generate CAS salt
 - [ ] Better testing
 
 ## Caveats
