@@ -22,9 +22,6 @@ let firstRun;
 
 const parseDomainOpts = {};
 const isCorrectDomain = domain => parseDomain(domain, parseDomainOpts) !== null;
-const isASubDomain = domain =>
-  isCorrectDomain(domain) &&
-  parseDomain(domain, parseDomainOpts).subdomain !== "";
 
 const em = text => chalk.keyword("orange")(text);
 
@@ -41,7 +38,8 @@ const defUseSubdomainPrompt = (a, service) => {
 const validateDomain = (input, name, store) =>
   new Promise(resolve => {
     if (debug) logger(`Validate ${input} ${name}`);
-    const isValid = isCorrectDomain(input);
+    // It's a domain not a https://url
+    const isValid = isCorrectDomain(input) && input.split("/").length === 1;
     if (isValid && store) storeMachine(name, input);
     if (isValid || input === "other") {
       resolve(true);
@@ -198,6 +196,34 @@ function PromptSubdomainFor(name, subdomain, when) {
   }
 }
 
+function hostChoices(a, varUsesSubdomain, subdomain, varName) {
+  let choices;
+  if (typeof varUsesSubdomain !== "undefined" && a[varUsesSubdomain]) {
+    choices = [`${subdomain}.${a.LA_domain}`, ...machines, "other"];
+  } else {
+    choices = [...machines, "other"];
+  }
+  // Add previous selected hostname at the start of the array
+  const hasPrevious =
+    typeof previousConfig !== "undefined" &&
+    typeof previousConfig[varName] !== "undefined";
+  const previousHostname = hasPrevious ? previousConfig[varName] : null;
+  if (debug) logger(`hasPrevious: ${hasPrevious} ${previousHostname}`);
+  if (replay && hasPrevious) {
+    if (choices.includes(previousHostname)) {
+      // Remove and later put in the first position
+      for (var i = 0; i < choices.length; i++) {
+        if (choices[i] === previousHostname) {
+          choices.splice(i, 1);
+        }
+      }
+    }
+    choices.unshift(previousHostname);
+  }
+  if (debug) logger(choices);
+  return choices;
+}
+
 function PromptHostnameFor(name, subdomain, when) {
   this.store = defaultStore;
   this.type = "list";
@@ -205,33 +231,7 @@ function PromptHostnameFor(name, subdomain, when) {
   const varUsesSubdomain = `LA_${name}_uses_subdomain`;
   this.name = varName;
   this.message = `LA ${em(name)} hostname ?`;
-  this.choices = a => {
-    let choices;
-    if (a[varUsesSubdomain]) {
-      choices = [`${subdomain}.${a.LA_domain}`, ...machines, "other"];
-    } else {
-      choices = [...machines, "other"];
-    }
-    // Add previous selected hostname at the start of the array
-    const hasPrevious =
-      typeof previousConfig !== "undefined" &&
-      typeof previousConfig[varName] !== "undefined";
-    const previousHostname = hasPrevious ? previousConfig[varName] : null;
-    if (debug) logger(`hasPrevious: ${hasPrevious} ${previousHostname}`);
-    if (replay && hasPrevious) {
-      if (choices.includes(previousHostname)) {
-        // Remove and later put in the first position
-        for (var i = 0; i < choices.length; i++) {
-          if (choices[i] === previousHostname) {
-            choices.splice(i, 1);
-          }
-        }
-      }
-      choices.unshift(previousHostname);
-    }
-    if (debug) logger(choices);
-    return choices;
-  };
+  this.choices = a => hostChoices(a, varUsesSubdomain, subdomain, varName);
   if (when) {
     this.when = when;
   }
@@ -261,50 +261,9 @@ function PromptHostnameInputFor(name, when) {
   this.validate = input => validateDomain(input, name, true);
 }
 
-function PromptUrlFor(name, path, when) {
-  this.store = defaultStore;
-  this.type = "input";
-  const varName = `LA_${name}_url`;
-  const varUsesSubdomain = `LA_${name}_uses_subdomain`;
-  const varHostname = `LA_${name}_hostname`;
-  this.name = varName;
-  this.message = `LA ${em(name)} base url?`;
-  this.default = a => {
-    const usesSubdomain = a[varUsesSubdomain];
-    const samplePrefix = usesSubdomain ? `${path}.` : "";
-    // Was: const sampleSuffix = usesSubdomain ? "/" : `/${path}`;
-    const sampleSuffix = "";
-    return `${samplePrefix}${a.LA_domain}${sampleSuffix}`;
-  };
-  this.when = a => {
-    if (when && !when(a)) {
-      return false;
-    }
-    const hostname = a[varHostname];
-    const hostnameIsASubdomain = isASubDomain(hostname);
-    const hostnameIsNotASubdomain = !hostnameIsASubdomain;
-    if (hostnameIsASubdomain) {
-      a[varName] = a[varHostname];
-    }
-    const usedMachine = typeof machinesAndPaths[hostname] !== "undefined";
-    if (debug) logger(machinesAndPaths[hostname]);
-    const shouldIAsk = hostnameIsNotASubdomain || usedMachine;
-    if (debug) {
-      logger(
-        `hostname: ${hostname} hostnameIsASubdomain: ${hostnameIsASubdomain}`
-      );
-    }
-    if (debug) logger(`usedMachine: ${usedMachine} shouldIAsk: ${shouldIAsk}`);
-    if (when) return shouldIAsk && when(a);
-    return shouldIAsk;
-  };
-  this.validate = input => validateDomain(input, name, false);
-}
-
 function PromptPathFor(name, path, when) {
   this.store = defaultStore;
   const varName = `LA_${name}_path`;
-  const varUrl = `LA_${name}_url`;
   const varUsesSubdomain = `LA_${name}_uses_subdomain`;
   const varHostname = `LA_${name}_hostname`;
   this.type = "input";
@@ -316,7 +275,7 @@ function PromptPathFor(name, path, when) {
       : `/${typeof path === "undefined" ? "" : path}`;
     return `Which context ${em(
       "/path"
-    )} you wanna use for this service (like ${em(a[varUrl])}${em(
+    )} you wanna use for this service (like ${em(a[varHostname])}${em(
       samplePath
     )}) ?`;
   };
@@ -520,37 +479,31 @@ module.exports = class extends Generator {
 
           new PromptHostnameFor("collectory", "collectory"),
           new PromptHostnameInputFor("collectory"),
-          new PromptUrlFor("collectory", "collectory"),
           new PromptPathFor("collectory", "collectory"),
 
           new PromptSubdomainFor("ala_hub", "biocache"),
           new PromptHostnameFor("ala_hub", "biocache"),
           new PromptHostnameInputFor("ala_hub"),
-          new PromptUrlFor("ala_hub", "ala-hub"),
           new PromptPathFor("ala_hub", "ala-hub"),
 
           new PromptSubdomainFor("biocache_service", "biocache-service"),
           new PromptHostnameFor("biocache_service", "biocache-ws"),
           new PromptHostnameInputFor("biocache_service"),
-          new PromptUrlFor("biocache_service", "biocache-service"),
           new PromptPathFor("biocache_service", "biocache-service"),
 
           new PromptSubdomainFor("ala_bie", "bie"),
           new PromptHostnameFor("ala_bie", "bie"),
           new PromptHostnameInputFor("ala_bie"),
-          new PromptUrlFor("ala_bie", "ala-bie"),
           new PromptPathFor("ala_bie", "ala-bie"),
 
           new PromptSubdomainFor("bie_index", "bie-service"),
           new PromptHostnameFor("bie_index", "bie-ws"),
           new PromptHostnameInputFor("bie_index"),
-          new PromptUrlFor("bie_index", "bie-index"),
           new PromptPathFor("bie_index", "bie-index"),
 
           new PromptSubdomainFor("images", "images"),
           new PromptHostnameFor("images", "images"),
           new PromptHostnameInputFor("images"),
-          new PromptUrlFor("images", "images"),
           new PromptPathFor("images", "images"),
 
           new PromptSubdomainFor(
@@ -560,11 +513,7 @@ module.exports = class extends Generator {
           ),
           new PromptHostnameFor("lists", "lists", a => a.LA_use_species_lists),
           new PromptHostnameInputFor("lists", a => a.LA_use_species_lists),
-          new PromptUrlFor(
-            "lists",
-            "specieslists",
-            a => a.LA_use_species_lists
-          ),
+
           new PromptPathFor(
             "lists",
             "specieslists",
@@ -574,25 +523,21 @@ module.exports = class extends Generator {
           new PromptSubdomainFor("regions", "regions", a => a.LA_use_regions),
           new PromptHostnameFor("regions", "regions", a => a.LA_use_regions),
           new PromptHostnameInputFor("regions", a => a.LA_use_regions),
-          new PromptUrlFor("regions", "regions", a => a.LA_use_regions),
           new PromptPathFor("regions", "regions", a => a.LA_use_regions),
 
           new PromptSubdomainFor("logger", "logger"),
           new PromptHostnameFor("logger", "logger"),
           new PromptHostnameInputFor("logger"),
-          new PromptUrlFor("logger"),
           new PromptPathFor("logger", "logger-service"),
 
           new PromptSubdomainFor("webapi", "webapi", a => a.LA_use_webapi),
           new PromptHostnameFor("webapi", "api", a => a.LA_use_webapi),
           new PromptHostnameInputFor("webapi", a => a.LA_use_webapi),
-          new PromptUrlFor("webapi", "webapi", a => a.LA_use_webapi),
           new PromptPathFor("webapi", "webapi", a => a.LA_use_webapi),
 
           new PromptSubdomainFor("solr", "solr"),
           new PromptHostnameFor("solr", "index"),
           new PromptHostnameInputFor("solr"),
-          new PromptUrlFor("solr"),
           new PromptPathFor("solr", "solr"),
 
           {
@@ -687,11 +632,14 @@ module.exports = class extends Generator {
       if (path === "/") {
         this.answers[`LA_${service}_path`] = "";
       }
+      this.answers[`LA_${service}_url`] = this.answers[
+        `LA_${service}_hostname`
+      ];
     });
-
     if (this.answers.LA_solr_uses_subdomain) {
       this.answers.LA_solr_path = "";
     }
+    this.answers.LA_solr_url = this.answers.LA_solr_hostname;
 
     this.answers.LA_machines = machines;
     this.answers.LA_services_machines = servicesAndMachines;
