@@ -205,6 +205,8 @@ biocache_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 sampling_url = <%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
 ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
+# Warning: in spatial, the app uses userdetais_base_url instead of userdetails_url
+# so in the rest of inventories like CAS, we use the correct userdetails_base_url (without context /userdetails)
 user_details_base_url = https://<%= LA_cas_hostname %>/userdetails
 header_and_footer_baseurl = <%= LA_urls_prefix %><%= LA_domain %>
 logger_base_url = <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/service

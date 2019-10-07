@@ -48,7 +48,6 @@ pac4j_cookie_encryption_key=
 cas_webflow_signing_key=
 cas_webflow_encryption_key=
 
-userdetails_base_url=<%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
 user_create_password=to_be_added_in_the_near_future
 endpoints_enabled=true
 user_store_db_name=emmet
