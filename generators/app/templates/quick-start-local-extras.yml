@@ -41,6 +41,7 @@ spatial_hub_locale = default
 default_map_lat =
 default_map_lon =
 vernacular_language = en
+eol_lang = en
 
 # SOLR local vars
 # solr_heap=16g
