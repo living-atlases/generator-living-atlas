@@ -50,7 +50,7 @@ eol_lang = en
 # Set to true if only allow connections from the same solr host
 solr_bind_jetty_host = true
 
-<% if (LA_enable_ssl) { %>
+<%_ if (LA_enable_ssl) { _%>
 #
 # Put here the correct location for your SSL certs. Now the inventories are
 # using this self-signed ubuntu cert
@@ -73,7 +73,7 @@ solr_bind_jetty_host = true
 #
 # https://certbot.eff.org/docs/using.html#renewing-certificates
 #
-<% } %>
+<%_ } _%>
 
 [collectory:vars]
 
@@ -87,17 +87,16 @@ solr_bind_jetty_host = true
 
 [bie-index:vars]
 
-[regions:vars]
+<%_ if (LA_use_regions) { _%>[regions:vars]
 
-[image-service:vars]
+<%_ } _%>[image-service:vars]
 
-[species-list:vars]
+<%_ if (LA_use_species_lists) { _%>[species-list:vars]
 
-[logger-service:vars]
+<%_ } _%>[logger-service:vars]
 
 [solr7-server:vars]
 
-[webapi_standalone:vars]
+<%_ if (LA_use_webapi) { _%>[webapi_standalone:vars]
 
-
-
+<%_ } _%>
