@@ -432,7 +432,9 @@ module.exports = class extends Generator {
             store: true,
             type: "confirm",
             name: "LA_use_webapi",
-            message: `Use ${em("webapi")} service (similar to api.ala.org.au)?`,
+            message: `Use ${em(
+              "webapi"
+            )} documentation service (similar to api.ala.org.au)?`,
             default: false
           },
           {
