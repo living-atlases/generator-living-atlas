@@ -375,7 +375,7 @@ biocache_service_version = 2.2.0
 bie_hub_version = 1.4.19
 bie_index_version=1.4.8
 biocache_cli_version = 2.4.5
-species_list_version = 3.3
+species_list_version = 3.4
 regions_version = 3.3.4
 image_service_version=1.0.9
 
