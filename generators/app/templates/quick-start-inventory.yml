@@ -221,7 +221,6 @@ use_gbif_nexus = false
 
 sds_enabled = false
 
-<% if (!LA_collectory_uses_subdomain && !LA_ala_hub_uses_subdomain) { %>
 # Disabled caches - the collections cache is problematic when collectory + biocache on same server
 
 caches_auth_enabled=false
@@ -229,7 +228,6 @@ caches_log_enabled=false
 caches_collections_enabled=false
 caches_layers_enabled=false
 
-<% } %>
 webserver_nginx=true
 ssl=<%= LA_enable_ssl %>
 <% if (LA_enable_ssl) { %>

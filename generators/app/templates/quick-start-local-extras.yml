@@ -50,6 +50,15 @@ eol_lang = en
 # Set to true if only allow connections from the same solr host
 solr_bind_jetty_host = true
 
+# By default caches are disabled (the collections cache is problematic when collectory + biocache on same server)
+# Configure properly for your case
+
+caches_auth_enabled=false
+caches_log_enabled=false
+caches_collections_enabled=false
+caches_layers_enabled=false
+
+
 <%_ if (LA_enable_ssl) { _%>
 #
 # Put here the correct location for your SSL certs. Now the inventories are
