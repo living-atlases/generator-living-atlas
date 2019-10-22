@@ -55,9 +55,9 @@ solr_bind_jetty_host = true
 
 caches_auth_enabled=false
 caches_log_enabled=false
+# If collections cache is disabled biocache-service will show collections_uid, institutions_uid instead of their respective names in facets and legends
 caches_collections_enabled=false
 caches_layers_enabled=false
-
 
 <%_ if (LA_enable_ssl) { _%>
 #
