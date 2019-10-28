@@ -132,6 +132,14 @@ We recommend to override and set variables adding then to `<%= LA_pkg_name %>-lo
 <% if (LA_use_spatial) { %>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_hostname %>
 - Spatial Webservice: <%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
 - Spatial Geoserver: <%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver/<% } %>
+<%_ if (LA_use_webapi) { _%>
+- Web API: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/
+- Web API administration: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/admin
+<%_ } _%>
+<%_ if (LA_use_dashboard) { _%>
+- Dashboard: <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>/
+- Dashboard administration: <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>/alaAdmin
+<%_ } _%>
 
 ### TODO
 
