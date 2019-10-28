@@ -164,6 +164,12 @@ const servicesRolsMap = {
     group: "webapi_standalone",
     playbook: "webapi_standalone",
     desc: "API front-end"
+  },
+  dashboard: {
+    name: "dashboard",
+    group: "dashboard",
+    playbook: "dashboard",
+    desc: "dashboard"
   }
 };
 
@@ -440,6 +446,15 @@ module.exports = class extends Generator {
           {
             store: true,
             type: "confirm",
+            name: "LA_use_dashboard",
+            message: `Use ${em(
+              "dashboard"
+            )} view stats service (similar to dashboard.ala.org.au)?`,
+            default: false
+          },
+          {
+            store: true,
+            type: "confirm",
             name: "LA_use_CAS",
             message: `Use ${em("CAS")} Auth service?`,
             default: true
@@ -537,6 +552,19 @@ module.exports = class extends Generator {
           new PromptHostnameInputFor("webapi", a => a.LA_use_webapi),
           new PromptPathFor("webapi", "webapi", a => a.LA_use_webapi),
 
+          new PromptSubdomainFor(
+            "dashboard",
+            "dashboard",
+            a => a.LA_use_dashboard
+          ),
+          new PromptHostnameFor(
+            "dashboard",
+            "dashboard",
+            a => a.LA_use_dashboard
+          ),
+          new PromptHostnameInputFor("dashboard", a => a.LA_use_dashboard),
+          new PromptPathFor("dashboard", "dashboard", a => a.LA_use_dashboard),
+
           new PromptSubdomainFor("solr", "solr"),
           new PromptHostnameFor("solr", "index"),
           new PromptHostnameInputFor("solr"),
@@ -593,6 +621,9 @@ module.exports = class extends Generator {
       if (typeof this.answers.LA_use_webapi === "undefined")
         this.answers.LA_use_webapi = false;
 
+      if (typeof this.answers.LA_use_dashboard === "undefined")
+        this.answers.LA_use_dashboard = false;
+
       this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
         ? "https://"
         : "http://";
@@ -601,6 +632,7 @@ module.exports = class extends Generator {
         if (service === "regions" && !this.answers.LA_use_regions) return;
         if (service === "lists" && !this.answers.LA_use_species_lists) return;
         if (service === "webapi" && !this.answers.LA_use_webapi) return;
+        if (service === "dashboard" && !this.answers.LA_use_dashboard) return;
         if (debug) logger(this.answers);
         const hostVar = `LA_${service}_hostname`;
         const hostname = this.answers[hostVar];
@@ -626,7 +658,8 @@ module.exports = class extends Generator {
       "logger",
       "lists",
       "regions",
-      "webapi"
+      "webapi",
+      "dashboard"
     ];
 
     services.forEach(service => {

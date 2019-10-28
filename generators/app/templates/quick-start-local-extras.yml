@@ -84,28 +84,6 @@ caches_layers_enabled=false
 #
 <%_ } _%>
 
-[collectory:vars]
-
-[biocache-hub:vars]
-
-[biocache-service-clusterdb:vars]
-
-[biocache-cli:vars]
-
-[bie-hub:vars]
-
-[bie-index:vars]
-
-<%_ if (LA_use_regions) { _%>[regions:vars]
-
-<%_ } _%>[image-service:vars]
-
-<%_ if (LA_use_species_lists) { _%>[species-list:vars]
-
-<%_ } _%>[logger-service:vars]
-
-[solr7-server:vars]
-
-<%_ if (LA_use_webapi) { _%>[webapi_standalone:vars]
-
-<%_ } _%>
+<% for(var i=0; i < LA_services_machines.length; i++) { %>
+[<%= LA_services_machines[i].map.group %>:vars]
+<% } %>

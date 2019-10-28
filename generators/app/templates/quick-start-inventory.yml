@@ -338,7 +338,8 @@ biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA
 <% if (LA_use_spatial) { %>spatial_ws_hostname=<%= LA_spatial_hostname %><% } %>
 <% } %>
 
-<% if (LA_use_webapi) { %>
+<%_ if (LA_use_webapi) { _%>
+####### Web API #######
 webapi_hostname = <%= LA_webapi_hostname %>
 webapi_base_url = <%= LA_urls_prefix %><%= LA_webapi_url %>
 webapi_url = <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>
@@ -348,7 +349,16 @@ webapi_db_name = webapi
 webapi_db_username = webapi
 webapi_db_password = webapi
 
-<% } %>
+<%_ } _%>
+<%_ if (LA_use_dashboard) { _%>
+####### Dashboard #######
+dashboard_hostname = <%= LA_dashboard_hostname %>
+dashboard_base_url = <%= LA_urls_prefix %><%= LA_dashboard_url %>
+dashboard_url = <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>
+dashboard_context_path = <%= LA_dashboard_path %>
+volunteer_base_url =
+
+<%_ } _%>
 ##### Copied from workshop, should be in living-atlas inventory
 
 postgresql_username=postgres
