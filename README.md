@@ -190,6 +190,7 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 - [x] Add `--tags` to ansible wrapper
 - [x] Generate CAS salt
 - [x] Improve questions when not using subdomains using and /context instead
+- [x] Added dashboard support
 - [ ] Better testing
 
 ## Caveats
