@@ -48,8 +48,14 @@ biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %>
 biocache_service_context_path = <%= LA_biocache_service_path %>
 logging_enabled = true
 default_country =
-<% if (LA_use_spatial) { %>layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws<% } else { %>layers_service_url =<% } %>
-<% if (LA_use_spatial) { %>spatial_layers_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws/fields<% } else { %>spatial.layers.url=<% } %>
+<%_ if (LA_use_spatial) { _%>
+layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
+spatial_layers_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws/fields
+<%_ } else { _%>
+# While you decide to enable and deploy the spatial service we use ALA service to avoid issues
+layers_service_url=https://spatial.ala.org.au/ws
+spatial_layers_url=https://spatial.ala.org.au/ws/fields
+<%_ } _%>
 layers_service_sampling = <%= LA_use_spatial %>
 enable_lists = <%= LA_use_species_lists %>
 include_species_lists = <%= LA_use_species_lists %>
@@ -60,7 +66,12 @@ media_store_local = false
 media_store_url=<%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>
 download_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %>/biocache-download
 download_dir=/data/biocache-download
-<% if (LA_use_spatial) { %>geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver<% } %>
+<%_ if (LA_use_spatial) { _%>
+geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
+<%_ } else { _%>
+# While you decide to enable and deploy the spatial service we use ALA service to avoid issues
+geoserver_url=https://spatial.ala.org.au/geoserver
+<%_ } _%>
 
 ####################### Hub ###################################################
 
@@ -297,11 +308,14 @@ lists_base_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% 
 sightings_url =
 alerts_url =
 alerts_base_url=
-<% if (LA_use_spatial) { %>
+<%_ if (LA_use_spatial) { _%>
 spatial_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
-spatial_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %><% } else { %>
-spatial_url =
-spatial_base_url =<% } %>
+spatial_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
+<%_ } else { _%>
+# While you decide to enable and deploy the spatial service we use ALA service to avoid issues
+spatial_url=https://spatial.ala.org.au
+spatial_base_url=https://spatial.ala.org.au
+<%_ } _%>
 
 bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
 ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
@@ -327,15 +341,26 @@ regions_context_path = <%= LA_regions_path %>
 
 regions_map_bounds = []
 regions_map_height =
-<% if (LA_use_spatial) { %>
+<%_ if (LA_use_spatial) { _%>
 spatial_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 spatial_base_url_ws=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
 alerts_base_url=
 geoserver_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
-<% } %>
+<%_ } else { _%>
+# While you decide to enable and deploy the spatial service we use ALA service
+spatial_base_url=https://spatial.ala.org.au
+spatial_base_url_ws=https://spatial.ala.org.au/ws
+alerts_base_url=
+geoserver_base_url=https://spatial.ala.org.au/geoserver
+<%_ } _%>
 biocache_records_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
-<% if (LA_use_spatial) { %>spatial_ws_hostname=<%= LA_spatial_hostname %><% } %>
+<%_ if (LA_use_spatial) { _%>
+spatial_ws_hostname=<%= LA_spatial_hostname %>
+<%_ } else { _%>
+# While you decide to enable and deploy the spatial service we use ALA service
+spatial_ws_hostname=spatial.ala.org.au
+<%_ } _%>
 <% } %>
 
 <%_ if (LA_use_webapi) { _%>
