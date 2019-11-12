@@ -11,6 +11,7 @@ favicon_url = https://www.gbif.org/favicon.ico
 skin_favicon = https://www.gbif.org/favicon.ico
 technical_contact = support@<%= LA_domain %>
 orgEmail = info@<%= LA_domain %>
+google_api_key = some-google-key
 
 [spatial-hub:vars]
 
@@ -18,6 +19,23 @@ orgEmail = info@<%= LA_domain %>
 startup_lat = 39.8581
 startup_lng = -4.0226
 startup_zoom = 3
+google_analytics_id = UA-XXXXX
+nginx_client_max_body_size=300m
+
+# Your node default spatial area (by default Australia)
+spatial_default_area_name = 'España'
+spatial_default_area_sqkm = 4491002.4759
+spatial_default_area_bbox = [-19.556, 26.588, 5.493, 44.434]
+
+# Used by spatial-hub and spatial-service to allow task creation
+spatial_service_api_key=put-here-some-key
+
+[spatial-service:vars]
+
+# Used by spatial-hub and spatial-service to allow task creation
+spatial_service_api_key=put-here-some-key
+
+google_api_key = some-google-key
 
 [geoserver:vars]
 
@@ -25,4 +43,5 @@ startup_zoom = 3
 
 [spatial-analysis:vars]
 
-[layers-db:vars]   
+[layers-db:vars]
+
