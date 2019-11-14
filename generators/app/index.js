@@ -170,6 +170,12 @@ const servicesRolsMap = {
     group: "dashboard",
     playbook: "dashboard",
     desc: "dashboard"
+  },
+  nameindexer: {
+    name: "nameindexer",
+    group: "nameindexer",
+    playbook: "nameindexer-standalone",
+    desc: "nameindexer"
   }
 };
 
@@ -587,7 +593,9 @@ module.exports = class extends Generator {
               new Promise(resolve => {
                 storeMachine("biocache_backend", input).then(input =>
                   storeMachine("biocache_cli", input).then(input =>
-                    resolve(input)
+                    storeMachine("nameindexer", input).then(input =>
+                      resolve(input)
+                    )
                   )
                 );
               }),
@@ -615,6 +623,7 @@ module.exports = class extends Generator {
 
     this.answers.LA_main_hostname = this.answers.LA_domain;
     this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
+    this.answers.LA_nameindexer_hostname = this.answers.LA_biocache_backend_hostname;
 
     if (dontAsk) {
       // Compatible with old generated inventories and don-ask
@@ -652,6 +661,7 @@ module.exports = class extends Generator {
       "biocache_service",
       "biocache_backend",
       "biocache_cli",
+      "nameindexer",
       "ala_bie",
       "bie_index",
       "images",

@@ -22,16 +22,6 @@ ansible_become=yes
 <%= LA_services_machines[i].machine %>
 <% } %>
 
-[nameindexer]
-
-# We install nameindexer in these hostnames but maybe you prefer other if you want to generate a new custom
-# nameindex in a dedicated VM, for instance, without affecting to your production site
-# More info:
-# https://github.com/AtlasOfLivingAustralia/documentation/wiki/A-Guide-to-Getting-Names-into-the-ALA
-# https://github.com/AtlasOfLivingAustralia/documentation/wiki/Name-indexer
-<%= LA_biocache_backend_hostname %>
-<%= LA_ala_bie_hostname %>
-
 [all:vars]
 is_vagrant=false
 # Mounted storage is usually /mnt on EC2. Create a symlink to /mnt -> /data
