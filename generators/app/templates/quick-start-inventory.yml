@@ -284,6 +284,8 @@ bie_index_base_url = <%= LA_urls_prefix %><%= LA_bie_index_url %>
 bie_index_context_path = <%= LA_bie_index_path %>
 bie_index_hostname = <%= LA_bie_index_hostname %>
 
+bie_use_yml = true
+
 index_live_url = http://<%= LA_solr_url %>:8983/solr/bie
 index_offline_url = http://<%= LA_solr_url %>:8983/solr/bie-offline
 
