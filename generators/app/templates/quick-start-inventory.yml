@@ -79,6 +79,8 @@ biocache_hub_hostname = <%= LA_ala_hub_hostname %>
 biocache_hub_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %>
 biocache_hub_context_path = <%= LA_ala_hub_path %>
+# Used by Image service
+biocache_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails/
 # Warning: in biocache, the app uses userdetais_base_url instead of userdetails_url
 # https://github.com/AtlasOfLivingAustralia/biocache-hubs/blob/ba944aca8c848c816bf9931b0f21900e3dedfb63/grails-app/services/au/org/ala/biocache/hubs/UserDataService.groovy#L32
