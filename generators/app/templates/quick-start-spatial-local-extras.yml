@@ -34,6 +34,8 @@ spatial_service_api_key=put-here-some-key
 
 # Used by spatial-hub and spatial-service to allow task creation
 spatial_service_api_key=put-here-some-key
+spatial_service_service_key=put-here-some-key
+spatial_service_slave_key=put-here-some-key
 
 google_api_key = some-google-key
 
@@ -44,4 +46,3 @@ google_api_key = some-google-key
 [spatial-analysis:vars]
 
 [layers-db:vars]
-
