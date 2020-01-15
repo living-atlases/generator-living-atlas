@@ -39,10 +39,10 @@ spatial_service_slave_key=put-here-some-key
 
 google_api_key = some-google-key
 
-[geoserver:vars]
+# [geoserver:vars]
 
-[layers-service:vars]
+# [layers-service:vars]
 
-[spatial-analysis:vars]
+# [spatial-analysis:vars]
 
-[layers-db:vars]
+# [layers-db:vars]
