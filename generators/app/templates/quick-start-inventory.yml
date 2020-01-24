@@ -423,3 +423,8 @@ namedata_datestamp=20171012
 [nameindexer:vars]
 
 ala_name_matching_version = "3.4"
+
+[logger-service:vars]
+
+skin_layout = main
+
