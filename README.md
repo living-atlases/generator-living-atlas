@@ -196,7 +196,7 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 
 ## Caveats
 
-- Currently running several services in the same machine and the same domain doesn't configure correctly `nginx` `vhosts`. See [this enhancement issue](https://github.com/AtlasOfLivingAustralia/ala-install/issues/256) in `ala-install`. **Workaround**: Use different hostnames per each service in the same machine. So, if for instance, bie and bie-ws are in the same machine, this machine receives multiple names (like bie.example.org and bie-ws.example.org) and `nginx` don't overwrite each service vhost configuration.
+- Currently running several services in the same machine and the same domain doesn't configure correctly `nginx` `vhosts`. See [this enhancement issue](https://github.com/AtlasOfLivingAustralia/ala-install/issues/256) in `ala-install`. **Workaround**: Use different hostnames per each service in the same machine. So, if for instance, `bie` and `bie-ws` are in the same machine, this machine receives multiple names (like `bie.example.org` and `bie-ws.example.org`) and `nginx` doesn't overwrite each service vhost configuration. See the [LA FAQ](https://github.com/AtlasOfLivingAustralia/documentation/wiki/FAQ) for more details.
 
 ## Any problem with this generator?
 
