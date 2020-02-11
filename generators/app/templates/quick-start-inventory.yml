@@ -407,15 +407,17 @@ tomcat_user=tomcat7
 # Check: https://github.com/AtlasOfLivingAustralia/documentation/wiki/Components-versioning
 #
 
-collectory_version = LATEST
-biocache_hub_version = 3.2.2
-biocache_service_version = 2.2.0
-bie_hub_version = 1.4.19
-bie_index_version=1.4.8
+collectory_version = 1.6.2
+biocache_hub_version = 3.2.4
+biocache_service_version = 2.2.2
+bie_hub_version = 1.4.20
+bie_index_version=1.4.9
 biocache_cli_version = 2.4.5
-species_list_version = 3.4
+species_list_version = 3.5.1
 regions_version = 3.3.4
-image_service_version=1.0.9
+image_service_version=1.0.13
+spatial_hub_version = 0.3.1
+spatial_service_version = 0.3.1
 
 # workaround for: https://github.com/AtlasOfLivingAustralia/ala-install/issues/291
 namedata_datestamp=20171012
@@ -427,4 +429,3 @@ ala_name_matching_version = "3.4"
 [logger-service:vars]
 
 skin_layout = main
-
