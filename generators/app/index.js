@@ -446,7 +446,7 @@ module.exports = class extends Generator {
             name: "LA_use_webapi",
             message: `Use ${em(
               "webapi"
-            )} documentation service (similar to api.ala.org.au)?`,
+            )} an API documentation service (similar to api.ala.org.au but empty)?`,
             default: false
           },
           {
