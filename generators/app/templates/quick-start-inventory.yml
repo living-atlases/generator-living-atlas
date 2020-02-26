@@ -422,6 +422,10 @@ spatial_service_version = 0.3.1
 # workaround for: https://github.com/AtlasOfLivingAustralia/ala-install/issues/291
 namedata_datestamp=20171012
 
+# This prevents overwrite vhost configurations when deploying in same server
+# See: https://github.com/AtlasOfLivingAustralia/ala-install/pull/368
+vhost_with_appname_conf = true
+
 [nameindexer:vars]
 
 ala_name_matching_version = "3.4"
