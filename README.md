@@ -191,6 +191,8 @@ Without `--nodryrun` you will get only the full `ansible-playbook` command to us
 - [x] Generate CAS salt
 - [x] Improve questions when not using subdomains using and /context instead
 - [x] Added dashboard support
+- [ ] Integrate LA base skin
+- [ ] Reorder apikeys variables (Jason Loomis comment)
 - [ ] Improve `.yo-rc.json` location
 - [ ] Better testing
 
