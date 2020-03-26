@@ -137,6 +137,7 @@ collectory_db_user = collectory
 collectory_db_password = password
 bypass_cas = <%= !LA_use_CAS %>
 collectory_app=ala-collectory
+collectory_skin_layout = ala
 
 # API key that support registry updates
 api_key = dummy-registry-api-key
