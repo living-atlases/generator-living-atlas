@@ -82,6 +82,8 @@ biocache_hub_context_path = <%= LA_ala_hub_path %>
 # Used by Image service
 biocache_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails/
+# FIXME, which tool use wich url? the previous or the next one
+userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails/getUserListFull
 # Warning: in biocache, the app uses userdetais_base_url instead of userdetails_url
 # https://github.com/AtlasOfLivingAustralia/biocache-hubs/blob/ba944aca8c848c816bf9931b0f21900e3dedfb63/grails-app/services/au/org/ala/biocache/hubs/UserDataService.groovy#L32
 # so in the rest of inventories like CAS, we use the correct userdetails_base_url (without context /userdetails)
@@ -178,7 +180,7 @@ eml_country = Spain
 
 # Disable UI components
 disable_map = true
-disable_alerts = true
+disable_alerts = <%= !LA_use_alerts %>
 disable_logger = false
 
 # Whether to check API keys for incoming write requests
@@ -311,8 +313,6 @@ bie_service_enabled = true
 <% if (LA_use_species_lists) { %>species_list_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 lists_base_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
 sightings_url =
-alerts_url =
-alerts_base_url=
 <%_ if (LA_use_spatial) { _%>
 spatial_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 spatial_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
@@ -349,15 +349,43 @@ regions_map_height =
 <%_ if (LA_use_spatial) { _%>
 spatial_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 spatial_base_url_ws=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
-alerts_base_url=
 geoserver_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
 <%_ } else { _%>
 # While you decide to enable and deploy the spatial service we use ALA service
 spatial_base_url=https://spatial.ala.org.au
 spatial_base_url_ws=https://spatial.ala.org.au/ws
-alerts_base_url=
 geoserver_base_url=https://spatial.ala.org.au/geoserver
 <%_ } _%>
+
+<%_ if (LA_use_alerts) { _%>
+alerts_base_url = <%= LA_urls_prefix %><%= LA_alerts_url %>
+alerts_url = <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>
+alerts_context_path = <%= LA_alerts_path %>
+alerts_apikey_check_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/apikey/ws/check?apikey=
+alerts_apikey_whitelist =
+alerts_hostname = <%= LA_alerts_hostname %>
+alerts_db_hostname = localhost
+alerts_db_name = alerts
+alerts_db_username = alerts
+email_sender = atlas-alerts@ala.org.au
+email_alert_address_title = Atlas alerts
+email_info_address_title = Atlas of Living Australia
+email_info_sender = atlas-alerts@ala.org.au
+enableEmail = true
+userdetails_context_path = /userdetails
+occurrence_searchTitle = occurrence search
+occurrence_searchUrl = https://biocache.ala.org.au/occurrences/search?q=passer
+regions_searchTitle = ACT
+regions_searchUrl = https://regions.ala.org.au/states/Australian+Capital+Territory
+speciesPages_searchTitle = Shingle-back
+speciesPages_searchUrl = https://bie.ala.org.au/species/Tiliqua+rugosa
+collection_searchTitle = ANIC
+collection_searchUrl = https://collections.ala.org.au/public/show/co13
+<%_ } else { _%>
+alerts_base_url =
+alerts_url =
+<%_ } _%>
+
 biocache_records_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 <%_ if (LA_use_spatial) { _%>

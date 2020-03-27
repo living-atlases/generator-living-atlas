@@ -171,6 +171,12 @@ const servicesRolsMap = {
     playbook: "dashboard",
     desc: "dashboard"
   },
+  alerts: {
+    name: "alerts",
+    group: "alerts-service",
+    playbook: "alerts-standalone",
+    desc: "alerts"
+  },
   nameindexer: {
     name: "nameindexer",
     group: "nameindexer",
@@ -461,6 +467,13 @@ module.exports = class extends Generator {
           {
             store: true,
             type: "confirm",
+            name: "LA_use_alerts",
+            message: `Use ${em("alerts")} service?`,
+            default: false
+          },
+          {
+            store: true,
+            type: "confirm",
             name: "LA_use_CAS",
             message: `Use ${em("CAS")} Auth service?`,
             default: true
@@ -571,6 +584,11 @@ module.exports = class extends Generator {
           new PromptHostnameInputFor("dashboard", a => a.LA_use_dashboard),
           new PromptPathFor("dashboard", "dashboard", a => a.LA_use_dashboard),
 
+          new PromptSubdomainFor("alerts", "alerts", a => a.LA_use_alerts),
+          new PromptHostnameFor("alerts", "api", a => a.LA_use_alerts),
+          new PromptHostnameInputFor("alerts", a => a.LA_use_alerts),
+          new PromptPathFor("alerts", "alerts", a => a.LA_use_alerts),
+
           new PromptSubdomainFor("solr", "solr"),
           new PromptHostnameFor("solr", "index"),
           new PromptHostnameInputFor("solr"),
@@ -630,6 +648,9 @@ module.exports = class extends Generator {
       if (typeof this.answers.LA_use_webapi === "undefined")
         this.answers.LA_use_webapi = false;
 
+      if (typeof this.answers.LA_use_alerts === "undefined")
+        this.answers.LA_use_alerts = false;
+
       if (typeof this.answers.LA_use_dashboard === "undefined")
         this.answers.LA_use_dashboard = false;
 
@@ -641,6 +662,7 @@ module.exports = class extends Generator {
         if (service === "regions" && !this.answers.LA_use_regions) return;
         if (service === "lists" && !this.answers.LA_use_species_lists) return;
         if (service === "webapi" && !this.answers.LA_use_webapi) return;
+        if (service === "alerts" && !this.answers.LA_use_alerts) return;
         if (service === "dashboard" && !this.answers.LA_use_dashboard) return;
         if (debug) logger(this.answers);
         const hostVar = `LA_${service}_hostname`;
@@ -669,6 +691,7 @@ module.exports = class extends Generator {
       "lists",
       "regions",
       "webapi",
+      "alerts",
       "dashboard"
     ];
 

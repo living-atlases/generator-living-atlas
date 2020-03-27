@@ -93,3 +93,21 @@ caches_layers_enabled=false
 # [biocache-cli:vars]
 #
 # nameindex_user = root
+
+<%_ if (LA_use_alerts) { _%>
+[alerts-service:vars]
+
+email_sender = atlas-alerts@ala.org.au
+email_alert_address_title = Atlas alerts
+email_info_address_title = Atlas of Living Australia
+email_info_sender = atlas-alerts@ala.org.au
+enableEmail = true
+occurrence_searchTitle = occurrence search
+occurrence_searchUrl = https://biocache.ala.org.au/occurrences/search?q=passer
+regions_searchTitle = ACT
+regions_searchUrl = https://regions.ala.org.au/states/Australian+Capital+Territory
+speciesPages_searchTitle = Shingle-back
+speciesPages_searchUrl = https://bie.ala.org.au/species/Tiliqua+rugosa
+collection_searchTitle = ANIC
+collection_searchUrl = https://collections.ala.org.au/public/show/co13
+<%_ } _%>
