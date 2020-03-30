@@ -41,7 +41,7 @@
     "child_process": "^1.0.2",
     "niceware": "^1.0.7",
     "onionsay": "github:theonion/onionsay",
-    "parse-domain": "^2.3.1",
+    "parse-domain": "^2.3.4",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   },
