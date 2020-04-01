@@ -121,6 +121,7 @@ We recommend to override and set variables adding then to `<%= LA_pkg_name %>-lo
 <% if (LA_use_CAS) { %>- CAS Auth system: https://<%= LA_cas_hostname %>/cas
 - User details: https://<%= LA_cas_hostname %>/userdetails
 - User details administration: https://<%= LA_cas_hostname %>/userdetails/admin
+- User details alaAdmin https://<%= LA_cas_hostname %>/userdetails/alaAdmin
 - Apikey management: https://<%= LA_cas_hostname %>/apikey/
 - CAS management administration: https://<%= LA_cas_hostname %>/cas-management/<% } %>
 - Logger: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/
@@ -135,6 +136,14 @@ We recommend to override and set variables adding then to `<%= LA_pkg_name %>-lo
 <%_ if (LA_use_webapi) { _%>
 - Web API: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/
 - Web API administration: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/admin
+<%_ } _%>
+<%_ if (LA_use_alerts) { _%>
+- Alerts service: <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>/
+- Alerts service administration: <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>/admin
+<%_ } _%>
+<%_ if (LA_use_doi) { _%>
+- DOI service: <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>/
+- DOI service administration: <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>/admin
 <%_ } _%>
 <%_ if (LA_use_dashboard) { _%>
 - Dashboard: <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>/
