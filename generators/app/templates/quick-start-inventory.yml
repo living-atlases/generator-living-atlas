@@ -108,7 +108,6 @@ map_default_latitude = 40.4168
 map_default_longitude = -3.7038
 map_default_zoom = 5
 
-skin_layout = generic
 # If you don't want fluid layout, leave this option empty
 skin_fluid_layout = true
 
@@ -139,7 +138,6 @@ collectory_db_user = collectory
 collectory_db_password = password
 bypass_cas = <%= !LA_use_CAS %>
 collectory_app=ala-collectory
-collectory_skin_layout = ala
 
 # API key that support registry updates
 api_key = dummy-registry-api-key
@@ -259,6 +257,7 @@ nginx_vhost_fragments_to_clear = <%- JSON.stringify(LA_nginx_vhosts)%>
 biocache_opts = -Xmx1g -Xms1g
 
 ############## Base header / footer ###############
+# NOTE: this url doesn't have a trailing /
 header_and_footer_baseurl = <%= LA_urls_prefix %><%= LA_domain %>
 
 ###### favicon #######
@@ -304,7 +303,7 @@ index_images = true
 
 ############# BIE Hub ################
 
-bie_skin_layout = generic
+bie_skin_layout = ala
 bie_hub = ala-bie
 bie_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %>
 bie_hub_context_path = <%= LA_ala_bie_path %>
@@ -458,6 +457,43 @@ vhost_with_appname_conf = true
 [nameindexer:vars]
 
 ala_name_matching_version = "3.4"
+
+[collectory:vars]
+
+collectory_skin_layout = ala
+skin_layout = ala
+
+[biocache-hub:vars]
+
+skin_layout = ala
+
+[bie-hub:vars]
+
+skin_layout = ala
+
+[bie-index:vars]
+
+skin_layout = main
+
+[image-service:vars]
+
+skin_layout = main
+
+<%_ if (LA_use_species_lists) { _%>
+[species-list:vars]
+
+skin_layout = main
+<%_ } _%>
+
+[regions:vars]
+
+skin_layout = main
+
+<%_ if (LA_use_alerts) { _%>
+[alerts-service:vars]
+
+skin_layout = main
+<%_ } _%>
 
 [logger-service:vars]
 

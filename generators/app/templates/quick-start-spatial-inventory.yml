@@ -208,6 +208,7 @@ ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
 # Warning: in spatial, the app uses userdetais_base_url instead of userdetails_url
 # so in the rest of inventories like CAS, we use the correct userdetails_base_url (without context /userdetails)
 user_details_base_url = https://<%= LA_cas_hostname %>/userdetails
+# NOTE: this header/footer url doesn't have a trailing /
 header_and_footer_baseurl = <%= LA_urls_prefix %><%= LA_domain %>
 logger_base_url = <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/service
 <% if (LA_use_species_lists) { %>lists_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
