@@ -13,6 +13,10 @@ technical_contact = support@<%= LA_domain %>
 orgEmail = info@<%= LA_domain %>
 google_api_key = some-google-key
 
+# file upload limit
+nginx_client_max_body_size = 600m
+max_request_size = 614400000
+
 [spatial-hub:vars]
 
 # Here we override the default 0,0 coordinates
