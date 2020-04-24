@@ -64,6 +64,9 @@ caches_layers_enabled=false
 # sample_fields = cl1,cl2,cl3
 sample_fields =
 
+# In order to permit admin operations add here allowed IP lists comman separated
+image_service_whitelist =
+
 <%_ if (LA_enable_ssl) { _%>
 #
 # Put here the correct location for your SSL certs. Now the inventories are
@@ -93,11 +96,6 @@ sample_fields =
 # [<%= LA_services_machines[i].map.group %>:vars]
 <% } %>
 
-# Uncomment this if your biocache-cli is running in a host without tomcat installed
-# [biocache-cli:vars]
-#
-# nameindex_user = root
-
 <%_ if (LA_use_alerts) { _%>
 [alerts-service:vars]
 
@@ -117,3 +115,8 @@ collection_searchTitle = ANIC
 collection_searchUrl = https://collections.ala.org.au/public/show/co13
 alerts_apikey_whitelist =
 <%_ } _%>
+
+# Uncomment this if your biocache-cli is running in a host without tomcat installed
+# [biocache-cli:vars]
+#
+# nameindex_user = root
