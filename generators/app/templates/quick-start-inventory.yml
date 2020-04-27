@@ -81,13 +81,12 @@ biocache_hub_base_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %>
 biocache_hub_context_path = <%= LA_ala_hub_path %>
 # Used by Image service
 biocache_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
-userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails/
-# FIXME, which tool use wich url? the previous or the next one
-userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails/getUserListFull
-# Warning: in biocache, the app uses userdetais_base_url instead of userdetails_url
-# https://github.com/AtlasOfLivingAustralia/biocache-hubs/blob/ba944aca8c848c816bf9931b0f21900e3dedfb63/grails-app/services/au/org/ala/biocache/hubs/UserDataService.groovy#L32
-# so in the rest of inventories like CAS, we use the correct userdetails_base_url (without context /userdetails)
-userdetails_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
+
+userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails
+
+userdetails_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>
+# In alerts with is with slash '/userdetails' not in the rest
+userdetails_context_path = userdetails
 
 google_apikey = AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk
 
@@ -371,7 +370,6 @@ email_alert_address_title = Atlas alerts
 email_info_address_title = Atlas of Living Australia
 email_info_sender = atlas-alerts@ala.org.au
 enableEmail = true
-userdetails_context_path = /userdetails
 occurrence_searchTitle = occurrence search
 occurrence_searchUrl = https://biocache.ala.org.au/occurrences/search?q=passer
 regions_searchTitle = ACT
@@ -466,6 +464,10 @@ skin_layout = ala
 [biocache-hub:vars]
 
 skin_layout = ala
+# Warning: in biocache, the app uses userdetais_base_url instead of userdetails_url
+# https://github.com/AtlasOfLivingAustralia/biocache-hubs/blob/ba944aca8c848c816bf9931b0f21900e3dedfb63/grails-app/services/au/org/ala/biocache/hubs/UserDataService.groovy#L32
+# so in the rest of inventories like CAS, we use the correct userdetails_base_url (without context /userdetails)
+userdetails_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
 
 [bie-hub:vars]
 
@@ -493,6 +495,9 @@ skin_layout = main
 [alerts-service:vars]
 
 skin_layout = main
+# This userdetails_url and context is different in alerts from the rest of tools
+userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
+userdetails_context_path = /userdetails
 <%_ } _%>
 
 [logger-service:vars]
