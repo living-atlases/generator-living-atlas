@@ -59,7 +59,10 @@ spatial_layers_url=https://spatial.ala.org.au/ws/fields
 layers_service_sampling = <%= LA_use_spatial %>
 enable_lists = <%= LA_use_species_lists %>
 include_species_lists = <%= LA_use_species_lists %>
-<% if (LA_use_species_lists) { %>lists_service_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
+<%_ if (LA_use_species_lists) { _%>
+lists_service_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+specieslist_apikey_check_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/apikey/ws/check?apikey=
+<%_ } _%>
 registry_api_key = dummy-registry-api-key
 commonname_lang = en
 media_store_local = false
