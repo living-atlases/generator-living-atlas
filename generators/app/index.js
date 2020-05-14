@@ -272,9 +272,11 @@ function PromptHostnameInputFor(name, when) {
   this.name = varName;
   this.when = a => {
     if (typeof when !== "undefined" && !when(a)) {
+      if (debug) logger("We don't ask for other hostname");
       return false;
     }
     if (a[varName] === "other") {
+      if (debug) logger("We ask for other hostname");
       return true;
     }
     // Store previous hostname
