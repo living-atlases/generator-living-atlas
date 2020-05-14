@@ -88,7 +88,7 @@ biocache_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails
 
 userdetails_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>
-# In alerts with is with slash '/userdetails' not in the rest
+# In alerts this is with slash '/userdetails' not in the rest
 userdetails_context_path = userdetails
 
 google_apikey = AIzaSyAJDtEeoy7Sc9pij2TAoVnmTwA34Q-2VHk
@@ -462,7 +462,6 @@ ala_name_matching_version = "3.4"
 [collectory:vars]
 
 collectory_skin_layout = ala
-skin_layout = ala
 
 [biocache-hub:vars]
 
