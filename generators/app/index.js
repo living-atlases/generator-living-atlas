@@ -221,15 +221,23 @@ const storeMachine = (name, machine) =>
     resolve(machine);
   });
 
-function PromptSubdomainFor(name, subdomain, when) {
+function PromptSubdomainFor(name, subdomain, when, force) {
   this.store = defaultStore;
   this.type = "confirm";
   const varName = `LA_${name}_uses_subdomain`;
   this.name = varName;
   this.message = a => defUseSubdomainPrompt(a, name);
   this.default = a => defUseSubdomain(a);
-  if (when) {
-    this.when = when;
+  if (force) {
+    this.when = a =>
+      new Promise(resolve => {
+        a[varName] = true;
+        resolve(false);
+      });
+  } else {
+    if (when) {
+      this.when = when;
+    }
   }
 }
 
@@ -591,34 +599,34 @@ module.exports = class extends Generator {
               { name: "service-path", value: false }
             ]
           },
-          new PromptHostnameFor("collectory", "collectory"),
+          new PromptHostnameFor("collectory", "collections"),
           new PromptHostnameInputFor("collectory"),
-          new PromptUrlFor("collectory", "collectory"),
-          new PromptPathFor("collectory", "collectory"),
+          new PromptUrlFor("collectory", "collections"),
+          new PromptPathFor("collectory", "collections"),
 
-          new PromptSubdomainFor("ala_hub", "biocache"),
-          new PromptHostnameFor("ala_hub", "biocache"),
+          new PromptSubdomainFor("ala_hub", "records"),
+          new PromptHostnameFor("ala_hub", "records"),
           new PromptHostnameInputFor("ala_hub"),
-          new PromptUrlFor("ala_hub", "biocache"),
-          new PromptPathFor("ala_hub", "ala-hub"),
+          new PromptUrlFor("ala_hub", "records"),
+          new PromptPathFor("ala_hub", "records"),
 
-          new PromptSubdomainFor("biocache_service", "biocache-service"),
-          new PromptHostnameFor("biocache_service", "biocache-ws"),
+          new PromptSubdomainFor("biocache_service", "records-ws"),
+          new PromptHostnameFor("biocache_service", "records-ws"),
           new PromptHostnameInputFor("biocache_service"),
-          new PromptUrlFor("biocache_service", "biocache-ws"),
-          new PromptPathFor("biocache_service", "biocache-service"),
+          new PromptUrlFor("biocache_service", "records-ws"),
+          new PromptPathFor("biocache_service", "records-ws"),
 
-          new PromptSubdomainFor("ala_bie", "bie"),
-          new PromptHostnameFor("ala_bie", "bie"),
+          new PromptSubdomainFor("ala_bie", "species"),
+          new PromptHostnameFor("ala_bie", "species"),
           new PromptHostnameInputFor("ala_bie"),
-          new PromptUrlFor("ala_bie", "bie"),
-          new PromptPathFor("ala_bie", "ala-bie"),
+          new PromptUrlFor("ala_bie", "species"),
+          new PromptPathFor("ala_bie", "species"),
 
-          new PromptSubdomainFor("bie_index", "bie-service"),
-          new PromptHostnameFor("bie_index", "bie-ws"),
+          new PromptSubdomainFor("bie_index", "species-service"),
+          new PromptHostnameFor("bie_index", "species-ws"),
           new PromptHostnameInputFor("bie_index"),
-          new PromptUrlFor("bie_index", "bie-ws"),
-          new PromptPathFor("bie_index", "bie-index"),
+          new PromptUrlFor("bie_index", "species-ws"),
+          new PromptPathFor("bie_index", "species-ws"),
 
           new PromptSubdomainFor("images", "images"),
           new PromptHostnameFor("images", "images"),
@@ -690,19 +698,16 @@ module.exports = class extends Generator {
           new PromptUrlFor("solr", "index"),
           new PromptPathFor("solr", "solr"),
 
-          {
-            store: true,
-            type: "input",
-            name: "LA_cas_hostname",
-            message: `LA ${em("CAS")} subdomain`,
-            filter: input => storeMachine("cas", input),
-            default: a => `auth.${a.LA_domain}`
-          },
+          new PromptSubdomainFor("cas", "auth", true, true),
+          new PromptHostnameFor("cas", "auth"),
+          new PromptHostnameInputFor("cas"),
+          new PromptUrlFor("cas", "auth"),
           {
             store: true,
             type: "input",
             name: "LA_biocache_backend_hostname",
             message: `LA ${em("biocache-backend")} hostname`,
+            validate: input => isCorrectHostname(input),
             filter: input =>
               new Promise(resolve => {
                 storeMachine("biocache_backend", input).then(input =>
@@ -713,17 +718,17 @@ module.exports = class extends Generator {
                   )
                 );
               }),
-            default: a => `${a.LA_domain}`
+            default: a => `${a.LA_main_hostname}`
           },
-          {
-            store: true,
-            type: "input",
-            name: "LA_spatial_hostname",
-            message: `LA ${em("spatial")} subdomain`,
-            filter: input => storeMachine("spatial", input),
-            when: a => a.LA_use_spatial,
-            default: a => `spatial.${a.LA_domain}`
-          },
+          new PromptSubdomainFor(
+            "spatial",
+            "spatial",
+            a => a.LA_use_spatial,
+            true
+          ),
+          new PromptHostnameFor("spatial", "spatial", a => a.LA_use_spatial),
+          new PromptHostnameInputFor("spatial", a => a.LA_use_spatial),
+          new PromptUrlFor("spatial", "spatial", a => a.LA_use_spatial),
           {
             store: true,
             type: "confirm",
@@ -740,6 +745,13 @@ module.exports = class extends Generator {
     }
     this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
     this.answers.LA_nameindexer_hostname = this.answers.LA_biocache_backend_hostname;
+
+    if (typeof this.answers.LA_spatial_uses_subdomain === "undefined") {
+      this.answers.LA_spatial_uses_subdomain = true;
+    }
+    if (typeof this.answers.LA_cas_uses_subdomain === "undefined") {
+      this.answers.LA_cas_uses_subdomain = true;
+    }
 
     if (dontAsk) {
       // Compatible with old generated inventories and don-ask
@@ -812,8 +824,15 @@ module.exports = class extends Generator {
     if (this.answers.LA_solr_uses_subdomain) {
       this.answers.LA_solr_path = "";
     }
+    // Backward compatibility
     if (typeof this.answers.LA_solr_url === "undefined") {
       this.answers.LA_solr_url = this.answers.LA_solr_hostname;
+    }
+    if (typeof this.answers.LA_cas_url === "undefined") {
+      this.answers.LA_cas_url = this.answers.LA_cas_hostname;
+    }
+    if (typeof this.answers.LA_spatial_url === "undefined") {
+      this.answers.LA_spatial_url = this.answers.LA_spatial_hostname;
     }
     this.answers.LA_machines = machines;
     this.answers.LA_services_machines = servicesAndMachines;

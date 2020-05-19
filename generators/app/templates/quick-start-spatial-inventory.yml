@@ -37,8 +37,8 @@ local_repo_dir=~/.ala
 data_dir=/data
 
 geoserver_hostname=<%= LA_spatial_hostname %>
-geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
-geoserver_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
+geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_url %>/geoserver
+geoserver_base_url=<%= LA_urls_prefix %><%= LA_spatial_url %>
 geoserver_context_path=/geoserver
 geoserver_app=geoserver
 
@@ -73,8 +73,8 @@ local_repo_dir=~/.ala
 data_dir=/data
 
 geonetwork_hostname=<%= LA_spatial_hostname %>
-geonetwork_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geonetwork
-geonetwork_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
+geonetwork_url=<%= LA_urls_prefix %><%= LA_spatial_url %>/geonetwork
+geonetwork_base_url=<%= LA_urls_prefix %><%= LA_spatial_url %>
 geonetwork_context_path=/geonetwork
 geonetwork_app=geonetwork
 
@@ -115,11 +115,11 @@ orgNameLong = <%= LA_project_name %>
 orgNameShort = <%= LA_project_shortname %>
 
 spatial_service_hostname=<%= LA_spatial_hostname %>
-spatial_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
-spatial_service_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
+spatial_service_url=<%= LA_urls_prefix %><%= LA_spatial_url %>/ws
+spatial_service_base_url=<%= LA_urls_prefix %><%= LA_spatial_url %>
 spatial_service_context_path=/ws
 
-layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
+layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_url %>/ws
 biocache_service_url=<%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 
 layers_db_host=localhost
@@ -143,8 +143,8 @@ service_enable=true
 
 spatial_service_remote_url=https://nectar-spatial-staging.ala.org.au/spatial-service
 
-auth_base_url = https://<%= LA_cas_hostname %>
-auth_cas_url = https://<%= LA_cas_hostname %>/cas
+auth_base_url = https://<%= LA_cas_url %>
+auth_cas_url = https://<%= LA_cas_url %>/cas
 
 webserver_nginx=true
 robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
@@ -167,12 +167,12 @@ startup_zoom = 2
 
 spatial_hub_skin_layout=portal
 spatial_hub_hostname=<%= LA_spatial_hostname %>
-spatial_hub_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/
-spatial_hub_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
+spatial_hub_url=<%= LA_urls_prefix %><%= LA_spatial_url %>/
+spatial_hub_base_url=<%= LA_urls_prefix %><%= LA_spatial_url %>
 spatial_hub_context_path=/
 
-layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
-geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
+layers_service_url=<%= LA_urls_prefix %><%= LA_spatial_url %>/ws
+geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_url %>/geoserver
 
 sandbox_url=<%= LA_urls_prefix %>sandbox.<%= LA_domain %>/ala-hub
 sandbox_ui_url=<%= LA_urls_prefix %>sandbox.<%= LA_domain %>/datacheck
@@ -203,14 +203,14 @@ collections_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory
 collectory_url = <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
 biocache_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 biocache_service_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
-sampling_url = <%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
+sampling_url = <%= LA_urls_prefix %><%= LA_spatial_url %>/ws
 ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
 # Warning: in spatial, the app uses userdetais_base_url instead of userdetails_url
 # so in the rest of inventories like CAS, we use the correct userdetails_base_url (without context /userdetails)
-user_details_base_url = https://<%= LA_cas_hostname %>/userdetails
+user_details_base_url = https://<%= LA_cas_url %>/userdetails
 # NOTE: this header/footer url doesn't have a trailing /
 header_and_footer_baseurl = <%= LA_urls_prefix %><%= LA_domain %>
 logger_base_url = <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/service
 <% if (LA_use_species_lists) { %>lists_url = <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %><% } %>
-api_key_check_url_template = https://<%= LA_cas_hostname %>/apikey/ws/check?apikey={0}
+api_key_check_url_template = https://<%= LA_cas_url %>/apikey/ws/check?apikey={0}
 biocollect_url =

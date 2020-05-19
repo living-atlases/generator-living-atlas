@@ -118,21 +118,21 @@ We recommend to override and set variables adding then to `<%= LA_pkg_name %>-lo
 - Species webservice: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
 - Species webservice administration: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>/admin
 - SOLR non-public web interface: http://<%= LA_solr_url %>:8983 (You should use ssh port redirection to access this)
-<% if (LA_use_CAS) { %>- CAS Auth system: https://<%= LA_cas_hostname %>/cas
-- User details: https://<%= LA_cas_hostname %>/userdetails
-- User details administration: https://<%= LA_cas_hostname %>/userdetails/admin
-- User details alaAdmin https://<%= LA_cas_hostname %>/userdetails/alaAdmin
-- Apikey management: https://<%= LA_cas_hostname %>/apikey/
-- CAS management administration: https://<%= LA_cas_hostname %>/cas-management/<% } %>
+<% if (LA_use_CAS) { %>- CAS Auth system: https://<%= LA_cas_url %>/cas
+- User details: https://<%= LA_cas_url %>/userdetails
+- User details administration: https://<%= LA_cas_url %>/userdetails/admin
+- User details alaAdmin https://<%= LA_cas_url %>/userdetails/alaAdmin
+- Apikey management: https://<%= LA_cas_url %>/apikey/
+- CAS management administration: https://<%= LA_cas_url %>/cas-management/<% } %>
 - Logger: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/
 - Logger administration: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/admin
 <% if (LA_use_species_lists) { %>- Species list: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 - Species list administration: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>/admin<% } %>
 <% if (LA_use_regions) { %>- Regions: <%= LA_urls_prefix %><%= LA_regions_url %>
 - Regions administration: <%= LA_urls_prefix %><%= LA_regions_url %>/alaAdmin<% } %>
-<% if (LA_use_spatial) { %>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_hostname %>
-- Spatial Webservice: <%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
-- Spatial Geoserver: <%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver/<% } %>
+<% if (LA_use_spatial) { %>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_url %>
+- Spatial Webservice: <%= LA_urls_prefix %><%= LA_spatial_url %>/ws
+- Spatial Geoserver: <%= LA_urls_prefix %><%= LA_spatial_url %>/geoserver/<% } %>
 <%_ if (LA_use_webapi) { _%>
 - Web API: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/
 - Web API administration: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/admin

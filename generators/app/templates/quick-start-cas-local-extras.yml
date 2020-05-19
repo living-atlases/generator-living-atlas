@@ -50,8 +50,8 @@ cas_webflow_encryption_key=
 # Sample of Oauth configuration:
 # Go to your Github organization settings, add a Oauth App
 # with:
-# Homepage url: https://<%= LA_cas_hostname %>/
-# Authorization callback URL: https:///<%= LA_cas_hostname %>/cas/login
+# Homepage url: https://<%= LA_cas_url %>/
+# Authorization callback URL: https:///<%= LA_cas_url %>/cas/login
 # put here the key and secret, and rerun the playbook
 # pac4j_github_consumer_key=to_be_added_in_the_near_future
 # pac4j_github_consumer_secret=to_be_added_in_the_near_future
