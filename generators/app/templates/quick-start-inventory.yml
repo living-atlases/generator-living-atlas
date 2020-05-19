@@ -15,8 +15,7 @@ ansible_user=ubuntu
 ansible_become=yes
 
 [ala-demo]
-<%= LA_domain %>
-
+<%= LA_main_hostname %>
 <% for(var i=0; i < LA_services_machines.length; i++) { %>
 [<%= LA_services_machines[i].map.group %>]
 <%= LA_services_machines[i].machine %>
