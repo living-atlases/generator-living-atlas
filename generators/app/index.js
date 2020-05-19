@@ -259,7 +259,7 @@ function PromptHostnameFor(name, subdomain, when) {
   if (when) {
     this.when = when;
   }
-  // This does not work:
+  // This does not work with list:
   // this.filter = input => storeMachine(name, input);
   // https://github.com/SBoudrias/Inquirer.js/issues/383
   // this.validate = input => validateDomain(input, name, true);
@@ -270,20 +270,24 @@ function PromptHostnameInputFor(name, when) {
   this.type = "input";
   const varName = `LA_${name}_hostname`;
   this.name = varName;
+  this.message = `LA ${em(name)} hostname ?`;
   this.when = a => {
+    if (debug) logger(`We ask for other ${name}/${a[varName]}?`);
     if (typeof when !== "undefined" && !when(a)) {
       if (debug) logger("We don't ask for other hostname");
       return false;
     }
     if (a[varName] === "other") {
-      if (debug) logger("We ask for other hostname");
+      if (debug) logger("We ask for 'other' hostname");
       return true;
     }
     // Store previous hostname
+    if (debug) logger(`We store ${name} hostname`);
     storeMachine(name, a[varName]);
     // And don't ask again
     return false;
   };
+  this.askAnswered = true;
   this.validate = input => validateDomain(input, name, true);
 }
 
