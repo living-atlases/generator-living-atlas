@@ -861,6 +861,14 @@ module.exports = class extends Generator {
       this.answers
     );
 
+    if (!this.fs.exists(`${dest}/dot-ssh-config`)) {
+      this.fs.copyTpl(
+        this.templatePath("dot-ssh-config.sample"),
+        this.destinationPath(`${dest}/dot-ssh-config`),
+        this.answers
+      );
+    }
+
     // Migrate old quick-start generated inventory files to pkg_name named
     const templateFiles = [
       "inventory.yml",

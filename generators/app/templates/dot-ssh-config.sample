@@ -1,0 +1,24 @@
+#
+# ssh config sample
+# Adapt it and put his file in your /home/you/.ssh/config
+#
+# You can also include several configs in modern ssh versions:
+# See: https://supersuser.com/questions/247564/is-there-a-way-for-one-ssh-config-file-to-include-another-one
+
+# These first options apply to all the rest of Hosts
+Host *
+  User ubuntu
+  IdentityFile ~/.ssh/put-here-some-key-already-deployed-in-hostnames
+  # Comment this line in production
+  StrictHostKeyChecking no
+
+<%_ LA_machines.forEach(machine => { -%>
+Host <%= machine %>
+  # If you have to jump to another (bastion) host to access this,
+  # uncoment and adjust this ProxyJump line
+  # ProxyJump ubuntu@bastion_host:22
+  #
+  # Put here the IP of this hostname
+  Hostname 1.2.3.X
+
+<%_ }); %>
