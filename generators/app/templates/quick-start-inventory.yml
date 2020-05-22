@@ -488,10 +488,11 @@ skin_layout = main
 skin_layout = main
 <%_ } _%>
 
+<% if (LA_use_regions) { %>
 [regions:vars]
 
 skin_layout = main
-
+<%_ } _%>
 <%_ if (LA_use_alerts) { _%>
 [alerts-service:vars]
 
