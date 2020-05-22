@@ -336,7 +336,7 @@ image_service_db_password=images
 image_service_db_username=images
 image_service_port=9101
 
-<% if (LA_use_regions) { %>
+<%_ if (LA_use_regions) { _%>
 
 ####### Regions #######
 
@@ -346,6 +346,7 @@ regions_context_path = <%= LA_regions_path %>
 
 regions_map_bounds = []
 regions_map_height =
+<%_ } _%>
 <%_ if (LA_use_spatial) { _%>
 spatial_base_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>
 spatial_base_url_ws=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/ws
@@ -393,7 +394,6 @@ spatial_ws_hostname=<%= LA_spatial_hostname %>
 # While you decide to enable and deploy the spatial service we use ALA service
 spatial_ws_hostname=spatial.ala.org.au
 <%_ } _%>
-<% } %>
 
 <%_ if (LA_use_webapi) { _%>
 ####### Web API #######
