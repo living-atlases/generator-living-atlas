@@ -74,6 +74,7 @@ geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
 # While you decide to enable and deploy the spatial service we use ALA service to avoid issues
 geoserver_url=https://spatial.ala.org.au/geoserver
 <%_ } _%>
+sightings_base_url=
 
 ####################### Hub ###################################################
 
@@ -139,6 +140,9 @@ collectory_db_user = collectory
 collectory_db_password = password
 bypass_cas = <%= !LA_use_CAS %>
 collectory_app=ala-collectory
+apikey_service_url=https://<%= LA_cas_url %>/apikey/ws/check?apikey=
+public_archive_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>/archives/gbif/@UID@/@UID@.zip
+gbif_archive_url=<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>/archives/gbif/@UID@/@UID@.zip
 
 # API key that support registry updates
 api_key = dummy-registry-api-key
@@ -235,6 +239,7 @@ use_gbif_nexus = false
 ####### Disable SDS checks for the demo #######
 
 sds_enabled = false
+biocache_sds_url =
 
 # Disabled caches - the collections cache is problematic when collectory + biocache on same server
 
@@ -513,6 +518,7 @@ skin_layout = main
 deployment_env = test
 doi_service_hostname = <%= LA_doi_hostname %>
 doi_service_context_path = <%= LA_doi_path %>
+doi_service_url = <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>
 doi_service_port = 8081
 ands_doi_mint_url = https://services.ands.org.au/doi/1.1/
 ands_doi_app_id =
@@ -530,4 +536,5 @@ doi_db_name = doi
 doi_db_user = doi
 doi_service_version = 1.0.2
 <%_ } else { _%>
+doi_service_url =
 <%_ } _%>
