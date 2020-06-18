@@ -31,7 +31,7 @@ skin_home_url = <%= LA_urls_prefix %><%= LA_domain %>
 
 ############# GBIF Name matching index
 
-custom_namematching_url = https://s3.amazonaws.com/ala-nameindexes/latest/namematching-gbif-lucene5.tgz
+custom_namematching_url = custom_namematching_url = https://datos.gbif.es/others/namematching-gbif-backbone-2020-06-18.tgz
 nameindex_to_use = custom
 
 ####################### Biocache ##############################################
