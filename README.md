@@ -154,6 +154,12 @@ or all the services with something like:
 
 Without `--nodryrun` you will get only the full `ansible-playbook` command to use these inventories .
 
+## Maintain your inventories over time
+
+You can generate your
+
+As we mentioned previously you can rerun the generator with the option `yo living-atlas --replay` to reuse all the previous responses and regenerate the inventories with some modifications (if for instance you want to add a new service, or use a new version of this generator with improvements).
+
 ## TODO
 
 - [x] Add basic services (`collectory`, `ala-hub`, etc).

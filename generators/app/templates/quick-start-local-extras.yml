@@ -60,6 +60,10 @@ caches_log_enabled=false
 caches_collections_enabled=false
 caches_layers_enabled=false
 
+# Use in: collectory
+region = Australia
+regionName = Australia
+
 # Specify spatial fields to sample, like:
 # sample_fields = cl1,cl2,cl3
 sample_fields =
