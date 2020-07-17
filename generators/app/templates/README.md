@@ -111,6 +111,7 @@ We recommend to override and set variables adding then to `<%= LA_pkg_name %>-lo
 - Main landing page: <%= LA_urls_prefix %><%= LA_domain %>
 - Collections: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
 - Collections administration: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/admin
+- Collections alaAdmin: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/alaAdmin
 - Biocache (occurrences): <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 - Biocache administration: <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>/admin
 - Biocache webservice: <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
