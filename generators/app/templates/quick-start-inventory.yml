@@ -369,8 +369,8 @@ geoserver_base_url=https://spatial.ala.org.au/geoserver
 <%_ } _%>
 
 <%_ if (LA_use_alerts) { _%>
-alerts_base_url = <%= LA_urls_prefix %><%= LA_alerts_url %>
 alerts_url = <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>
+alerts_base_url = <%= LA_urls_prefix %><%= LA_alerts_url %>
 alerts_context_path = <%= LA_alerts_path %>
 alerts_apikey_check_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/apikey/ws/check?apikey=
 alerts_apikey_whitelist =
@@ -446,7 +446,7 @@ tomcat_user=tomcat7
 #
 
 collectory_version = 1.6.2
-biocache_hub_version = 3.2.4
+biocache_hub_version = 3.2.8
 biocache_service_version = 2.2.2
 bie_hub_version = 1.4.20
 bie_index_version=1.4.9
@@ -526,8 +526,9 @@ skin_layout = main
 # prod, test, dev
 deployment_env = test
 doi_service_hostname = <%= LA_doi_hostname %>
-doi_service_context_path = <%= LA_doi_path %>
 doi_service_url = <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>
+doi_service_base_url = <%= LA_urls_prefix %><%= LA_doi_url %>
+doi_service_context_path = <%= LA_doi_path %>
 doi_service_port = 8081
 ands_doi_mint_url = https://services.ands.org.au/doi/1.1/
 ands_doi_app_id =
