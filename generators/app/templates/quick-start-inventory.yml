@@ -85,7 +85,7 @@ biocache_hub_context_path = <%= LA_ala_hub_path %>
 # Used by Image service
 biocache_url = <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 
-userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails
+userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails/userDetails/
 
 userdetails_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>
 # In alerts this is with slash '/userdetails' not in the rest
