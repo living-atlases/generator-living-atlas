@@ -30,6 +30,8 @@ cas_hostname=<%= LA_cas_hostname %>
 cas_url=<%= LA_urls_prefix %><%= LA_cas_url %>/cas
 cas_base_url=<%= LA_urls_prefix %><%= LA_cas_url %>
 cas_context_path=cas
+ala_cas_ui_version=3
+cas_cors_enabled=true
 skin_favicon_baseurl=<%= LA_urls_prefix %><%= LA_domain %>/favicon/
 
 cas_management_server_name=<%= LA_urls_prefix %><%= LA_cas_url %>
@@ -62,6 +64,14 @@ user_store_db_encoding_salt=salt
 user_store_db_encoding_algorithm=MD5
 support_email=support@<%= LA_domain %>
 
+cas_audit_ssl_enabled=true
+cas_audit_host=localhost
+cas_audit_port=27017
+cas_audit_db=cas-audit-repository
+cas_audit_auth_db=admin
+cas_audit_username=casprod
+cas_audit_timeout=PT10S
+
 auth_cookie_domain=<%= LA_domain %>
 auth_cookie_secure=false
 # Don't change the cookie name, is only used for configuring CAS
@@ -90,7 +100,7 @@ apikey_url=<%= LA_urls_prefix %><%= LA_cas_url %>/apikey
 
 apikey_db_name=apikey
 apikey_db_username=apikey
-apikey_db_password=apikey
+# apikey_db_password=apikey
 apikey_db_hostname=localhost
 
 oauth_providers_flickr_key=somekey
@@ -101,44 +111,45 @@ volunteer_base_url=
 
 bootadmin_enabled=false
 bootadmin_username=admin23
-bootadmin_password=23admin
+# bootadmin_password=23admin
 
 # This role do not install redis, so none right now
 # spring_session_store_type=redis
 spring_session_store_type=none
 
-# False => setup db from scratch
-cas_db_migration_baseline=false
-apikey_db_migration_baseline=false
+cas_db_migration_baseline=true
+apikey_db_migration_baseline=true
 
 server_tz = Europe/Paris
 
 mysql_root_username=root
-mysql_root_password=password
+# mysql_root_password=password
 cas_db_username=cas
-cas_db_password=password
+# cas_db_password=password
 cas_db_hostname=localhost
 cas_flyway_username=flyway
-cas_flyway_password=password
+# cas_flyway_password=password
 
-user_details_version=2.2.2
-apikey_version=1.5
-cas_version=5.3.12-1
+cas_version=5.3.12-2
 cas_management_version=5.3.6-1
+user_details_version=2.3.0
+apikey_version=1.5
 
 ssl=<%= LA_enable_ssl %>
 
 cas_tickets_host=localhost
 cas_tickets_db=cas-ticket-registry
 cas_tickets_username=tickets
-cas_tickets_password=password
+cas_service_ticket_timeout=15
+# cas_tickets_password=password
 cas_services_host=localhost
 cas_services_db=cas-service-registry
 cas_services_username=services
-cas_services_password=password
+# cas_services_password=password
+cas_services_timeout=PT10S
 
 mongodb_root_username=admin
-mongodb_root_password=password
+# mongodb_root_password=password
 
 # use bs container or container-fluid (leave empty to use non fluid)
 skin_fluid_layout = true

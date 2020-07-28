@@ -378,6 +378,7 @@ alerts_hostname = <%= LA_alerts_hostname %>
 alerts_db_hostname = localhost
 alerts_db_name = alerts
 alerts_db_username = alerts
+set_sql_mode=false
 email_sender = atlas-alerts@ala.org.au
 email_alert_address_title = Atlas alerts
 email_info_address_title = Atlas of Living Australia
@@ -445,7 +446,7 @@ tomcat_user=tomcat7
 # Check: https://github.com/AtlasOfLivingAustralia/documentation/wiki/Components-versioning
 #
 
-collectory_version = 1.6.2
+collectory_version = 1.6.3
 biocache_hub_version = 3.2.8
 biocache_service_version = 2.2.3
 biocache_cli_version = 2.5.1
@@ -475,6 +476,9 @@ collectory_skin_layout = ala
 # Collectory returns incorrect response content types for `/ws/resolveNames` with callbacks (JSONP)
 # When https://github.com/AtlasOfLivingAustralia/collectory-plugin/issues/159 is fixed we can switch it back on again
 content_type_options_header=false
+
+# RIFCS
+rifcs_exclude_bounds = true
 
 [biocache-hub:vars]
 
@@ -514,6 +518,8 @@ skin_layout = main
 # This userdetails_url and context is different in alerts from the rest of tools
 userdetails_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
 userdetails_context_path = /userdetails
+
+bie_search_path=/search
 <%_ } _%>
 
 [logger-service:vars]

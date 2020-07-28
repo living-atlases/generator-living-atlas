@@ -56,6 +56,26 @@ cas_webflow_encryption_key=
 # pac4j_github_consumer_key=to_be_added_in_the_near_future
 # pac4j_github_consumer_secret=to_be_added_in_the_near_future
 
+# Sample flickr
+# oauth_providers_flickr_enabled=true
+# oauth_providers_flickr_key=SOMETHING
+# oauth_providers_flickr_secret=SOMETHING
+# oauth_providers_flickr_callback=https://auth.ala.org.au/userdetails/profile/flickrCallback
+
+# Sample iNaturalist
+# oauth_providers_inaturalist_enabled=true
+# oauth_providers_inaturalist_key=SOMETHING
+# oauth_providers_inaturalist_secret=SOMETHING
+# oauth_providers_inaturalist_callback=${grails.serverURL}/profile/inaturalistCallback
+
 # Use boostrap container or container-fluid
 # We don't use fluid because `userdetails` has a wrong margin with fluid
 skin_fluid_layout = false
+
+# Recatcha sample
+# userdetails_recaptcha_site_key=
+# userdetails_recaptcha_secret_key=
+
+# uncomment to load a db dump
+# cas_db_dump=~/dev/tmp/auth-test/emmet-dump.sql
+# apikey_db_dump=~/dev/tmp/auth-test/apikey-dump.sql
