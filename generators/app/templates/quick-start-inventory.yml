@@ -497,7 +497,7 @@ skin_layout = ala
 # so in the rest of inventories like CAS, we use the correct userdetails_base_url (without context /userdetails)
 userdetails_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
 
-[biocache-service:vars]
+[biocache-service-clusterdb:vars]
 
 solr_downloadquery_maxthreads=1
 endemic_query_maxthreads=1
