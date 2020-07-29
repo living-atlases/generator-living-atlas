@@ -125,6 +125,7 @@ downloads_indexed_fields_url=<%= LA_urls_prefix %><%= LA_biocache_service_url %>
 downloads_fieldguide_download_url =
 downloads_static_downloads_url =
 downloads_terms_of_use =
+download_auth_sensitive = true
 download_solr_only = true
 
 ####################### Collectory ############################################
@@ -334,6 +335,15 @@ spatial_base_url=https://spatial.ala.org.au
 
 bie_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
 ala_base_url = <%= LA_urls_prefix %><%= LA_domain %>
+skin_taxa_links_base_url = <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>/species
+
+use_ala_bie=true
+use_ala_spatial_portal=<%= LA_use_spatial %>
+
+# EOL
+eol_sanitise=true
+eol_html_allowedElements=h1,h2,h3,h4,h5,h6,div,a,br,i,b,u,small,strike,span,ul,li,p,sup,cite,ol,em,hr
+eol_html_allowAttributes=href;a;^(http|https|mailto|#).+,class;span,id;span,src;img;^(http|https).+
 
 ####### Images #######
 
@@ -383,7 +393,7 @@ email_sender = atlas-alerts@ala.org.au
 email_alert_address_title = Atlas alerts
 email_info_address_title = Atlas of Living Australia
 email_info_sender = atlas-alerts@ala.org.au
-enableEmail = true
+enable_email = true
 occurrence_searchTitle = occurrence search
 occurrence_searchUrl = https://biocache.ala.org.au/occurrences/search?q=passer
 regions_searchTitle = ACT
@@ -473,8 +483,7 @@ ala_name_matching_version = "3.4"
 
 collectory_skin_layout = ala
 
-# Collectory returns incorrect response content types for `/ws/resolveNames` with callbacks (JSONP)
-# When https://github.com/AtlasOfLivingAustralia/collectory-plugin/issues/159 is fixed we can switch it back on again
+# When https://github.com/AtlasOfLivingAustralia/collectory-plugin/issues/159 is fixed set to true
 content_type_options_header=false
 
 # RIFCS
@@ -487,6 +496,26 @@ skin_layout = ala
 # https://github.com/AtlasOfLivingAustralia/biocache-hubs/blob/ba944aca8c848c816bf9931b0f21900e3dedfb63/grails-app/services/au/org/ala/biocache/hubs/UserDataService.groovy#L32
 # so in the rest of inventories like CAS, we use the correct userdetails_base_url (without context /userdetails)
 userdetails_base_url = <%= LA_urls_prefix %><%= LA_cas_hostname %>/userdetails
+
+[biocache-service:vars]
+
+solr_downloadquery_maxthreads=1
+endemic_query_maxthreads=1
+online_downloadquery_maxthreads=1
+download_offline_parallelquery_maxthreads=1
+download_offline_max_size=50000000
+download_throttle_ms=600
+download_batch_size=1000
+download_internal_queue_size=2000
+download.shp.enabled=false
+scatterplot_query_page_size=20000
+facets_max = 32
+qid_wkt_maxPoints=10000
+# 100 * 1024 * 1024
+wms_cache_size_max=104857600
+
+# When https://github.com/AtlasOfLivingAustralia/biocache-service/issues/247 is fixed set to true
+content_type_options_header=false
 
 [bie-hub:vars]
 
@@ -504,12 +533,18 @@ skin_layout = main
 [species-list:vars]
 
 skin_layout = main
+set_sql_mode = true
+skin_fluid_layout = true
 <%_ } _%>
 
 <% if (LA_use_regions) { %>
 [regions:vars]
 
 skin_layout = main
+
+# Whe https://github.com/AtlasOfLivingAustralia/regions/issues/63 is fixed set to true
+content_type_options_header=false
+
 <%_ } _%>
 <%_ if (LA_use_alerts) { _%>
 [alerts-service:vars]
@@ -525,6 +560,9 @@ bie_search_path=/search
 [logger-service:vars]
 
 skin_layout = main
+
+# When https://github.com/AtlasOfLivingAustralia/logger-service/issues/19 is fixed set to true
+content_type_options_header=false
 
 <%_ if (LA_use_doi) { _%>
 [doi-service:vars]
@@ -551,6 +589,7 @@ doi_db_hostname = localhost
 doi_db_name = doi
 doi_db_user = doi
 doi_service_version = 1.0.2
+nginx_client_max_body_size = 4096m
 <%_ } else { _%>
 doi_service_url =
 <%_ } _%>

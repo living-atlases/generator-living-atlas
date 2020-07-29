@@ -58,8 +58,9 @@ postgresql_username=postgres
 postgresql_password=password
 
 webserver_nginx=true
-robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
-robots_disallow_useragents=["SemrushBot", "Mappy", "BUbiNG"]
+nginx_default_vhost_required=true
+robots_disallow_paths=["/ws", "/geoserver", "/geonetwork", "/alaspatial", "/files", "/layers-service", "/actions"]
+robots_disallow_useragents=["SemrushBot", "Semrush", "SEMrush", "semrush", "Mappy", "BUbiNG"]
 
 ssl=<%= LA_enable_ssl %>
 
@@ -68,8 +69,6 @@ ssl=<%= LA_enable_ssl %>
 ###
 
 [geonetwork:vars]
-is_vagrant=true
-local_repo_dir=~/.ala
 data_dir=/data
 
 geonetwork_hostname=<%= LA_spatial_hostname %>
@@ -78,6 +77,8 @@ geonetwork_base_url=<%= LA_urls_prefix %><%= LA_spatial_url %>
 geonetwork_context_path=/geonetwork
 geonetwork_app=geonetwork
 
+geonetwork_host=localhost
+geonetwork_port=5432
 geonetwork_username=admin
 geonetwork_password=password
 geonetwork_database=geonetwork
@@ -97,8 +98,11 @@ postgresql_username=postgres
 postgresql_password=password
 
 webserver_nginx=true
-robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
-robots_disallow_useragents=["SemrushBot", "Mappy", "BUbiNG"]
+
+nginx_default_vhost_required=true
+
+robots_disallow_paths=["/ws", "/geoserver", "/geonetwork", "/alaspatial", "/files", "/layers-service", "/actions"]
+robots_disallow_useragents=["SemrushBot", "Semrush", "SEMrush", "semrush", "Mappy", "BUbiNG"]
 
 ssl=<%= LA_enable_ssl %>
 
@@ -107,8 +111,6 @@ ssl=<%= LA_enable_ssl %>
 ###
 
 [spatial-service:vars]
-is_vagrant=true
-local_repo_dir=~/.ala
 data_dir=/data
 
 orgNameLong = <%= LA_project_name %>
@@ -147,8 +149,10 @@ auth_base_url = https://<%= LA_cas_url %>
 auth_cas_url = https://<%= LA_cas_url %>/cas
 
 webserver_nginx=true
-robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
-robots_disallow_useragents=["SemrushBot", "Mappy", "BUbiNG"]
+nginx_default_vhost_required=true
+
+robots_disallow_paths=["/ws", "/geoserver", "/geonetwork", "/alaspatial", "/files", "/layers-service", "/actions"]
+robots_disallow_useragents=["SemrushBot", "Semrush", "SEMrush", "semrush", "Mappy", "BUbiNG"]
 
 ssl=<%= LA_enable_ssl %>
 
@@ -157,8 +161,6 @@ ssl=<%= LA_enable_ssl %>
 ###
 
 [spatial-hub:vars]
-is_vagrant=true
-local_repo_dir=~/.ala
 data_dir=/data
 
 startup_lat = 0
@@ -184,8 +186,11 @@ spatial_hub_api_key=get-an-ala-api-key
 tomcat_java_opts = -Xmx4g -Xms4g -Xss256k -Djava.awt.headless=true
 
 webserver_nginx=true
-robots_disallow_paths=["/ws", "/geoserver", "/geonetwork"]
-robots_disallow_useragents=["SemrushBot", "Mappy", "BUbiNG"]
+
+nginx_default_vhost_required=true
+
+robots_disallow_paths=["/ws", "/geoserver", "/geonetwork", "/alaspatial", "/files", "/layers-service", "/actions"]
+robots_disallow_useragents=["SemrushBot", "Semrush", "SEMrush", "semrush", "Mappy", "BUbiNG"]
 
 ssl=<%= LA_enable_ssl %>
 
