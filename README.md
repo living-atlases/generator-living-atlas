@@ -34,22 +34,11 @@ First, install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [np
 ```bash
 npm install -g yo
 ```
-
-Wait!, as this `generator-living-atlas` is still somewhat experimental, it's not published in `npm`. So if you want to test it, you can clone this repo and just use it like:
-
-```bash
-cd this-cloned-repo
-npm link
-cd /tmp # or other directory
-yo living-atlas
-```
-
 As this is a `yeoman` development environment you can get some `EPERM` or `EACCESS` errors, so check the [yeoman setup guide](https://yeoman.io/codelab/setup.html) for proper configuration.
 
-If we decide to publish this generator in the future, the normal use will be like:
+Later, install the generator itself:
 
 ```bash
-npm install -g yo
 npm install -g generator-living-atlas
 ```
 
@@ -82,13 +71,6 @@ Using it for Tanzania demo session:
 Differences beween two runs:
 
 ![](re-running-diff.png)
-
-
-
-We can use these inventories as a base for extracting documentation via `doxygen` (or similar):
-
-![](doxygen-ansible-reference.png)
-
 
 ## Rerunning the generator
 
@@ -154,53 +136,13 @@ or all the services with something like:
 
 Without `--nodryrun` you will get only the full `ansible-playbook` command to use these inventories .
 
+## Sample `~/.ssh/config`
+
+A sample `dot-ssh-config.sample` is generated that you can edit and move to `~/.ssh/config` in orther to access to you VMs easily.
+
 ## Maintain your inventories over time
 
-You can generate your
-
 As we mentioned previously you can rerun the generator with the option `yo living-atlas --replay` to reuse all the previous responses and regenerate the inventories with some modifications (if for instance you want to add a new service, or use a new version of this generator with improvements).
-
-## TODO
-
-- [x] Add basic services (`collectory`, `ala-hub`, etc).
-- [x] Add domain/context and service subdomains support
-- [x] Add `http`/`https` urls support
-- [x] Add `regions` service
-- [x] Add `species-list` service
-- [x] Add `spatial` service
-- [x] Disable caches when using the same host for `collectory` & `biocache`
-- [x] use `--limit` with hostnames
-- [x] Improve README hosts
-- [x] Improve README playbook commands
-- [x] Add `ansible` wrapper
-- [x] Add inventories to add extra vars without modify the generated inventories
-- [x] Store = true if you running it for the first time
-- [x] Add other administration info (technical_contact, orgEmail, etc)
-- [x] Recommend to use git to track your inventories changes
-- [x] Add `biocache-backend` and `biocache-cli` playbook and `cassandra` host selection
-- [x] Add `CAS` 5 service
-- [x] Fix `apikey_db_dump` location relative to `ala-install`
-- [x] Add `ssl` self signed certs support when ssl enabled
-- [x] Document `letsencrypt` usage
-- [x] Improve generator for only a domain and `/context` use
-- [x] Add `local-extras.sample` files that can be updated in the future without lost local changes in `local-extras.yml` files
-- [x] Generation of passwords on first run and increase security by default
-- [x] Added option `--replay-dont-ask` to regenerate the playbooks with previous answers without asking again
-- [x] Improble BIE/biocache etc descriptions (records, species)
-- [x] Demo index.html uses `biocache_hub_context_path` etc that does not works with multi hosts
-- [x] Set `collectory_app = ala-collectory` in main playbook
-- [x] Use `biocache-db` instead of missing playbook
-- [x] Clean nginx fragments for each hostname
-- [x] Update to use the new image-service (grails3)
-- [x] Use a different playbook than demo that do not install by default all main services so we can choose a different host for them
-- [x] Add `--tags` to ansible wrapper
-- [x] Generate CAS salt
-- [x] Improve questions when not using subdomains using and /context instead
-- [x] Added dashboard support
-- [ ] Integrate LA base skin
-- [ ] Reorder apikeys variables (Jason Loomis comment)
-- [ ] Improve `.yo-rc.json` location
-- [ ] Better testing
 
 ## Caveats
 
@@ -209,36 +151,6 @@ As we mentioned previously you can rerun the generator with the option `yo livin
 ## Any problem with this generator?
 
 Please [add an issue](https://github.com/vjrj/generator-living-atlas/issues/new) give us details of your problem and we'll try to help you and to improve the generator. Thanks!
-
-## But why this?
-
-Ansible is a fantastic tool for manage LA node infrastructures. But nowadays we have some problems with our current `ala-install` inventories/roles & documentation that make their use difficult by newcomer nodes, but also for other non-Australian nodes' maintenance:
-- There are many config properties that are not documented and this makes it quite difficult to tune a LA node
-- Sometimes the `/data/*/config/*properties` are well commented but not their source inventories
-- From time to time new properties appear but other non-ALA nodes don’t notice
-- We end up using several self-made inventories, duplicate properties (like orgName, urls, etc), and many times this is a source of problems (like [code duplication](https://en.wikipedia.org/wiki/Duplicate_code)). Some minor sample:
-![](dups.png)
-- There is a lack of more real production-ready inventories (you have to ask for them).
-- `ala-install` has a structure that sometimes is difficult to find some samples or how to start to deploy some service (think of CAS)
-- Many times you have to check the `ansible` generated `config/*properties` for non configured or default properties, search the `ansible` role code to know how to configure these variables, re-run `ansible` with these new variables and re-check the `ansible` `/data/*/config/*properties`.
-- The demo inventory (or the last Paris workshop inventories) are a good sample but not enough for a new production LA node (lack of inventory variables documentation, missing important services like CAS)
-- We have a lack of info about services' versions compatibility
-- Sometimes default module versions in inventories or `LATEST` nexus packages are not the correct/latest ones.
-- It would be nice to choose strategies that are also usable by the ALA (not just LA nodes) - this might help maintenance.
-
-## Can these quick-start inventories solve all this?
-
-No. This is only a *Proof of Concept* that tries to mitigate some of the previous problems.
-
-If we think that some tool like this can be useful, we can add more functionality like:
-
-- Better comments of properties in generated inventories for easy operation & tuning
-- ~CAS deployment~ done ✓
-- Focus on having well maintained generators and their inventories
-- Autogenerate documentation from the inventory comments with tools like `doxygen`
-- etc
-
-or maybe this experiment suggests to us another path to follow.
 
 ## About Yeoman
 
