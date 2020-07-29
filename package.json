@@ -1,6 +1,6 @@
 {
   "name": "generator-living-atlas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An experimental Yeoman Generator for Living Atlas Ansible Inventories",
   "homepage": "https://living-atlases.gbif.org",
   "author": {
@@ -78,6 +78,6 @@
     "pretest": "eslint .",
     "test": "jest"
   },
-  "repository": "vjrj/generator-living-atlas",
+  "repository": "living-atlases/generator-living-atlas",
   "license": "Apache-2.0"
 }
