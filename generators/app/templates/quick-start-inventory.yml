@@ -66,7 +66,7 @@ registry_api_key = dummy-registry-api-key
 commonname_lang = en
 media_store_local = false
 media_store_url=<%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>
-download_url=<%= LA_urls_prefix %><%= LA_biocache_service_url %>/biocache-download
+download_url=<%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>/biocache-download
 download_dir=/data/biocache-download
 <%_ if (LA_use_spatial) { _%>
 geoserver_url=<%= LA_urls_prefix %><%= LA_spatial_hostname %>/geoserver
