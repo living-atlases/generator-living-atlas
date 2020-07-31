@@ -517,6 +517,11 @@ wms_cache_size_max=104857600
 # When https://github.com/AtlasOfLivingAustralia/biocache-service/issues/247 is fixed set to true
 content_type_options_header=false
 
+[biocache-cli:vars]
+
+# This is different that the rest so media.url is generated correctly
+biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
+
 [bie-hub:vars]
 
 skin_layout = ala
@@ -539,6 +544,9 @@ skin_fluid_layout = true
 
 <% if (LA_use_regions) { %>
 [regions:vars]
+
+# Regions use biocache_service_base_url instead of biocache_service_url
+biocache_service_base_url = <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
 
 skin_layout = main
 
