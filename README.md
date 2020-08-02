@@ -2,20 +2,19 @@
 
 > A Yeoman Generator for Living Atlas Ansible Inventories
 
-
 * [Intro](#intro)
 * [Installation](#installation)
 * [Options](#options)
 * [Screens](#screens)
 * [Rerunning the generator](#rerunning-the-generator)
-* [Ansible Wrapper](#ansible-wrapper)
-* [TODO](#todo)
+* [Ansible wrapper](#ansible-wrapper)
+* [Sample ~/.ssh/config](#sample-sshconfig)
+* [Maintain your inventories over time](#maintain-your-inventories-over-time)
 * [Caveats](#caveats)
 * [Any problem with this generator?](#any-problem-with-this-generator)
-* [But why this?](#but-why-this)
-* [Can these quick-start inventories solve all this?](#can-these-quick-start-inventories-solve-all-this)
 * [About Yeoman](#about-yeoman)
 * [License](#license)
+
 
 ## Intro
 
@@ -159,10 +158,3 @@ Please [add an issue](https://github.com/vjrj/generator-living-atlas/issues/new)
 ## License
 
 Apache-2.0 © [Living Atlases](https://living-atlases.gbif.org)
-
-[npm-image]: https://badge.fury.io/js/generator-living-atlas.svg
-[npm-url]: https://npmjs.org/package/generator-living-atlas
-[travis-image]: https://travis-ci.org/vjrj/generator-living-atlas.svg?branch=master
-[travis-url]: https://travis-ci.org/vjrj/generator-living-atlas
-[daviddm-image]: https://david-dm.org/vjrj/generator-living-atlas.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/vjrj/generator-living-atlas
