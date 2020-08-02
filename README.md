@@ -1,4 +1,4 @@
-# generator-living-atlas [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-living-atlas [![NPM version][npm-image]][npm-url]
 
 > A Yeoman Generator for Living Atlas Ansible Inventories
 
