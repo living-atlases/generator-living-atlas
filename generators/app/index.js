@@ -1040,7 +1040,7 @@ module.exports = class extends Generator {
     const cmdOpts = {
       cwd: this.destinationPath(dest),
       shell: true,
-      stdio: "inherit",
+      stdio: null,
     };
 
     // Should be useful in the future but we don't have dependencies in the
@@ -1055,14 +1055,12 @@ module.exports = class extends Generator {
 
         if (cmdResult !== 0) {
           cmdResult = this.spawnCommandSync("git", ["init"], cmdOpts);
-          if (cmdResult === 0) {
-            cmdResult = this.spawnCommandSync("git", ["add", "--all"], cmdOpts);
-            this.spawnCommandSync(
-              "git",
-              ["commit", "-am", '"Initial commit"'],
-              cmdOpts
-            );
-          }
+          cmdResult = this.spawnCommandSync("git", ["add", "--all"], cmdOpts);
+          this.spawnCommandSync(
+            "git",
+            ["commit", "-am", '"Initial commit"'],
+            cmdOpts
+          );
         }
       } else {
         logger(
