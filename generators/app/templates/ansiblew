@@ -67,10 +67,10 @@ if __name__ == '__main__':
     if debug:
         print("Extras: %s" % (extras))
 
-    baseInventories = "-i %s-inventory.yml -i %s-local-extras.yml" % (pkg, pkg)
+    baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini" % (pkg, pkg)
 
     if main or doall:
-        mainCmd = "%s ansible-playbook %s -u ubuntu %s -i %s-local-passwords.yml %s/ansible/ala-demo-basic.yml %s --limit %s" % (cmdPrefix, additionalParams, baseInventories, pkg, alainstall, extras, limit if limit else "<%= LA_domain %>")
+        mainCmd = "%s ansible-playbook %s -u ubuntu %s -i %s-local-passwords.ini %s/ansible/ala-demo-basic.yml %s --limit %s" % (cmdPrefix, additionalParams, baseInventories, pkg, alainstall, extras, limit if limit else "<%= LA_domain %>")
         if nodryrun:
             os.system("echo %s" % mainCmd)
         os.system(mainCmd)
@@ -80,13 +80,13 @@ if __name__ == '__main__':
         let isCasInv = LA_services_machines[j].map.name === 'cas';
         let extraInv;
         if (isSpatialInv) {
-           extraInv = `-i ${LA_pkg_name}-spatial-inventory.yml -i ${LA_pkg_name}-spatial-local-extras.yml`;
+           extraInv = `-i ${LA_pkg_name}-spatial-inventory.ini -i ${LA_pkg_name}-spatial-local-extras.ini`;
         }
         if (isCasInv) {
-           extraInv = `-i ${LA_pkg_name}-cas-inventory.yml -i ${LA_pkg_name}-cas-local-extras.yml`
+           extraInv = `-i ${LA_pkg_name}-cas-inventory.ini -i ${LA_pkg_name}-cas-local-extras.ini`
         }%>if args['<%= LA_services_machines[j].map.name %>'] or doall:
         extraInventories = "<%= extraInv %>"
-        otherCmd = "%s ansible-playbook %s -u ubuntu %s %s -i %s-local-passwords.yml %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s  --extra-vars 'ala_install_repo=%s'" % (cmdPrefix, additionalParams, baseInventories, extraInventories, pkg, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>", alainstall)
+        otherCmd = "%s ansible-playbook %s -u ubuntu %s %s -i %s-local-passwords.ini %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s  --extra-vars 'ala_install_repo=%s'" % (cmdPrefix, additionalParams, baseInventories, extraInventories, pkg, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>", alainstall)
         if nodryrun:
             os.system("echo %s" % otherCmd)
         os.system(otherCmd)

@@ -13,7 +13,7 @@ const niceware = require("niceware");
 let defaultStore = false;
 let logger;
 
-const defUseSubdomain = a => {
+const defUseSubdomain = (a) => {
   return a.LA_collectory_uses_subdomain;
 };
 
@@ -24,14 +24,15 @@ let previousConfig;
 let firstRun;
 const hostnameRegexp = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$/;
 const parseDomainOpts = {};
-const isCorrectDomain = domain => parseDomain(domain, parseDomainOpts) !== null;
-const isCorrectHostname = hostname => {
+const isCorrectDomain = (domain) =>
+  parseDomain(domain, parseDomainOpts) !== null;
+const isCorrectHostname = (hostname) => {
   var isCorrect = hostnameRegexp.test(hostname);
   return isCorrect
     ? true
     : "Invalid hostname: should be something like host.example.org, myvm1, or somehost.amazonaws.com";
 };
-const em = text => chalk.keyword("orange")(text);
+const em = (text) => chalk.keyword("orange")(text);
 
 const defUseSubdomainPrompt = (a, service) => {
   var desc =
@@ -44,7 +45,7 @@ const defUseSubdomainPrompt = (a, service) => {
 };
 
 const validateDomain = (input, name) =>
-  new Promise(resolve => {
+  new Promise((resolve) => {
     if (debug) logger(`Validate ${input} ${name}`);
     // It's a domain not a https://url
     const isValid = isCorrectDomain(input) && input.split("/").length === 1;
@@ -82,127 +83,127 @@ const servicesRolsMap = {
     name: "main",
     group: "ala-demo",
     playbook: "ala-demo-basic",
-    desc: ""
+    desc: "",
   },
   collectory: {
     name: "collectory",
     group: "collectory",
     playbook: "collectory-standalone",
-    desc: "biodiversity collections"
+    desc: "biodiversity collections",
   },
   ala_hub: {
     name: "ala_hub",
     group: "biocache-hub",
     playbook: "biocache-hub-standalone",
-    desc: "occurrences search frontend"
+    desc: "occurrences search frontend",
   },
   biocache_service: {
     name: "biocache_service",
     group: "biocache-service-clusterdb",
     playbook: "biocache-service-clusterdb",
-    desc: "occurrences web service"
+    desc: "occurrences web service",
   },
   ala_bie: {
     name: "ala_bie",
     group: "bie-hub",
     playbook: "bie-hub",
-    desc: "species search frontend"
+    desc: "species search frontend",
   },
   bie_index: {
     name: "bie_index",
     group: "bie-index",
     playbook: "bie-index",
-    desc: "species web service"
+    desc: "species web service",
   },
   images: {
     name: "images",
     group: "image-service",
     playbook: "image-service",
-    desc: ""
+    desc: "",
   },
   lists: {
     name: "lists",
     group: "species-list",
     playbook: "species-list-standalone",
-    desc: ""
+    desc: "",
   },
   regions: {
     name: "regions",
     group: "regions",
     playbook: "regions-standalone",
-    desc: "regional data frontend"
+    desc: "regional data frontend",
   },
   logger: {
     name: "logger",
     group: "logger-service",
     playbook: "logger-standalone",
-    desc: "event logging"
+    desc: "event logging",
   },
   solr: {
     name: "solr",
     group: "solr7-server",
     playbook: "solr7-standalone",
-    desc: "indexing"
+    desc: "indexing",
   },
   cas: {
     name: "cas",
     group: "cas-servers",
     playbook: "cas5-standalone",
-    desc: "authentication system"
+    desc: "authentication system",
   },
   biocache_backend: {
     name: "biocache_backend",
     group: "biocache-db",
     playbook: "biocache-db",
-    desc: "cassandra"
+    desc: "cassandra",
   },
   biocache_cli: {
     name: "biocache_cli",
     group: "biocache-cli",
     playbook: "biocache-cli",
     desc:
-      "manages the loading, sampling, processing and indexing of occurrence records"
+      "manages the loading, sampling, processing and indexing of occurrence records",
   },
   spatial: {
     name: "spatial",
     group: "spatial",
     playbook: "spatial",
-    desc: "spatial front-end"
+    desc: "spatial front-end",
   },
   webapi: {
     name: "webapi",
     group: "webapi_standalone",
     playbook: "webapi_standalone",
-    desc: "API front-end"
+    desc: "API front-end",
   },
   dashboard: {
     name: "dashboard",
     group: "dashboard",
     playbook: "dashboard",
-    desc: "dashboard"
+    desc: "dashboard",
   },
   alerts: {
     name: "alerts",
     group: "alerts-service",
     playbook: "alerts-standalone",
-    desc: "alerts"
+    desc: "alerts",
   },
   doi: {
     name: "doi",
     group: "doi-service",
     playbook: "doi-service-standalone",
-    desc: "DOI service"
+    desc: "DOI service",
   },
   nameindexer: {
     name: "nameindexer",
     group: "nameindexer",
     playbook: "nameindexer-standalone",
-    desc: "nameindexer"
-  }
+    desc: "nameindexer",
+  },
 };
 
 const storeMachine = (name, machine) =>
-  new Promise(resolve => {
+  new Promise((resolve) => {
     if (debug) logger(`Store: ${name} -> ${machine}`);
     if (isCorrectHostname(machine) === true) {
       if (debug) logger("We add to the first position");
@@ -212,7 +213,7 @@ const storeMachine = (name, machine) =>
         servicesAndMachines.push({
           service: name,
           machine,
-          map: servicesRolsMap[name]
+          map: servicesRolsMap[name],
         });
       }
     }
@@ -226,11 +227,11 @@ function PromptSubdomainFor(name, subdomain, when, force) {
   this.type = "confirm";
   const varName = `LA_${name}_uses_subdomain`;
   this.name = varName;
-  this.message = a => defUseSubdomainPrompt(a, name);
-  this.default = a => defUseSubdomain(a);
+  this.message = (a) => defUseSubdomainPrompt(a, name);
+  this.default = (a) => defUseSubdomain(a);
   if (force) {
-    this.when = a =>
-      new Promise(resolve => {
+    this.when = (a) =>
+      new Promise((resolve) => {
         a[varName] = true;
         resolve(false);
       });
@@ -291,7 +292,7 @@ function PromptHostnameFor(name, subdomain, when) {
   this.message = `LA ${em(
     name
   )} hostname (like myvm1, somehost.amazonaws.com, ...) ?`;
-  this.choices = a => hostChoices(a, varUsesSubdomain, subdomain, varName);
+  this.choices = (a) => hostChoices(a, varUsesSubdomain, subdomain, varName);
   if (when) {
     this.when = when;
   }
@@ -306,7 +307,7 @@ function PromptHostnameInputFor(name, when) {
   const varName = `LA_${name}_hostname`;
   this.name = varName;
   this.message = `LA ${em(name)} hostname ?`;
-  this.when = a => {
+  this.when = (a) => {
     if (debug) logger(`We ask for other ${name}/${a[varName]}?`);
     if (typeof when !== "undefined" && !when(a)) {
       if (debug) logger("We don't ask for other hostname");
@@ -320,7 +321,7 @@ function PromptHostnameInputFor(name, when) {
     return false;
   };
   this.askAnswered = true;
-  this.validate = input => isCorrectHostname(input);
+  this.validate = (input) => isCorrectHostname(input);
 }
 
 function PromptUrlFor(name, subdomain, when) {
@@ -333,7 +334,7 @@ function PromptUrlFor(name, subdomain, when) {
   if (when) {
     this.when = when;
   }
-  this.default = a => urlDefValue(a, varUsesSubdomain, subdomain, varName);
+  this.default = (a) => urlDefValue(a, varUsesSubdomain, subdomain, varName);
   this.validate = (input, a) => {
     // Store previous hostname from choices or input request for later use
     const varHostName = `LA_${name}_hostname`;
@@ -352,7 +353,7 @@ function PromptPathFor(name, path, when) {
   const varUrl = `LA_${name}_url`;
   this.type = "input";
   this.name = varName;
-  this.message = a => {
+  this.message = (a) => {
     // Warn: dup code below
     const samplePath = a[varUsesSubdomain]
       ? "/"
@@ -361,7 +362,7 @@ function PromptPathFor(name, path, when) {
       a[varUrl]
     }${em(samplePath)}) ?`;
   };
-  this.default = a => {
+  this.default = (a) => {
     if (a[varUsesSubdomain]) {
       const hostname = a[varHostname];
       const url = a[varUrl];
@@ -377,7 +378,7 @@ function PromptPathFor(name, path, when) {
     this.when = when;
   }
   this.validate = (path, answers) =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       // Check if in this machine this path is already used
       if (!path.startsWith("/")) {
         resolve("Please enter something like '/path'");
@@ -460,15 +461,15 @@ module.exports = class extends Generator {
             type: "input",
             name: "LA_project_name",
             message: `Your LA Project ${em("Long Name")}:`,
-            default: "Living Atlas of Wakanda"
+            default: "Living Atlas of Wakanda",
           },
           {
             store: true,
             type: "input",
             name: "LA_project_shortname",
             message: `Your LA Project ${em("Shortname")}:`,
-            default: answers =>
-              answers.LA_project_name.replace(/Living Atlas of /g, "LA ")
+            default: (answers) =>
+              answers.LA_project_name.replace(/Living Atlas of /g, "LA "),
           },
           {
             store: true,
@@ -477,45 +478,45 @@ module.exports = class extends Generator {
             message: `Your LA ${em(
               "short-lowercase-name"
             )} (we'll put your inventories in that directory):`,
-            default: answers =>
+            default: (answers) =>
               answers.LA_project_name.toLowerCase().replace(/ /g, "-"),
-            validate: input =>
-              new Promise(resolve => {
+            validate: (input) =>
+              new Promise((resolve) => {
                 if (input.match(/^[a-z0-9-]+$/g)) {
                   resolve(true);
                 } else {
                   resolve("You need to provide some-example-short-name");
                 }
-              })
+              }),
           },
           {
             store: true,
             type: "input",
             name: "LA_domain",
             message: `What is your LA node ${em("main domain")}?`,
-            default: answers => `${answers.LA_pkg_name}.org`,
-            validate: input => validateDomain(input, "main", true)
+            default: (answers) => `${answers.LA_pkg_name}.org`,
+            validate: (input) => validateDomain(input, "main", true),
           },
           {
             store: true,
             type: "confirm",
             name: "LA_use_spatial",
             message: `Use ${em("spatial")} service?`,
-            default: true
+            default: true,
           },
           {
             store: true,
             type: "confirm",
             name: "LA_use_regions",
             message: `Use ${em("regions")} service?`,
-            default: true
+            default: true,
           },
           {
             store: true,
             type: "confirm",
             name: "LA_use_species_lists",
             message: `Use ${em("specieslists")} service?`,
-            default: true
+            default: true,
           },
           {
             store: true,
@@ -524,7 +525,7 @@ module.exports = class extends Generator {
             message: `Use ${em(
               "webapi"
             )} an API documentation service (similar to api.ala.org.au but empty)?`,
-            default: false
+            default: false,
           },
           {
             store: true,
@@ -533,35 +534,35 @@ module.exports = class extends Generator {
             message: `Use ${em(
               "dashboard"
             )} view stats service (similar to dashboard.ala.org.au)?`,
-            default: false
+            default: false,
           },
           {
             store: true,
             type: "confirm",
             name: "LA_use_alerts",
             message: `Use ${em("alerts")} service?`,
-            default: false
+            default: false,
           },
           {
             store: true,
             type: "confirm",
             name: "LA_use_doi",
             message: `Use ${em("doi")} service?`,
-            default: false
+            default: false,
           },
           {
             store: true,
             type: "confirm",
             name: "LA_use_CAS",
             message: `Use ${em("CAS")} Auth service?`,
-            default: true
+            default: true,
           },
           {
             store: true,
             type: "confirm",
             name: "LA_enable_ssl",
             message: `Enable ${em("SSL")}?`,
-            default: true
+            default: true,
           },
           {
             store: defaultStore,
@@ -569,26 +570,26 @@ module.exports = class extends Generator {
             name: "check-ssl",
             message: "",
             default: "",
-            when: a =>
-              new Promise(resolve => {
+            when: (a) =>
+              new Promise((resolve) => {
                 a.LA_urls_prefix = a.LA_enable_ssl ? "https://" : "http://";
                 resolve(false);
-              })
+              }),
           },
           {
             store: true,
             type: "input",
             name: "LA_main_hostname",
             message: `Hostname for the basic LA branding?`,
-            filter: input => storeMachine("main", input),
-            validate: input => isCorrectHostname(input),
-            default: a => a.LA_domain
+            filter: (input) => storeMachine("main", input),
+            validate: (input) => isCorrectHostname(input),
+            default: (a) => a.LA_domain,
           },
           {
             store: defaultStore,
             type: "list",
             name: "LA_collectory_uses_subdomain",
-            message: a =>
+            message: (a) =>
               `Will the ${em("collectory")} service use a ${
                 a.LA_urls_prefix
               }${em("subdomain")}.${a.LA_domain} or a ${a.LA_urls_prefix}${
@@ -596,8 +597,8 @@ module.exports = class extends Generator {
               }${em("/service-path")} ?`,
             choices: [
               { name: "subdomain", value: true },
-              { name: "service-path", value: false }
-            ]
+              { name: "service-path", value: false },
+            ],
           },
           new PromptHostnameFor("collectory", "collections"),
           new PromptHostnameInputFor("collectory"),
@@ -637,22 +638,26 @@ module.exports = class extends Generator {
           new PromptSubdomainFor(
             "lists",
             "specieslists",
-            a => a.LA_use_species_lists
+            (a) => a.LA_use_species_lists
           ),
-          new PromptHostnameFor("lists", "lists", a => a.LA_use_species_lists),
-          new PromptHostnameInputFor("lists", a => a.LA_use_species_lists),
-          new PromptUrlFor("lists", "lists", a => a.LA_use_species_lists),
+          new PromptHostnameFor(
+            "lists",
+            "lists",
+            (a) => a.LA_use_species_lists
+          ),
+          new PromptHostnameInputFor("lists", (a) => a.LA_use_species_lists),
+          new PromptUrlFor("lists", "lists", (a) => a.LA_use_species_lists),
           new PromptPathFor(
             "lists",
             "specieslists",
-            a => a.LA_use_species_lists
+            (a) => a.LA_use_species_lists
           ),
 
-          new PromptSubdomainFor("regions", "regions", a => a.LA_use_regions),
-          new PromptHostnameFor("regions", "regions", a => a.LA_use_regions),
-          new PromptHostnameInputFor("regions", a => a.LA_use_regions),
-          new PromptUrlFor("regions", "regions", a => a.LA_use_regions),
-          new PromptPathFor("regions", "regions", a => a.LA_use_regions),
+          new PromptSubdomainFor("regions", "regions", (a) => a.LA_use_regions),
+          new PromptHostnameFor("regions", "regions", (a) => a.LA_use_regions),
+          new PromptHostnameInputFor("regions", (a) => a.LA_use_regions),
+          new PromptUrlFor("regions", "regions", (a) => a.LA_use_regions),
+          new PromptPathFor("regions", "regions", (a) => a.LA_use_regions),
 
           new PromptSubdomainFor("logger", "logger"),
           new PromptHostnameFor("logger", "logger"),
@@ -660,37 +665,41 @@ module.exports = class extends Generator {
           new PromptUrlFor("logger", "logger"),
           new PromptPathFor("logger", "logger-service"),
 
-          new PromptSubdomainFor("webapi", "webapi", a => a.LA_use_webapi),
-          new PromptHostnameFor("webapi", "api", a => a.LA_use_webapi),
-          new PromptHostnameInputFor("webapi", a => a.LA_use_webapi),
-          new PromptUrlFor("webapi", "api", a => a.LA_use_webapi),
-          new PromptPathFor("webapi", "webapi", a => a.LA_use_webapi),
+          new PromptSubdomainFor("webapi", "webapi", (a) => a.LA_use_webapi),
+          new PromptHostnameFor("webapi", "api", (a) => a.LA_use_webapi),
+          new PromptHostnameInputFor("webapi", (a) => a.LA_use_webapi),
+          new PromptUrlFor("webapi", "api", (a) => a.LA_use_webapi),
+          new PromptPathFor("webapi", "webapi", (a) => a.LA_use_webapi),
 
           new PromptSubdomainFor(
             "dashboard",
             "dashboard",
-            a => a.LA_use_dashboard
+            (a) => a.LA_use_dashboard
           ),
           new PromptHostnameFor(
             "dashboard",
             "dashboard",
-            a => a.LA_use_dashboard
+            (a) => a.LA_use_dashboard
           ),
-          new PromptHostnameInputFor("dashboard", a => a.LA_use_dashboard),
-          new PromptUrlFor("dashboard", "dashboard", a => a.LA_use_dashboard),
-          new PromptPathFor("dashboard", "dashboard", a => a.LA_use_dashboard),
+          new PromptHostnameInputFor("dashboard", (a) => a.LA_use_dashboard),
+          new PromptUrlFor("dashboard", "dashboard", (a) => a.LA_use_dashboard),
+          new PromptPathFor(
+            "dashboard",
+            "dashboard",
+            (a) => a.LA_use_dashboard
+          ),
 
-          new PromptSubdomainFor("alerts", "alerts", a => a.LA_use_alerts),
-          new PromptHostnameFor("alerts", "alerts", a => a.LA_use_alerts),
-          new PromptHostnameInputFor("alerts", a => a.LA_use_alerts),
-          new PromptUrlFor("alerts", "alerts", a => a.LA_use_alerts),
-          new PromptPathFor("alerts", "alerts", a => a.LA_use_alerts),
+          new PromptSubdomainFor("alerts", "alerts", (a) => a.LA_use_alerts),
+          new PromptHostnameFor("alerts", "alerts", (a) => a.LA_use_alerts),
+          new PromptHostnameInputFor("alerts", (a) => a.LA_use_alerts),
+          new PromptUrlFor("alerts", "alerts", (a) => a.LA_use_alerts),
+          new PromptPathFor("alerts", "alerts", (a) => a.LA_use_alerts),
 
-          new PromptSubdomainFor("doi", "doi", a => a.LA_use_doi),
-          new PromptHostnameFor("doi", "doi", a => a.LA_use_doi),
-          new PromptHostnameInputFor("doi", a => a.LA_use_doi),
-          new PromptUrlFor("doi", "doi", a => a.LA_use_doi),
-          new PromptPathFor("doi", "doi", a => a.LA_use_doi),
+          new PromptSubdomainFor("doi", "doi", (a) => a.LA_use_doi),
+          new PromptHostnameFor("doi", "doi", (a) => a.LA_use_doi),
+          new PromptHostnameInputFor("doi", (a) => a.LA_use_doi),
+          new PromptUrlFor("doi", "doi", (a) => a.LA_use_doi),
+          new PromptPathFor("doi", "doi", (a) => a.LA_use_doi),
 
           new PromptSubdomainFor("solr", "solr"),
           new PromptHostnameFor("solr", "index"),
@@ -707,28 +716,28 @@ module.exports = class extends Generator {
             type: "input",
             name: "LA_biocache_backend_hostname",
             message: `LA ${em("biocache-backend")} hostname`,
-            validate: input => isCorrectHostname(input),
-            filter: input =>
-              new Promise(resolve => {
-                storeMachine("biocache_backend", input).then(input =>
-                  storeMachine("biocache_cli", input).then(input =>
-                    storeMachine("nameindexer", input).then(input =>
+            validate: (input) => isCorrectHostname(input),
+            filter: (input) =>
+              new Promise((resolve) => {
+                storeMachine("biocache_backend", input).then((input) =>
+                  storeMachine("biocache_cli", input).then((input) =>
+                    storeMachine("nameindexer", input).then((input) =>
                       resolve(input)
                     )
                   )
                 );
               }),
-            default: a => `${a.LA_main_hostname}`
+            default: (a) => `${a.LA_main_hostname}`,
           },
           new PromptSubdomainFor(
             "spatial",
             "spatial",
-            a => a.LA_use_spatial,
+            (a) => a.LA_use_spatial,
             true
           ),
-          new PromptHostnameFor("spatial", "spatial", a => a.LA_use_spatial),
-          new PromptHostnameInputFor("spatial", a => a.LA_use_spatial),
-          new PromptUrlFor("spatial", "spatial", a => a.LA_use_spatial),
+          new PromptHostnameFor("spatial", "spatial", (a) => a.LA_use_spatial),
+          new PromptHostnameInputFor("spatial", (a) => a.LA_use_spatial),
+          new PromptUrlFor("spatial", "spatial", (a) => a.LA_use_spatial),
           {
             store: true,
             type: "confirm",
@@ -736,8 +745,8 @@ module.exports = class extends Generator {
             message: `Use ${em(
               "git"
             )} in your generated inventories to track their changes? (Very recommended)`,
-            default: true
-          }
+            default: true,
+          },
         ]);
 
     if (typeof this.answers.LA_main_hostname === "undefined") {
@@ -770,7 +779,7 @@ module.exports = class extends Generator {
       this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
         ? "https://"
         : "http://";
-      Object.keys(servicesRolsMap).forEach(service => {
+      Object.keys(servicesRolsMap).forEach((service) => {
         if (service === "spatial" && !this.answers.LA_use_spatial) return;
         if (service === "regions" && !this.answers.LA_use_regions) return;
         if (service === "lists" && !this.answers.LA_use_species_lists) return;
@@ -791,6 +800,19 @@ module.exports = class extends Generator {
   }
 
   writing() {
+    const dest = this.answers.LA_pkg_name;
+    const useGit = this.answers.LA_use_git;
+    const cmdOpts = {
+      cwd: this.destinationPath(dest),
+      shell: true,
+      stdio: "inherit",
+    };
+    const useCAS = this.answers.LA_use_CAS;
+    const useSpatial = this.answers.LA_use_spatial;
+
+    if (debug) logger(`Destination root: ${this.destinationRoot()}`);
+    if (debug) logger(`cmdOpts: ${JSON.stringify(cmdOpts)}`);
+
     const services = [
       "collectory",
       "ala_hub",
@@ -807,10 +829,10 @@ module.exports = class extends Generator {
       "webapi",
       "alerts",
       "doi",
-      "dashboard"
+      "dashboard",
     ];
 
-    services.forEach(service => {
+    services.forEach((service) => {
       const path = this.answers[`LA_${service}_path`];
       if (path === "/") {
         this.answers[`LA_${service}_path`] = "";
@@ -836,23 +858,10 @@ module.exports = class extends Generator {
     }
     this.answers.LA_machines = machines;
     this.answers.LA_services_machines = servicesAndMachines;
-    const dest = this.answers.LA_pkg_name;
+
     const filePrefix = dest;
 
     this.answers.LA_nginx_vhosts = [...new Set(machines)];
-
-    if (
-      firstRun ||
-      !this.fs.exists(`${dest}/${filePrefix}-local-passwords.yml`)
-    ) {
-      // We'll generate some easy but strong passwords for our new database, etc
-
-      this.answers.LA_passwords = [];
-      for (let num = 0; num < 40; num++) {
-        this.answers.LA_passwords.push(niceware.generatePassphrase(4).join(""));
-      }
-    }
-
     if (debug) logger(this.answers);
 
     this.fs.copyTpl(
@@ -874,7 +883,7 @@ module.exports = class extends Generator {
       "inventory.yml",
       "local-extras.yml",
       "spatial-inventory.yml",
-      "spatial-local-extras.yml"
+      "spatial-local-extras.yml",
     ];
     for (var i = 0; i < templateFiles.length; i++) {
       const currentFile = `${dest}/quick-start-${templateFiles[i]}`;
@@ -883,36 +892,87 @@ module.exports = class extends Generator {
       }
     }
 
-    if (!this.fs.exists(`${dest}/${filePrefix}-local-extras.yml`)) {
+    // Rename old .yml to correct .ini extension
+    if (!firstRun) {
+      const oldFile = `${dest}/${filePrefix}-inventory.yml`;
+      if (debug) logger(`Trying to rename yml to ini: ${oldFile}`);
+      if (this.fs.exists(oldFile)) {
+        var inventories = ["inventory", "local-extras", "local-passwords"];
+        if (useSpatial) {
+          inventories.push("spatial-inventory", "spatial-local-extras");
+        }
+        if (useCAS) {
+          inventories.push("cas-inventory", "cas-local-extras");
+        }
+        let cmdResult;
+        for (let i = 0; i < inventories.length; i++) {
+          const currentFile = `${filePrefix}-${inventories[i]}.yml`;
+          const destFile = `${filePrefix}-${inventories[i]}.ini`;
+
+          if (this.fs.exists(`${dest}/${currentFile}`)) {
+            if (debug) logger(`Moving ${currentFile} to ${destFile}`);
+            if (useGit) {
+              cmdResult = this.spawnCommandSync(
+                "git",
+                ["mv", currentFile, destFile],
+                cmdOpts
+              );
+              if (debug) logger(`git mv result ${JSON.stringify(cmdResult)}`);
+            } else {
+              cmdResult = this.spawnCommandSync(
+                "mv",
+                [currentFile, destFile],
+                cmdOpts
+              );
+              if (debug) logger(`mv result ${JSON.stringify(cmdResult)}`);
+            }
+          }
+        }
+      }
+    }
+
+    if (
+      firstRun ||
+      !this.fs.exists(`${dest}/${filePrefix}-local-passwords.ini`)
+    ) {
+      // We'll generate some easy but strong passwords for our new database, etc
+
+      this.answers.LA_passwords = [];
+      for (let num = 0; num < 40; num++) {
+        this.answers.LA_passwords.push(niceware.generatePassphrase(4).join(""));
+      }
+    }
+
+    if (!this.fs.exists(`${dest}/${filePrefix}-local-extras.ini`)) {
       // When only create the extras inventory in the first run
       this.fs.copyTpl(
-        this.templatePath(`quick-start-local-extras.yml`),
-        this.destinationPath(`${dest}/${filePrefix}-local-extras.yml`),
+        this.templatePath(`quick-start-local-extras.ini`),
+        this.destinationPath(`${dest}/${filePrefix}-local-extras.ini`),
         this.answers
       );
     }
 
     // .sample is always updated with new versions
     this.fs.copyTpl(
-      this.templatePath(`quick-start-local-extras.yml`),
+      this.templatePath(`quick-start-local-extras.ini`),
       this.destinationPath(`${dest}/${filePrefix}-local-extras.sample`),
       this.answers
     );
 
-    if (this.answers.LA_use_spatial) {
-      if (!this.fs.exists(`${dest}/${filePrefix}-spatial-local-extras.yml`)) {
+    if (useSpatial) {
+      if (!this.fs.exists(`${dest}/${filePrefix}-spatial-local-extras.ini`)) {
         // When only create the extras inventory in the first run
         this.fs.copyTpl(
-          this.templatePath(`quick-start-spatial-local-extras.yml`),
+          this.templatePath(`quick-start-spatial-local-extras.ini`),
           this.destinationPath(
-            `${dest}/${filePrefix}-spatial-local-extras.yml`
+            `${dest}/${filePrefix}-spatial-local-extras.ini`
           ),
           this.answers
         );
       }
       // .sample is always updated with new versions
       this.fs.copyTpl(
-        this.templatePath(`quick-start-spatial-local-extras.yml`),
+        this.templatePath(`quick-start-spatial-local-extras.ini`),
         this.destinationPath(
           `${dest}/${filePrefix}-spatial-local-extras.sample`
         ),
@@ -920,49 +980,49 @@ module.exports = class extends Generator {
       );
     }
 
-    if (this.answers.LA_use_CAS) {
-      if (!this.fs.exists(`${dest}/${filePrefix}-cas-local-extras.yml`)) {
+    if (useCAS) {
+      if (!this.fs.exists(`${dest}/${filePrefix}-cas-local-extras.ini`)) {
         // When only create the extras inventory in the first run
         this.fs.copyTpl(
-          this.templatePath(`quick-start-cas-local-extras.yml`),
-          this.destinationPath(`${dest}/${filePrefix}-cas-local-extras.yml`),
+          this.templatePath(`quick-start-cas-local-extras.ini`),
+          this.destinationPath(`${dest}/${filePrefix}-cas-local-extras.ini`),
           this.answers
         );
       }
       // .sample is always updated with new versions
       this.fs.copyTpl(
-        this.templatePath(`quick-start-cas-local-extras.yml`),
+        this.templatePath(`quick-start-cas-local-extras.ini`),
         this.destinationPath(`${dest}/${filePrefix}-cas-local-extras.sample`),
         this.answers
       );
     }
 
     this.fs.copyTpl(
-      this.templatePath(`quick-start-inventory.yml`),
-      this.destinationPath(`${dest}/${filePrefix}-inventory.yml`),
+      this.templatePath(`quick-start-inventory.ini`),
+      this.destinationPath(`${dest}/${filePrefix}-inventory.ini`),
       this.answers
     );
 
-    if (this.answers.LA_use_spatial) {
+    if (useSpatial) {
       this.fs.copyTpl(
-        this.templatePath("quick-start-spatial-inventory.yml"),
-        this.destinationPath(`${dest}/${filePrefix}-spatial-inventory.yml`),
+        this.templatePath("quick-start-spatial-inventory.ini"),
+        this.destinationPath(`${dest}/${filePrefix}-spatial-inventory.ini`),
         this.answers
       );
     }
 
-    if (this.answers.LA_use_CAS) {
+    if (useCAS) {
       this.fs.copyTpl(
-        this.templatePath("quick-start-cas-inventory.yml"),
-        this.destinationPath(`${dest}/${filePrefix}-cas-inventory.yml`),
+        this.templatePath("quick-start-cas-inventory.ini"),
+        this.destinationPath(`${dest}/${filePrefix}-cas-inventory.ini`),
         this.answers
       );
     }
 
-    if (!this.fs.exists(`${dest}/${filePrefix}-local-passwords.yml`)) {
+    if (!this.fs.exists(`${dest}/${filePrefix}-local-passwords.ini`)) {
       this.fs.copyTpl(
-        this.templatePath(`quick-start-local-passwords.yml`),
-        this.destinationPath(`${dest}/${filePrefix}-local-passwords.yml`),
+        this.templatePath(`quick-start-local-passwords.ini`),
+        this.destinationPath(`${dest}/${filePrefix}-local-passwords.ini`),
         this.answers
       );
     }
@@ -977,31 +1037,30 @@ module.exports = class extends Generator {
   install() {
     const dest = this.answers.LA_pkg_name;
     const useGit = this.answers.LA_use_git;
-    const gitOpts = {
-      cwd: this.destinationRoot(dest),
+    const cmdOpts = {
+      cwd: this.destinationPath(dest),
       shell: true,
-      stdio: null
+      stdio: "inherit",
     };
 
     // Should be useful in the future but we don't have dependencies in the
     // generated code (more than ansible):
     // this.installDependencies();
 
-    if (useGit) {
-      let cmdResult = this.spawnCommandSync("which", ["git"], gitOpts);
+    if (firstRun && useGit) {
+      let cmdResult = this.spawnCommandSync("which", ["git"], cmdOpts);
 
       if (cmdResult.status === 0) {
-        cmdResult = this.spawnCommandSync("git", ["status"], gitOpts);
+        cmdResult = this.spawnCommandSync("git", ["status"], cmdOpts);
 
         if (cmdResult !== 0) {
-          cmdResult = this.spawnCommandSync("git", ["init"], gitOpts);
+          cmdResult = this.spawnCommandSync("git", ["init"], cmdOpts);
           if (cmdResult === 0) {
-            // TODO: git add does not work?
-            cmdResult = this.spawnCommandSync("git", ["add", "--all"], gitOpts);
+            cmdResult = this.spawnCommandSync("git", ["add", "--all"], cmdOpts);
             this.spawnCommandSync(
               "git",
               ["commit", "-am", '"Initial commit"'],
-              gitOpts
+              cmdOpts
             );
           }
         }
