@@ -430,6 +430,17 @@ module.exports = class extends Generator {
 
     logger = this.log;
 
+    let cmdResult = this.spawnCommandSync("which", ["git"], {
+      shell: true,
+      stdio: null,
+    });
+    if (cmdResult.status !== 0) {
+      logger(
+        `${em("Error")}: Please install git before running this generator`
+      );
+      process.exit(1);
+    }
+
     // We always store in the first run
     if (debug && firstRun) {
       logger("Running generator for the first time in this location");
@@ -741,6 +752,15 @@ module.exports = class extends Generator {
           {
             store: true,
             type: "confirm",
+            name: "LA_generate_branding",
+            message: `Do you want to generate also a sample compatible ${em(
+              "LA branding"
+            )}? (Recommended to start, later you can improve it with your site style)`,
+            default: true,
+          },
+          {
+            store: true,
+            type: "confirm",
             name: "LA_use_git",
             message: `Use ${em(
               "git"
@@ -776,6 +796,9 @@ module.exports = class extends Generator {
       if (typeof this.answers.LA_use_dashboard === "undefined")
         this.answers.LA_use_dashboard = false;
 
+      if (typeof this.answers.LA_generate_branding === "undefined")
+        this.answers.LA_generate_branding = false;
+
       this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
         ? "https://"
         : "http://";
@@ -807,8 +830,6 @@ module.exports = class extends Generator {
       shell: true,
       stdio: "inherit",
     };
-    const useCAS = this.answers.LA_use_CAS;
-    const useSpatial = this.answers.LA_use_spatial;
 
     if (debug) logger(`Destination root: ${this.destinationRoot()}`);
     if (debug) logger(`cmdOpts: ${JSON.stringify(cmdOpts)}`);
@@ -856,8 +877,15 @@ module.exports = class extends Generator {
     if (typeof this.answers.LA_spatial_url === "undefined") {
       this.answers.LA_spatial_url = this.answers.LA_spatial_hostname;
     }
+    if (typeof this.answers.LA_generate_branding === "undefined") {
+      this.answers.LA_generate_branding = this.answers.LA_generate_branding;
+    }
     this.answers.LA_machines = machines;
     this.answers.LA_services_machines = servicesAndMachines;
+
+    const useCAS = this.answers.LA_use_CAS;
+    const useSpatial = this.answers.LA_use_spatial;
+    const useBranding = this.answers.LA_generate_branding;
 
     const filePrefix = dest;
 
@@ -1023,6 +1051,69 @@ module.exports = class extends Generator {
       this.fs.copyTpl(
         this.templatePath(`quick-start-local-passwords.ini`),
         this.destinationPath(`${dest}/${filePrefix}-local-passwords.ini`),
+        this.answers
+      );
+    }
+
+    const brandDest = `${dest}-branding`;
+    const brandSettings = `${brandDest}/app/js/settings.js`;
+
+    if (useBranding) {
+      if (!this.fs.exists(brandSettings)) {
+        logger(
+          `INFO: Generating a sample branding in '${brandDest}' directory. Please wait`
+        );
+
+        let cmdResult = this.spawnCommandSync(
+          "git",
+          [
+            "clone",
+            "--depth=1",
+            "https://github.com/living-atlases/base-branding.git",
+            brandDest,
+          ],
+          {
+            cwd: this.destinationRoot(),
+            shell: true,
+            stdio: null,
+            // stdio: "inherit",
+          }
+        );
+        if (cmdResult.status === 0) {
+          // Async update submodules
+          logger(
+            `INFO: Downloading sample branding dependencies in '${brandDest}' directory. Please wait`
+          );
+          this.spawnCommandSync(
+            "git",
+            ["submodule", "update", "--init", "--recursive", "--depth=1"],
+            {
+              cwd: this.destinationPath(brandDest),
+              shell: true,
+              stdio: null,
+            }
+          );
+          // we remove the default branding settings
+          this.spawnCommandSync("rm", ["-f", brandSettings], {
+            cwd: this.destinationPath(),
+            shell: true,
+            stdio: null,
+          });
+        } else {
+          logger(
+            `Error: Failed to clone base-branding, error: ${JSON.stringify(
+              cmdResult
+            )}`
+          );
+        }
+      }
+    }
+
+    if (useBranding) {
+      // TODO move this outside git part and do it conditional
+      this.fs.copyTpl(
+        this.templatePath("base-branding-settings.js"),
+        this.destinationPath(brandSettings),
         this.answers
       );
     }
