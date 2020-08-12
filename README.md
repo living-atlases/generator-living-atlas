@@ -149,7 +149,7 @@ As we mentioned previously you can rerun the generator with the option `yo livin
 
 ## Any problem with this generator?
 
-Please [add an issue](https://github.com/vjrj/generator-living-atlas/issues/new) give us details of your problem and we'll try to help you and to improve the generator. Thanks!
+Please [add an issue](https://github.com/living-atlases/generator-living-atlas/issues/new) give us details of your problem and we'll try to help you and to improve the generator. Thanks!
 
 ## About Yeoman
 
