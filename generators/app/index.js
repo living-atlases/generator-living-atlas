@@ -9,6 +9,7 @@ const chalk = require("chalk");
 const yosay = require("onionsay");
 const parseDomain = require("parse-domain");
 const niceware = require("niceware");
+const fsN = require("fs");
 
 let defaultStore = false;
 let logger;
@@ -823,8 +824,10 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    const dest = this.answers.LA_pkg_name;
-    const useGit = this.answers.LA_use_git;
+    let dest = this.answers.LA_pkg_name;
+    // For now we use with "pkgname-inventories"
+    if (!fsN.existsSync(dest)) dest = `${this.answers.LA_pkg_name}-inventories`;
+
     const cmdOpts = {
       cwd: this.destinationPath(dest),
       shell: true,
@@ -887,11 +890,16 @@ module.exports = class extends Generator {
     const useSpatial = this.answers.LA_use_spatial;
     const useBranding = this.answers.LA_generate_branding;
 
-    const filePrefix = dest;
+    const filePrefix = this.answers.LA_pkg_name;
 
     this.answers.LA_nginx_vhosts = [...new Set(machines)];
     if (debug) logger(this.answers);
 
+    this.fs.copyTpl(
+      this.templatePath("README-main.md"),
+      this.destinationPath("README.md"),
+      this.answers
+    );
     this.fs.copyTpl(
       this.templatePath("README.md"),
       this.destinationPath(`${dest}/README.md`),
@@ -1055,11 +1063,17 @@ module.exports = class extends Generator {
       );
     }
 
-    const brandDest = `${dest}-branding`;
+    const brandDest = `${this.answers.LA_pkg_name}-branding`;
     const brandSettings = `${brandDest}/app/js/settings.js`;
 
     if (useBranding) {
-      if (!this.fs.exists(brandSettings)) {
+      if (this.fs.exists(brandSettings)) {
+        this.fs.copyTpl(
+          this.templatePath("base-branding-settings.js"),
+          this.destinationPath(`${brandSettings}.sample`),
+          this.answers
+        );
+      } else {
         logger(
           `INFO: Generating a sample branding in '${brandDest}' directory. Please wait`
         );
@@ -1082,16 +1096,7 @@ module.exports = class extends Generator {
         if (cmdResult.status === 0) {
           // Async update submodules
           logger(
-            `INFO: Downloading sample branding dependencies in '${brandDest}' directory. Please wait`
-          );
-          this.spawnCommandSync(
-            "git",
-            ["submodule", "update", "--init", "--recursive", "--depth=1"],
-            {
-              cwd: this.destinationPath(brandDest),
-              shell: true,
-              stdio: null,
-            }
+            `INFO: Do a "git submodule update --init --recursive --depth=1" in '${brandDest}' directory later`
           );
           // we remove the default branding settings
           this.spawnCommandSync("rm", ["-f", brandSettings], {
@@ -1099,6 +1104,11 @@ module.exports = class extends Generator {
             shell: true,
             stdio: null,
           });
+          this.fs.copyTpl(
+            this.templatePath("base-branding-settings.js"),
+            this.destinationPath(brandSettings),
+            this.answers
+          );
         } else {
           logger(
             `Error: Failed to clone base-branding, error: ${JSON.stringify(
@@ -1109,15 +1119,6 @@ module.exports = class extends Generator {
       }
     }
 
-    if (useBranding) {
-      // TODO move this outside git part and do it conditional
-      this.fs.copyTpl(
-        this.templatePath("base-branding-settings.js"),
-        this.destinationPath(brandSettings),
-        this.answers
-      );
-    }
-
     this.fs.copyTpl(
       this.templatePath("ansiblew"),
       this.destinationPath(`${dest}/ansiblew`),
@@ -1126,7 +1127,9 @@ module.exports = class extends Generator {
   }
 
   install() {
-    const dest = this.answers.LA_pkg_name;
+    let dest = this.answers.LA_pkg_name;
+    // For now we use with "pkgname-inventories"
+    if (!fsN.existsSync(dest)) dest = `${this.answers.LA_pkg_name}-inventories`;
     const useGit = this.answers.LA_use_git;
     const cmdOpts = {
       cwd: this.destinationPath(dest),
