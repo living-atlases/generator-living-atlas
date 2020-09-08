@@ -512,6 +512,28 @@ module.exports = class extends Generator {
           {
             store: true,
             type: "confirm",
+            name: "LA_use_species",
+            message: `Use ${em("species")} service?`,
+            default: true,
+          },
+          {
+            store: true,
+            type: "confirm",
+            name: "LA_use_species_lists",
+            message: `Use ${em("specieslists")} service?`,
+            when: (a) => a.LA_use_species,
+            default: true,
+          },
+          {
+            store: true,
+            type: "confirm",
+            name: "LA_use_images",
+            message: `Use ${em("images")} service?`,
+            default: true,
+          },
+          {
+            store: true,
+            type: "confirm",
             name: "LA_use_spatial",
             message: `Use ${em("spatial")} service?`,
             default: true,
@@ -523,13 +545,7 @@ module.exports = class extends Generator {
             message: `Use ${em("regions")} service?`,
             default: true,
           },
-          {
-            store: true,
-            type: "confirm",
-            name: "LA_use_species_lists",
-            message: `Use ${em("specieslists")} service?`,
-            default: true,
-          },
+
           {
             store: true,
             type: "confirm",
@@ -629,23 +645,31 @@ module.exports = class extends Generator {
           new PromptUrlFor("biocache_service", "records-ws"),
           new PromptPathFor("biocache_service", "records-ws"),
 
-          new PromptSubdomainFor("ala_bie", "species"),
-          new PromptHostnameFor("ala_bie", "species"),
-          new PromptHostnameInputFor("ala_bie"),
-          new PromptUrlFor("ala_bie", "species"),
-          new PromptPathFor("ala_bie", "species"),
+          new PromptSubdomainFor("ala_bie", "species", (a) => a.LA_use_species),
+          new PromptHostnameFor("ala_bie", "species", (a) => a.LA_use_species),
+          new PromptHostnameInputFor("ala_bie", (a) => a.LA_use_species),
+          new PromptUrlFor("ala_bie", "species", (a) => a.LA_use_species),
+          new PromptPathFor("ala_bie", "species", (a) => a.LA_use_species),
 
-          new PromptSubdomainFor("bie_index", "species-service"),
-          new PromptHostnameFor("bie_index", "species-ws"),
-          new PromptHostnameInputFor("bie_index"),
-          new PromptUrlFor("bie_index", "species-ws"),
-          new PromptPathFor("bie_index", "species-ws"),
+          new PromptSubdomainFor(
+            "bie_index",
+            "species-service",
+            (a) => a.LA_use_species
+          ),
+          new PromptHostnameFor(
+            "bie_index",
+            "species-ws",
+            (a) => a.LA_use_species
+          ),
+          new PromptHostnameInputFor("bie_index", (a) => a.LA_use_species),
+          new PromptUrlFor("bie_index", "species-ws", (a) => a.LA_use_species),
+          new PromptPathFor("bie_index", "species-ws", (a) => a.LA_use_species),
 
-          new PromptSubdomainFor("images", "images"),
-          new PromptHostnameFor("images", "images"),
-          new PromptHostnameInputFor("images"),
-          new PromptUrlFor("images", "images"),
-          new PromptPathFor("images", "images"),
+          new PromptSubdomainFor("images", "images", (a) => a.LA_use_images),
+          new PromptHostnameFor("images", "images", (a) => a.LA_use_images),
+          new PromptHostnameInputFor("images", (a) => a.LA_use_images),
+          new PromptUrlFor("images", "images", (a) => a.LA_use_images),
+          new PromptPathFor("images", "images", (a) => a.LA_use_images),
 
           new PromptSubdomainFor(
             "lists",
@@ -776,12 +800,17 @@ module.exports = class extends Generator {
     this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
     this.answers.LA_nameindexer_hostname = this.answers.LA_biocache_backend_hostname;
 
-    if (typeof this.answers.LA_spatial_uses_subdomain === "undefined") {
+    if (typeof this.answers.LA_spatial_uses_subdomain === "undefined")
       this.answers.LA_spatial_uses_subdomain = true;
-    }
-    if (typeof this.answers.LA_cas_uses_subdomain === "undefined") {
+    if (typeof this.answers.LA_cas_uses_subdomain === "undefined")
       this.answers.LA_cas_uses_subdomain = true;
-    }
+
+    if (typeof this.answers.LA_use_images === "undefined")
+      this.answers.LA_use_images = true;
+    if (typeof this.answers.LA_use_species_lists === "undefined")
+      this.answers.LA_use_species_lists = false;
+    if (typeof this.answers.LA_use_species === "undefined")
+      this.answers.LA_use_species = true;
 
     if (dontAsk) {
       // Compatible with old generated inventories and don-ask
@@ -806,7 +835,10 @@ module.exports = class extends Generator {
       Object.keys(servicesRolsMap).forEach((service) => {
         if (service === "spatial" && !this.answers.LA_use_spatial) return;
         if (service === "regions" && !this.answers.LA_use_regions) return;
+        if (service === "ala_bie" && !this.answers.LA_use_species) return;
+        if (service === "bie_index" && !this.answers.LA_use_species) return;
         if (service === "lists" && !this.answers.LA_use_species_lists) return;
+        if (service === "images" && !this.answers.LA_use_images) return;
         if (service === "webapi" && !this.answers.LA_use_webapi) return;
         if (service === "alerts" && !this.answers.LA_use_alerts) return;
         if (service === "doi" && !this.answers.LA_use_doi) return;

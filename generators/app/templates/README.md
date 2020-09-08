@@ -115,9 +115,11 @@ We recommend to override and set variables adding then to `<%= LA_pkg_name %>-lo
 - Biocache (occurrences): <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 - Biocache administration: <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>/admin
 - Biocache webservice: <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
+<% if (LA_use_species) { %>
 - Species: <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
 - Species webservice: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
 - Species webservice administration: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>/admin
+<%_ } _%>
 - SOLR non-public web interface: http://<%= LA_solr_url %>:8983 (You should use ssh port redirection to access this)
 <% if (LA_use_CAS) { %>- CAS Auth system: https://<%= LA_cas_url %>/cas
 - User details: https://<%= LA_cas_url %>/userdetails
@@ -127,6 +129,10 @@ We recommend to override and set variables adding then to `<%= LA_pkg_name %>-lo
 - CAS management administration: https://<%= LA_cas_url %>/cas-management/<% } %>
 - Logger: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/
 - Logger administration: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/admin
+<%_ if (LA_use_images) { _%>
+- Images service: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/
+- Images service administration: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/admin
+<%_ } _%>
 <% if (LA_use_species_lists) { %>- Species list: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 - Species list administration: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>/admin<% } %>
 <% if (LA_use_regions) { %>- Regions: <%= LA_urls_prefix %><%= LA_regions_url %>
