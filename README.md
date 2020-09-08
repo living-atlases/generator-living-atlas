@@ -26,7 +26,7 @@ In others words, with the `ansible` inventories produced by this `yeoman` genera
 
 Also, thanks to `yeoman`, you can rerun this generator, for instance, to enable new modules in the future, or to enable eg. SSL, etc. and reuse your previous settings and compare the differences (see the [screenshots](#screens)).
 
-You can also try our experimental web generator: [http://generator.l-a.site/](http://generator.l-a.site/).
+You can also try our experimental web generator: [https://generator.l-a.site/](https://generator.l-a.site/).
 
 ## Installation
 
