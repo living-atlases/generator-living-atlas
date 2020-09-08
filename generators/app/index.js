@@ -79,6 +79,8 @@ const machinesAndPaths = {};
 
 const servicesAndMachines = [];
 
+const vhostsSet = new Set(); // use for nginx_vhost_fragments_to_clear
+
 const servicesRolsMap = {
   main: {
     name: "main",
@@ -339,8 +341,10 @@ function PromptUrlFor(name, subdomain, when) {
   this.validate = (input, a) => {
     // Store previous hostname from choices or input request for later use
     const varHostName = `LA_${name}_hostname`;
+    const varUrl = `LA_${name}_url`;
     if (debug) logger(`We store ${name} hostname with ${a[varHostName]}`);
     storeMachine(name, a[varHostName]);
+    vhostsSet.add(a[varUrl]);
     // Now we verify the url
     return validateDomain(input, name, true);
   };
@@ -794,6 +798,7 @@ module.exports = class extends Generator {
           },
         ]);
 
+    // For back-compatibility
     if (typeof this.answers.LA_main_hostname === "undefined") {
       this.answers.LA_main_hostname = this.answers.LA_domain;
     }
@@ -832,6 +837,11 @@ module.exports = class extends Generator {
       this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
         ? "https://"
         : "http://";
+
+      vhostsSet.add(this.answers.LA_domain);
+
+      if (debug) logger(this.answers);
+
       Object.keys(servicesRolsMap).forEach((service) => {
         if (service === "spatial" && !this.answers.LA_use_spatial) return;
         if (service === "regions" && !this.answers.LA_use_regions) return;
@@ -843,11 +853,14 @@ module.exports = class extends Generator {
         if (service === "alerts" && !this.answers.LA_use_alerts) return;
         if (service === "doi" && !this.answers.LA_use_doi) return;
         if (service === "dashboard" && !this.answers.LA_use_dashboard) return;
-        if (debug) logger(this.answers);
+
         const hostVar = `LA_${service}_hostname`;
+        const serviceUrl = this.answers[`LA_${service}_url`];
         const hostname = this.answers[hostVar];
-        if (debug) logger(`${hostVar} -> ${hostname}`);
+        if (debug)
+          logger(`${service}: ${hostVar} -> ${hostname}, url: ${serviceUrl}`);
         storeMachine(service, hostname);
+        if (typeof serviceUrl !== "undefined") vhostsSet.add(serviceUrl);
       });
 
       if (debug) logger(machines);
@@ -893,6 +906,7 @@ module.exports = class extends Generator {
       if (path === "/") {
         this.answers[`LA_${service}_path`] = "";
       }
+      // url var is new, so we use hostname for old generated inventories
       if (typeof this.answers[`LA_${service}_url`] === "undefined") {
         this.answers[`LA_${service}_url`] = this.answers[
           `LA_${service}_hostname`
@@ -913,7 +927,7 @@ module.exports = class extends Generator {
       this.answers.LA_spatial_url = this.answers.LA_spatial_hostname;
     }
     if (typeof this.answers.LA_generate_branding === "undefined") {
-      this.answers.LA_generate_branding = this.answers.LA_generate_branding;
+      this.answers.LA_generate_branding = false;
     }
     this.answers.LA_machines = machines;
     this.answers.LA_services_machines = servicesAndMachines;
@@ -924,7 +938,8 @@ module.exports = class extends Generator {
 
     const filePrefix = this.answers.LA_pkg_name;
 
-    this.answers.LA_nginx_vhosts = [...new Set(machines)];
+    this.answers.LA_nginx_vhosts = [...new Set(vhostsSet)];
+
     if (debug) logger(this.answers);
 
     this.fs.copyTpl(
