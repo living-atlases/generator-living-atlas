@@ -23,7 +23,7 @@ let replay = false;
 let dontAsk = false;
 let previousConfig;
 let firstRun;
-const hostnameRegexp = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$/;
+const hostnameRegexp = /^[._\-a-z0-9A-Z, ]+$/;
 const parseDomainOpts = {};
 const isCorrectDomain = (domain) =>
   parseDomain(domain, parseDomainOpts) !== null;
@@ -206,7 +206,7 @@ const servicesRolsMap = {
 };
 
 const storeMachine = (name, machine) =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     if (debug) logger(`Store: ${name} -> ${machine}`);
     if (isCorrectHostname(machine) === true) {
       if (debug) logger("We add to the first position");
@@ -219,6 +219,8 @@ const storeMachine = (name, machine) =>
           map: servicesRolsMap[name],
         });
       }
+    } else {
+      reject(new Error(`Invalid hostname ${machine}`));
     }
     if (debug) logger(machines);
     if (debug) logger(machinesSorted);
