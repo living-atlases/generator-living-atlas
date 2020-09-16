@@ -2,6 +2,57 @@
 
 These are some generated inventories to use to set up some machines on EC2 or other cloud provider with LA software.
 
+### Urls of your LA node
+
+- Main landing page: <%= LA_urls_prefix %><%= LA_domain %>
+- Collections: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
+- Collections administration: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/admin
+- Collections alaAdmin: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/alaAdmin
+- Biocache (occurrences): <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
+- Biocache administration: <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>/admin
+- Biocache webservice: <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
+<% if (LA_use_species) { %>
+- Species: <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
+- Species webservice: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
+- Species webservice administration: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>/admin
+<%_ } _%>
+- SOLR non-public web interface: http://<%= LA_solr_url %>:8983 (You should use ssh port redirection to access this)
+<% if (LA_use_CAS) { %>- CAS Auth system: https://<%= LA_cas_url %>/cas
+- User details: https://<%= LA_cas_url %>/userdetails
+- User details administration: https://<%= LA_cas_url %>/userdetails/admin
+- User details alaAdmin https://<%= LA_cas_url %>/userdetails/alaAdmin
+- Apikey management: https://<%= LA_cas_url %>/apikey/
+- CAS management administration: https://<%= LA_cas_url %>/cas-management/<% } %>
+- Logger: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/
+- Logger administration: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/admin
+<%_ if (LA_use_images) { _%>
+- Images service: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/
+- Images service administration: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/admin
+<%_ } _%>
+<% if (LA_use_species_lists) { %>- Species list: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+- Species list administration: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>/admin<% } %>
+<% if (LA_use_regions) { %>- Regions: <%= LA_urls_prefix %><%= LA_regions_url %>
+- Regions administration: <%= LA_urls_prefix %><%= LA_regions_url %>/alaAdmin<% } %>
+<% if (LA_use_spatial) { %>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_url %>
+- Spatial Webservice: <%= LA_urls_prefix %><%= LA_spatial_url %>/ws
+- Spatial Geoserver: <%= LA_urls_prefix %><%= LA_spatial_url %>/geoserver/<% } %>
+<%_ if (LA_use_webapi) { _%>
+- Web API: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/
+- Web API administration: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/admin
+<%_ } _%>
+<%_ if (LA_use_alerts) { _%>
+- Alerts service: <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>/
+- Alerts service administration: <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>/admin
+<%_ } _%>
+<%_ if (LA_use_doi) { _%>
+- DOI service: <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>/
+- DOI service administration: <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>/admin
+<%_ } _%>
+<%_ if (LA_use_dashboard) { _%>
+- Dashboard: <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>/
+- Dashboard administration: <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>/alaAdmin
+<%_ } _%>
+
 ### Initial Setup
 
 To use this, add the following into your `/etc/hosts` (of your working machine, and new service machine/s) and/or in your <%= LA_domain %> `DNS`. So these hostname should be accessible from your local working machine but also remotely between each machine/s so the hostname should resolve correctly.
@@ -10,11 +61,11 @@ To use this, add the following into your `/etc/hosts` (of your working machine, 
 12.12.12.<%= i %>  <%= machine %><%; i++ }) %>
 ```
 
-You'll need to replace `12.12.12.1` etc with the IP address of some new Ubuntu 16 instance in your provider.
+You'll need to replace `12.12.12.1` etc with the IP address of some new Ubuntu instances in your provider.
 
 These machines should have an user `ubuntu` with `sudo` permissions.
 
-You should generate and use some ssh key and copy `~/.ssh/MyKey.pub` in those machines under `~ubuntu/.ssh/authorized_keys` (via `ssh-copy-id` for avoid issues).
+You should generate and use some ssh key and copy `~/.ssh/MyKey.pub` in those machines under `~ubuntu/.ssh/authorized_keys` (via `ssh-copy-id` for avoid issues). See the `dot-ssh-config` as sample.
 
 You can test your initial setup with some `ssh` command like:
 ```
@@ -24,7 +75,7 @@ that should work.
 
 ### Run ansible
 
-With access to this machine/s you can run ansible:
+With access to this machine/s you can run ansible with commands like:
 
 ```
 export AI=<location-of-your-cloned-ala-install-repo>
@@ -47,7 +98,7 @@ ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%- ext
 ```
 #### ansible-playbook wrapper
 
-Also there is the utility `ansiblew` an `ansible-playbook` wrapper that can help you to exec this commands and can be easily modificable by you to your needs. It depends on `python-docopt` package. Help output:
+Also there is the utility `ansiblew` an `ansible-playbook` wrapper that can help you to exec these commands and can be easily modificable by you to your needs. It depends on `python-docopt` package. Help output:
 
 ```
 $ ./ansiblew --help
@@ -106,57 +157,3 @@ Also, you can use `--debug` to see some verbose debug info.
 
 We recommend to override and set variables adding then to `<%= LA_pkg_name %>-local-extras.yml` and `<%= LA_pkg_name %>-spatial-local-extras.yml` without modify the generated `<%= LA_pkg_name %>-inventory.yml` and `<%= LA_pkg_name %>-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes. The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.yml` files to add new vars, etc.
 
-### Urls of your LA node
-
-- Main landing page: <%= LA_urls_prefix %><%= LA_domain %>
-- Collections: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
-- Collections administration: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/admin
-- Collections alaAdmin: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/alaAdmin
-- Biocache (occurrences): <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
-- Biocache administration: <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>/admin
-- Biocache webservice: <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
-<% if (LA_use_species) { %>
-- Species: <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
-- Species webservice: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
-- Species webservice administration: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>/admin
-<%_ } _%>
-- SOLR non-public web interface: http://<%= LA_solr_url %>:8983 (You should use ssh port redirection to access this)
-<% if (LA_use_CAS) { %>- CAS Auth system: https://<%= LA_cas_url %>/cas
-- User details: https://<%= LA_cas_url %>/userdetails
-- User details administration: https://<%= LA_cas_url %>/userdetails/admin
-- User details alaAdmin https://<%= LA_cas_url %>/userdetails/alaAdmin
-- Apikey management: https://<%= LA_cas_url %>/apikey/
-- CAS management administration: https://<%= LA_cas_url %>/cas-management/<% } %>
-- Logger: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/
-- Logger administration: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/admin
-<%_ if (LA_use_images) { _%>
-- Images service: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/
-- Images service administration: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/admin
-<%_ } _%>
-<% if (LA_use_species_lists) { %>- Species list: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
-- Species list administration: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>/admin<% } %>
-<% if (LA_use_regions) { %>- Regions: <%= LA_urls_prefix %><%= LA_regions_url %>
-- Regions administration: <%= LA_urls_prefix %><%= LA_regions_url %>/alaAdmin<% } %>
-<% if (LA_use_spatial) { %>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_url %>
-- Spatial Webservice: <%= LA_urls_prefix %><%= LA_spatial_url %>/ws
-- Spatial Geoserver: <%= LA_urls_prefix %><%= LA_spatial_url %>/geoserver/<% } %>
-<%_ if (LA_use_webapi) { _%>
-- Web API: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/
-- Web API administration: <%= LA_urls_prefix %><%= LA_webapi_url %><%= LA_webapi_path %>/admin
-<%_ } _%>
-<%_ if (LA_use_alerts) { _%>
-- Alerts service: <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>/
-- Alerts service administration: <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>/admin
-<%_ } _%>
-<%_ if (LA_use_doi) { _%>
-- DOI service: <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>/
-- DOI service administration: <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>/admin
-<%_ } _%>
-<%_ if (LA_use_dashboard) { _%>
-- Dashboard: <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>/
-- Dashboard administration: <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>/alaAdmin
-<%_ } _%>
-
-### TODO
-
-[ ] Whitelist your IPs in the logger admin interface to allow correct log recollection
