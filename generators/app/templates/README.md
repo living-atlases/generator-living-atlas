@@ -11,13 +11,13 @@ These are some generated inventories to use to set up some machines on EC2 or ot
 - Biocache (occurrences): <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
 - Biocache administration: <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>/admin
 - Biocache webservice: <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
-<% if (LA_use_species) { %>
+<%_ if (LA_use_species) { _%>
 - Species: <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
 - Species webservice: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
 - Species webservice administration: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>/admin
 <%_ } _%>
 - SOLR non-public web interface: http://<%= LA_solr_url %>:8983 (You should use ssh port redirection to access this)
-<% if (LA_use_CAS) { %>- CAS Auth system: https://<%= LA_cas_url %>/cas
+<%_ if (LA_use_CAS) { _%>- CAS Auth system: https://<%= LA_cas_url %>/cas
 - User details: https://<%= LA_cas_url %>/userdetails
 - User details administration: https://<%= LA_cas_url %>/userdetails/admin
 - User details alaAdmin https://<%= LA_cas_url %>/userdetails/alaAdmin
@@ -29,11 +29,11 @@ These are some generated inventories to use to set up some machines on EC2 or ot
 - Images service: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/
 - Images service administration: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>/admin
 <%_ } _%>
-<% if (LA_use_species_lists) { %>- Species list: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+<%_ if (LA_use_species_lists) { _%>- Species list: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 - Species list administration: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>/admin<% } %>
-<% if (LA_use_regions) { %>- Regions: <%= LA_urls_prefix %><%= LA_regions_url %>
+<%_ if (LA_use_regions) { _%>- Regions: <%= LA_urls_prefix %><%= LA_regions_url %>
 - Regions administration: <%= LA_urls_prefix %><%= LA_regions_url %>/alaAdmin<% } %>
-<% if (LA_use_spatial) { %>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_url %>
+<%_ if (LA_use_spatial) { _%>- Spatial: <%= LA_urls_prefix %><%= LA_spatial_url %>
 - Spatial Webservice: <%= LA_urls_prefix %><%= LA_spatial_url %>/ws
 - Spatial Geoserver: <%= LA_urls_prefix %><%= LA_spatial_url %>/geoserver/<% } %>
 <%_ if (LA_use_webapi) { _%>
@@ -156,4 +156,3 @@ You can also use `yo living-atlas --replay-dont-ask` if you only want to repeat 
 Also, you can use `--debug` to see some verbose debug info.
 
 We recommend to override and set variables adding then to `<%= LA_pkg_name %>-local-extras.yml` and `<%= LA_pkg_name %>-spatial-local-extras.yml` without modify the generated `<%= LA_pkg_name %>-inventory.yml` and `<%= LA_pkg_name %>-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes. The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.yml` files to add new vars, etc.
-
