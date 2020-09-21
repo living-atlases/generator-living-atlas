@@ -1,4 +1,4 @@
-# generator-living-atlas ![npm](https://img.shields.io/npm/v/generator-living-atlas?color=green)
+# generator-living-atlas [![npm version](https://badge.fury.io/js/generator-living-atlas.svg)](https://badge.fury.io/js/generator-living-atlas)
 
 > A Yeoman Generator for Living Atlas Ansible Inventories
 
