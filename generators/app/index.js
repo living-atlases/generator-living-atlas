@@ -996,6 +996,7 @@ module.exports = class extends Generator {
 
           if (this.fs.exists(`${dest}/${currentFile}`)) {
             if (debug) logger(`Moving ${currentFile} to ${destFile}`);
+            const useGit = this.answers.LA_use_git;
             if (useGit) {
               cmdResult = this.spawnCommandSync(
                 "git",
