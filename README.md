@@ -30,11 +30,14 @@ You can also use this generator via web: [https://generator.l-a.site/](https://g
 
 ## Installation
 
-First, install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
+First, install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [npm](https://www.npmjs.com/):
 
 ```bash
 npm install -g yo
 ```
+
+We assume you have pre-installed a recent version of [node.js](https://nodejs.org/), you can use for eg. https://www.npmjs.com/package/n to get update it.
+ 
 As this is a `yeoman` development environment you can get some `EPERM` or `EACCESS` errors, so check the [yeoman setup guide](https://yeoman.io/codelab/setup.html) for proper configuration.
 
 Later, install the generator itself:
@@ -43,7 +46,7 @@ Later, install the generator itself:
 npm install -g generator-living-atlas
 ```
 
-Then generate your new project:
+Then generate your new LA project:
 
 ```bash
 yo living-atlas

@@ -1,5 +1,6 @@
 <a name="unreleased"></a>
 ## [Unreleased]
+- Updated README, thanks to @jloomisVCE for the feedback
 
 <a name="v1.1.1"></a>
 ## v1.1.1 - 2020-10-19
@@ -11,4 +12,4 @@
 <a name="v1.1.0"></a>
 ## v1.1.0 - 2020-10-19
 ### Layouts
-- Configurable layouts per service. This prevents that skin_layout variable is overwritten when several services run in the same server
+- Configurable layouts per service. This prevents that `skin_layout` variable is overwritten when several services run in the same server
