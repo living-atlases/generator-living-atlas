@@ -28,29 +28,45 @@ Also, thanks to `yeoman`, you can rerun this generator, for instance, to enable 
 
 You can also use this generator via web: [https://generator.l-a.site/](https://generator.l-a.site/).
 
-## Installation
+## Prerequisites
 
-First, install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [npm](https://www.npmjs.com/):
+### node/npm
+
+We assume you have pre-installed a recent version of [node.js](https://nodejs.org/), you can use for eg. https://www.npmjs.com/package/n to get update it.
+
+### ala-install
+
+You will need also to clone or download the [ala-install](https://github.com/AtlasOfLivingAustralia/) repository. We recommend to use the stable `v2.0.0` release, for instance with:
+
+### yeoman
+
+Install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [npm](https://www.npmjs.com/):
 
 ```bash
 npm install -g yo
 ```
 
-We assume you have pre-installed a recent version of [node.js](https://nodejs.org/), you can use for eg. https://www.npmjs.com/package/n to get update it.
- 
 As this is a `yeoman` development environment you can get some `EPERM` or `EACCESS` errors, so check the [yeoman setup guide](https://yeoman.io/codelab/setup.html) for proper configuration.
 
-Later, install the generator itself:
+```bash
+git clone --depth 1 --branch v2.0.0 https://github.com/AtlasOfLivingAustralia/ala-install.git
+```
+
+## Installation
+
+Later, install the LA generator itself:
 
 ```bash
 npm install -g generator-living-atlas
 ```
 
-Then generate your new LA project:
+Then generate your new LA project, just type:
 
 ```bash
 yo living-atlas
 ```
+
+and follow the questions.
 
 ## Options
 

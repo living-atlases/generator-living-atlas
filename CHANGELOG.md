@@ -1,6 +1,11 @@
 <a name="unreleased"></a>
 ## [Unreleased]
+
+<a name="v1.1.2"></a>
+## v1.1.1 - 2020-10-27
+
 - Updated README, thanks to @jloomisVCE for the feedback
+- DOI service updated to version 1.1
 
 <a name="v1.1.1"></a>
 ## v1.1.1 - 2020-10-19
