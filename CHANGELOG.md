@@ -1,6 +1,8 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+- Updated README
+
 <a name="v1.1.3"></a>
 ## v1.1.3 - 2020-10-27
 
@@ -17,7 +19,7 @@
 
 ### Layouts
 - set `header_and_footer_version` to `2` as in the default in new layouts
-- remove old skin_layout vars after PR https://github.com/AtlasOfLivingAustralia/ala-install/pull/443
+- remove old `skin_layout` variables after PR https://github.com/AtlasOfLivingAustralia/ala-install/pull/443
 
 <a name="v1.1.0"></a>
 ## v1.1.0 - 2020-10-19
