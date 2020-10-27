@@ -38,6 +38,10 @@ We assume you have pre-installed a recent version of [node.js](https://nodejs.or
 
 You will need also to clone or download the [ala-install](https://github.com/AtlasOfLivingAustralia/) repository. We recommend to use the stable `v2.0.0` release, for instance with:
 
+```bash
+git clone --depth 1 --branch v2.0.0 https://github.com/AtlasOfLivingAustralia/ala-install.git
+```
+
 ### yeoman
 
 Install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [npm](https://www.npmjs.com/):
@@ -47,10 +51,6 @@ npm install -g yo
 ```
 
 As this is a `yeoman` development environment you can get some `EPERM` or `EACCESS` errors, so check the [yeoman setup guide](https://yeoman.io/codelab/setup.html) for proper configuration.
-
-```bash
-git clone --depth 1 --branch v2.0.0 https://github.com/AtlasOfLivingAustralia/ala-install.git
-```
 
 ## Installation
 
