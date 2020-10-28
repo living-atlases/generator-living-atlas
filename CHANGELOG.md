@@ -1,7 +1,11 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.4"></a>
+## v1.1.4 - 2020-10-28
+
 - Updated README
+- Set default value for `facets_cached` in `biocache-hub`.
 
 <a name="v1.1.3"></a>
 ## v1.1.3 - 2020-10-27
