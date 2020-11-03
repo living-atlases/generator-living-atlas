@@ -1,6 +1,11 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.5"></a>
+## v1.1.5 - 2020-11-03
+
+- Fix default value of `doi_service_url` when the DOI service is not installed or enabled. Thanks to @jloomisVCE for the feedback. It seems that this brokes the downloads
+
 <a name="v1.1.4"></a>
 ## v1.1.4 - 2020-10-28
 
