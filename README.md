@@ -49,8 +49,13 @@ Install [Yeoman](http://yeoman.io) and `generator-living-atlas` using [npm](http
 ```bash
 npm install -g yo
 ```
-
 As this is a `yeoman` development environment you can get some `EPERM` or `EACCESS` errors, so check the [yeoman setup guide](https://yeoman.io/codelab/setup.html) for proper configuration.
+
+### python docopt 
+
+```
+apt install python-docopt
+```
 
 ## Installation
 
