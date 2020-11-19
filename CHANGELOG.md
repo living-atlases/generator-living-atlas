@@ -1,6 +1,12 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.6"></a>
+## v1.1.6 - 2020-11-19
+
+- Added several new variables to prevent default ALA values. Thanks to @jloomisVCE for his feedback
+- New variables added to `local-extra.sample` (like additional support emails), please compare yours with the `.sample` with some tool like `meld` to see the differences.
+
 <a name="v1.1.5"></a>
 ## v1.1.5 - 2020-11-03
 
