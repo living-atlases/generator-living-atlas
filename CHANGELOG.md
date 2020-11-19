@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.8"></a>
+## v1.1.8 - 2020-11-19
+- Removed wrong variable
+
 <a name="v1.1.7"></a>
 ## v1.1.7 - 2020-11-19
 - Reorder doi optional service vars used by bioache and others
