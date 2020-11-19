@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.7"></a>
+## v1.1.7 - 2020-11-19
+- Reorder doi optional service vars used by bioache and others
+
 <a name="v1.1.6"></a>
 ## v1.1.6 - 2020-11-19
 
