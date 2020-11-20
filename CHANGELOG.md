@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.10"></a>
+## v1.1.10 - 2020-11-20
+- Added additional options to `ansiblew` (`-n` abbreviation, `--extra` and `--continue` on failure)
+
 <a name="v1.1.9"></a>
 ## v1.1.9 - 2020-11-20
 - Added slash to doi api url that made biocache-service to not start
