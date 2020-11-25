@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.11"></a>
+## v1.1.11 - 2020-11-25
+- Added `skip_demo_etc_hosts` variable to skip `/etc/hosts` modification
+
 <a name="v1.1.10"></a>
 ## v1.1.10 - 2020-11-20
 - Added additional options to `ansiblew` (`-n` abbreviation, `--extra` and `--continue` on failure)
