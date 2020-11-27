@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.12"></a>
+## v1.1.12 - 2020-11-27
+- Added `alerts_apikey` variable for `biocache-hubs`.
+
 <a name="v1.1.11"></a>
 ## v1.1.11 - 2020-11-25
 - Added `skip_demo_etc_hosts` variable to skip `/etc/hosts` modification
