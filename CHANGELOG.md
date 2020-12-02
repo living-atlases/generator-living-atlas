@@ -1,6 +1,11 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.13"></a>
+## v1.1.13 - 2020-12-02
+- Changed comment of `prod` to `production` as doi deployment_env
+- Update README recommending to use `ala-install` `2.0.2`
+
 <a name="v1.1.12"></a>
 ## v1.1.12 - 2020-11-27
 - Added `alerts_apikey` variable for `biocache-hubs`.
