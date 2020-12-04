@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.14"></a>
+## v1.1.14 - 2020-12-04
+- Increased download offline queue values to default ones
+
 <a name="v1.1.13"></a>
 ## v1.1.13 - 2020-12-02
 - Changed comment of `prod` to `production` as doi deployment_env
