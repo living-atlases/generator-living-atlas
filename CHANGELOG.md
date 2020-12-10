@@ -1,5 +1,6 @@
 <a name="unreleased"></a>
 ## [Unreleased]
+- Fix typo in `locahost` (#8) and `mail_smtp_host` instead of `mail_smtp_port` instead of `mail.smtp.host` etc
 
 <a name="v1.1.14"></a>
 ## v1.1.14 - 2020-12-04
