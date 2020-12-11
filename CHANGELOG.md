@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
+
+<a name="v1.1.15"></a>
+## v1.1.15 - 2020-12-11
 - Fix typo in `locahost` (#8) and `mail_smtp_host` instead of `mail_smtp_port` instead of `mail.smtp.host` etc
+- Update README recommending to use `ala-install` `2.0.3`
 
 <a name="v1.1.14"></a>
 ## v1.1.14 - 2020-12-04
