@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.17"></a>
+## v1.1.17 - 2020-12-14
+- LA software versions updated
+
 <a name="v1.1.16"></a>
 ## v1.1.16 - 2020-12-14
 - Partial improvements for #9 adding more documentation in `local-extras` about how to configure the api_keys
