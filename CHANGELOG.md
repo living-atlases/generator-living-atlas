@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.16"></a>
+## v1.1.16 - 2020-12-14
+- Partial improvements for #9 adding more documentation in `local-extras` about how to configure the api_keys
+
 <a name="v1.1.15"></a>
 ## v1.1.15 - 2020-12-11
 - Fix typo in `locahost` (#8) and `mail_smtp_host` instead of `mail_smtp_port` instead of `mail.smtp.host` etc
