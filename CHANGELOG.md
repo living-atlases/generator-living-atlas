@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.18"></a>
+## v1.1.18 - 2020-12-15
+- Downgrade biocache-service to `2.2.3` as newer versions require tomcat8/9
+
 <a name="v1.1.17"></a>
 ## v1.1.17 - 2020-12-14
 - LA software versions updated
