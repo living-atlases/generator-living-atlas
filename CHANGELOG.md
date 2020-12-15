@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.19"></a>
+## v1.1.19 - 2020-12-15
+- Upgrade `doi` and `alerts` service
+
 <a name="v1.1.18"></a>
 ## v1.1.18 - 2020-12-15
 - Downgrade biocache-service to `2.2.3` as newer versions require tomcat8/9
