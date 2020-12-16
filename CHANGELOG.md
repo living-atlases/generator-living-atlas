@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.20"></a>
+## v1.1.20 - 2020-12-16
+- Fixes in `dashboard` service
+
 <a name="v1.1.19"></a>
 ## v1.1.19 - 2020-12-15
 - Upgrade `doi` and `alerts` service
