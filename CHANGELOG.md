@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.21"></a>
+## v1.1.21 - 2020-12-17
+- Fixes in some `dashboard` service urls
+
 <a name="v1.1.20"></a>
 ## v1.1.20 - 2020-12-16
 - Fixes in `dashboard` service
