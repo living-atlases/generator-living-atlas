@@ -36,10 +36,10 @@ We assume you have pre-installed a recent version of [node.js](https://nodejs.or
 
 ### ala-install
 
-You will need also to clone or download the [ala-install](https://github.com/AtlasOfLivingAustralia/) repository. We recommend to use the stable `v2.0.4` release, for instance with:
+You will need also to clone or download the [ala-install](https://github.com/AtlasOfLivingAustralia/) repository. We recommend to use the stable `v2.0.5` release, for instance with:
 
 ```bash
-git clone --depth 1 --branch v2.0.4 https://github.com/AtlasOfLivingAustralia/ala-install.git
+git clone --depth 1 --branch v2.0.5 https://github.com/AtlasOfLivingAustralia/ala-install.git
 ```
 
 ### yeoman

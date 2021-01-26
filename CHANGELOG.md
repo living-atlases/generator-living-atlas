@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.23"></a>
+## v1.1.23 - 2021-01-26
+- Update our README recommending to use `ala-install` `2.0.5`
+
 <a name="v1.1.22"></a>
 ## v1.1.22 - 2021-01-26
 - Add some news vars to run `dashboard` correctly
