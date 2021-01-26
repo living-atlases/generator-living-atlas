@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.22"></a>
+## v1.1.22 - 2021-01-26
+- Add some news vars to run `dashboard` correctly
+
 <a name="v1.1.21"></a>
 ## v1.1.21 - 2020-12-17
 - Fixes in some `dashboard` service urls
