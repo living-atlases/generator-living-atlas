@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.24"></a>
+## v1.1.24 - 2021-01-27
+- `ansiblew` now admits to exec multiple modules instead of one, for instance: `ansiblew cas spatial lists`
+
 <a name="v1.1.23"></a>
 ## v1.1.23 - 2021-01-26
 - Update our README recommending to use `ala-install` `2.0.5`

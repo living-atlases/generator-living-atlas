@@ -9,7 +9,7 @@ the real commands.
 With 'main' only operates over your main host.
 
 Usage:
-   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ main | <% for(var j=0; j < LA_services_machines.length; j++) { %><%= LA_services_machines[j].map.name %> | <% } %> all ]
+   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ ( main<% for(var j=0; j < LA_services_machines.length; j++) { %> | <%= LA_services_machines[j].map.name %><% } %> )... | all ]
    ansiblew -h | --help
    ansiblew -v | --version
 
