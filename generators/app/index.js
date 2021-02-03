@@ -1030,11 +1030,7 @@ module.exports = class extends Generator {
       for (let num = 0; num < 50; num++) {
         this.answers.LA_passwords.push(niceware.generatePassphrase(6).join(""));
       }
-      this.answers.LA_apikeys = [];
-      for (let num = 0; num < 50; num++) {
-        this.answers.LA_apikeys.push(uuidv4());
-      }
-      let self = this;
+
       const salt = bcrypt.genSaltSync(10, "a");
       this.answers.LA_admin_bcrypt_password = bcrypt.hashSync(
         this.answers.LA_passwords[23],
@@ -1049,6 +1045,11 @@ module.exports = class extends Generator {
         `To create a different one modify this in: ${dest}/${filePrefix}-local-passwords.ini`
       );
       logger("prior to deploy the CAS auth system.");
+    }
+
+    this.answers.LA_apikeys = [];
+    for (let num = 0; num < 50; num++) {
+      this.answers.LA_apikeys.push(uuidv4());
     }
 
     if (!this.fs.exists(`${dest}/${filePrefix}-local-extras.ini`)) {

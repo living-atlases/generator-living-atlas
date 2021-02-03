@@ -1,8 +1,14 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.26"></a>
+## v1.1.26 - 2021-02-03
+- Serveral fixes in apikeys autogeneration and db insertion
+- apikeys moved to local-password.ini
+- Fix for replay-dont-ask (apikeys missed)
+
 <a name="v1.1.25"></a>
-## v1.1.25 - 2021-01-27
+## v1.1.25 - 2021-02-03
 - First admin user creation for new LA deployments: https://github.com/AtlasOfLivingAustralia/ala-install/pull/460
 - apikeys autogeneration and db insertion: https://github.com/AtlasOfLivingAustralia/ala-install/pull/461
 
