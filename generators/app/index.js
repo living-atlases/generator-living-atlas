@@ -10,6 +10,8 @@ const yosay = require("onionsay");
 const parseDomain = require("parse-domain");
 const niceware = require("niceware");
 const fsN = require("fs");
+const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcrypt");
 
 let defaultStore = false;
 let logger;
@@ -619,6 +621,29 @@ module.exports = class extends Generator {
             validate: (input) => isCorrectHostname(input),
             default: (a) => a.LA_domain,
           },
+
+          new PromptSubdomainFor("cas", "auth", true, true),
+          new PromptHostnameFor("cas", "auth"),
+          new PromptHostnameInputFor("cas"),
+          new PromptUrlFor("cas", "auth"),
+          {
+            store: true,
+            type: "input",
+            name: "LA_biocache_backend_hostname",
+            message: `LA ${em("biocache-backend")} hostname`,
+            validate: (input) => isCorrectHostname(input),
+            filter: (input) =>
+              new Promise((resolve) => {
+                storeMachine("biocache_backend", input).then((input) =>
+                  storeMachine("biocache_cli", input).then((input) =>
+                    storeMachine("nameindexer", input).then((input) =>
+                      resolve(input)
+                    )
+                  )
+                );
+              }),
+            default: (a) => `${a.LA_main_hostname}`,
+          },
           {
             store: defaultStore,
             type: "list",
@@ -749,28 +774,6 @@ module.exports = class extends Generator {
           new PromptUrlFor("solr", "index"),
           new PromptPathFor("solr", "solr"),
 
-          new PromptSubdomainFor("cas", "auth", true, true),
-          new PromptHostnameFor("cas", "auth"),
-          new PromptHostnameInputFor("cas"),
-          new PromptUrlFor("cas", "auth"),
-          {
-            store: true,
-            type: "input",
-            name: "LA_biocache_backend_hostname",
-            message: `LA ${em("biocache-backend")} hostname`,
-            validate: (input) => isCorrectHostname(input),
-            filter: (input) =>
-              new Promise((resolve) => {
-                storeMachine("biocache_backend", input).then((input) =>
-                  storeMachine("biocache_cli", input).then((input) =>
-                    storeMachine("nameindexer", input).then((input) =>
-                      resolve(input)
-                    )
-                  )
-                );
-              }),
-            default: (a) => `${a.LA_main_hostname}`,
-          },
           new PromptSubdomainFor(
             "spatial",
             "spatial",
@@ -1024,9 +1027,28 @@ module.exports = class extends Generator {
       // We'll generate some easy but strong passwords for our new database, etc
 
       this.answers.LA_passwords = [];
-      for (let num = 0; num < 40; num++) {
-        this.answers.LA_passwords.push(niceware.generatePassphrase(4).join(""));
+      for (let num = 0; num < 50; num++) {
+        this.answers.LA_passwords.push(niceware.generatePassphrase(6).join(""));
       }
+      this.answers.LA_apikeys = [];
+      for (let num = 0; num < 50; num++) {
+        this.answers.LA_apikeys.push(uuidv4());
+      }
+      let self = this;
+      const salt = bcrypt.genSaltSync(10, "a");
+      this.answers.LA_admin_bcrypt_password = bcrypt.hashSync(
+        this.answers.LA_passwords[23],
+        salt
+      );
+
+      logger(
+        `Important: We'll create an admin user with email: support@${this.answers.LA_domain} and password: ${this.answers.LA_passwords[23]}`
+      );
+
+      logger(
+        `To create a different one modify this in: ${dest}/${filePrefix}-local-passwords.ini`
+      );
+      logger("prior to deploy the CAS auth system.");
     }
 
     if (!this.fs.exists(`${dest}/${filePrefix}-local-extras.ini`)) {

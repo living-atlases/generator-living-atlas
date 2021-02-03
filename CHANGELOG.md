@@ -1,6 +1,11 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.25"></a>
+## v1.1.25 - 2021-01-27
+- First admin user creation for new LA deployments: https://github.com/AtlasOfLivingAustralia/ala-install/pull/460
+- apikeys autogeneration and db insertion: https://github.com/AtlasOfLivingAustralia/ala-install/pull/461
+
 <a name="v1.1.24"></a>
 ## v1.1.24 - 2021-01-27
 - `ansiblew` now admits to exec multiple modules instead of one, for instance: `ansiblew cas spatial lists`
