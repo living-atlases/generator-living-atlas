@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.28"></a>
+## v1.1.28 - 2021-02-11
+- Disable admin user generation while the last ala-install PR are merged
+
 <a name="v1.1.27"></a>
 ## v1.1.27 - 2021-02-05
 - Disable apikey generation while the last ala-install PR are merged
