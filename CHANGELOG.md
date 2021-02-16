@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.29"></a>
+## v1.1.29 - 2021-02-16
+- New versions of alerts and bie-hub
+
 <a name="v1.1.28"></a>
 ## v1.1.28 - 2021-02-11
 - Disable admin user generation while the last ala-install PR are merged
