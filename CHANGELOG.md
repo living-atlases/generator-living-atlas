@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 ## [Unreleased]
+- Breaking change: We are joining our inventories in a single one + a single local-extras.ini.
+Please join all your local-extras.ini files into a single one. Follow the generator suggestions.
+- Added new variables to inventories when provided by the la-toolkit.
+- Fix parse-domain call.
 
 <a name="v1.1.29"></a>
 ## v1.1.29 - 2021-02-16

@@ -93,12 +93,8 @@ if __name__ == '__main__':
         let isSpatialInv = LA_services_machines[j].map.name === 'spatial';
         let isCasInv = LA_services_machines[j].map.name === 'cas';
         let extraInv;
-        if (isSpatialInv) {
-           extraInv = `-i ${LA_pkg_name}-spatial-inventory.ini -i ${LA_pkg_name}-spatial-local-extras.ini`;
-        }
-        if (isCasInv) {
-           extraInv = `-i ${LA_pkg_name}-cas-inventory.ini -i ${LA_pkg_name}-cas-local-extras.ini`
-        }%>if args['<%= LA_services_machines[j].map.name %>'] or doall:
+
+        %>if args['<%= LA_services_machines[j].map.name %>'] or doall:
         extraInventories = "<%= extraInv %>"
         newServerCmd = "%s ansible-playbook %s -u %s %s %s %s/ansible/newserver.yml %s --limit %s --extra-vars 'target=all ala_install_repo=%s'" % (cmdPrefix, additionalParams, user, baseInventories, extraInventories, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>", alainstall)
         execCmd(newServerCmd, fail_on_error)
