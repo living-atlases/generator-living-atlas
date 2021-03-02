@@ -621,29 +621,6 @@ module.exports = class extends Generator {
             validate: (input) => isCorrectHostname(input),
             default: (a) => a.LA_domain,
           },
-
-          new PromptSubdomainFor('cas', 'auth', true, true),
-          new PromptHostnameFor('cas', 'auth'),
-          new PromptHostnameInputFor('cas'),
-          new PromptUrlFor('cas', 'auth'),
-          {
-            store: true,
-            type: 'input',
-            name: 'LA_biocache_backend_hostname',
-            message: `LA ${em('biocache-backend')} hostname`,
-            validate: (input) => isCorrectHostname(input),
-            filter: (input) =>
-              new Promise((resolve) => {
-                storeMachine('biocache_backend', input).then((input) =>
-                  storeMachine('biocache_cli', input).then((input) =>
-                    storeMachine('nameindexer', input).then((input) =>
-                      resolve(input)
-                    )
-                  )
-                );
-              }),
-            default: (a) => `${a.LA_main_hostname}`,
-          },
           {
             store: defaultStore,
             type: 'list',
@@ -773,6 +750,29 @@ module.exports = class extends Generator {
           new PromptHostnameInputFor('solr'),
           new PromptUrlFor('solr', 'index'),
           new PromptPathFor('solr', 'solr'),
+
+          new PromptSubdomainFor('cas', 'auth', true, true),
+          new PromptHostnameFor('cas', 'auth'),
+          new PromptHostnameInputFor('cas'),
+          new PromptUrlFor('cas', 'auth'),
+          {
+            store: true,
+            type: 'input',
+            name: 'LA_biocache_backend_hostname',
+            message: `LA ${em('biocache-backend')} hostname`,
+            validate: (input) => isCorrectHostname(input),
+            filter: (input) =>
+              new Promise((resolve) => {
+                storeMachine('biocache_backend', input).then((input) =>
+                  storeMachine('biocache_cli', input).then((input) =>
+                    storeMachine('nameindexer', input).then((input) =>
+                      resolve(input)
+                    )
+                  )
+                );
+              }),
+            default: (a) => `${a.LA_main_hostname}`,
+          },
 
           new PromptSubdomainFor(
             'spatial',
