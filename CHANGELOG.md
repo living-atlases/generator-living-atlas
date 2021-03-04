@@ -1,6 +1,11 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.31"></a>
+## v1.1.31 - 2021-03-04
+- Migration to tomcat8
+- Upgrade of biocache-service for tomcat8
+
 <a name="v1.1.30"></a>
 ## v1.1.30 - 2021-03-04
 - Breaking change: We are joining our inventories in a single one + a single local-extras.ini.
