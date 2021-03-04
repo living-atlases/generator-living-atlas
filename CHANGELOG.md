@@ -1,9 +1,14 @@
 <a name="unreleased"></a>
 ## [Unreleased]
+
+<a name="v1.1.30"></a>
+## v1.1.30 - 2021-03-04
 - Breaking change: We are joining our inventories in a single one + a single local-extras.ini.
 Please join all your local-extras.ini files into a single one. Follow the generator suggestions.
 - Added new variables to inventories when provided by the la-toolkit.
 - Fix parse-domain call.
+- Stable logger version.
+- Reenable apikey generation and admin user generation (as the ala-install PR where merged)
 
 <a name="v1.1.29"></a>
 ## v1.1.29 - 2021-02-16
