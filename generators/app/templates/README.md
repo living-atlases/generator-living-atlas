@@ -81,18 +81,12 @@ With access to this machine/s you can run ansible with commands like:
 export AI=<location-of-your-cloned-ala-install-repo>
 
 #  For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
-<% let baseInv=`-i ${LA_pkg_name}-inventory.yml -i ${LA_pkg_name}-local-extras.yml`; let passInv = `-i ${LA_pkg_name}-local-passwords.yml`; %>
+<% let baseInv=`-i ${LA_pkg_name}-inventory.ini -i ${LA_pkg_name}-local-extras.ini`; let passInv = `-i ${LA_pkg_name}-local-passwords.ini`; %>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%= passInv %> $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
 <% for(var j=0; j < LA_services_machines.length; j++) {
 let isSpatialInv = LA_services_machines[j].map.name === 'spatial';
 let isCasInv = LA_services_machines[j].map.name === 'cas';
-let extraInv = `-i ${LA_pkg_name}-local-passwords.yml`;
-if (isSpatialInv) {
-    extraInv = `-i ${LA_pkg_name}-spatial-inventory.yml -i ${LA_pkg_name}-spatial-local-extras.yml -i ${LA_pkg_name}-local-passwords.yml`;
-}
-if (isCasInv) {
-    extraInv = `-i ${LA_pkg_name}-cas-inventory.yml -i ${LA_pkg_name}-cas-local-extras.yml -i ${LA_pkg_name}-local-passwords.yml --extra-vars "ala_install_repo=$AI"`;
-}
+let extraInv = `-i ${LA_pkg_name}-local-passwords.ini`;
 %>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%- extraInv %> $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
 ```
@@ -155,4 +149,4 @@ You can also use `yo living-atlas --replay-dont-ask` if you only want to repeat 
 
 Also, you can use `--debug` to see some verbose debug info.
 
-We recommend to override and set variables adding then to `<%= LA_pkg_name %>-local-extras.yml` and `<%= LA_pkg_name %>-spatial-local-extras.yml` without modify the generated `<%= LA_pkg_name %>-inventory.yml` and `<%= LA_pkg_name %>-spatial-inventory.yml`, so you can rerun the generator in the future without lost local changes. The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.yml` files to add new vars, etc.
+We recommend to override and set variables adding then to `<%= LA_pkg_name %>-local-extras.ini` without modify the generated `<%= LA_pkg_name %>-inventory.ini`, so you can rerun the generator in the future without lost local changes. The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.ini` files to add new vars, etc.
