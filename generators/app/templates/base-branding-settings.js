@@ -5,6 +5,7 @@ module.exports = {
   mainDomain: '<%= LA_domain %>', // used for cookies (without http/https)
   mainLAUrl: '<%= LA_urls_prefix %><%= LA_domain %>',
   baseFooterUrl: '<%= LA_urls_prefix %><%= LA_domain %>',
+  theme: '<%_ if (typeof LA_theme != 'undefined') { _%><%= LA_theme %><%_ } else { _%>simplex<%_ } _%>', // for now 'material', 'clean', 'superhero', 'yeti', 'cosmo', 'darkly', 'paper', 'sandstone', 'simplex', 'slate' or 'flatly' themes are available. See the last ones in: https://bootswatch.com/3/
   services: {
     collectory: { url: '<%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>', title: 'Collections' },
     biocache: { url: '<%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>', title: 'Occurrence records' },

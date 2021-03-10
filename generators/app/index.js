@@ -1136,11 +1136,34 @@ module.exports = class extends Generator {
 
     if (useBranding) {
       if (this.fs.exists(brandSettings)) {
-        this.fs.copyTpl(
-          this.templatePath('base-branding-settings.js'),
-          this.destinationPath(`${brandSettings}.sample`),
-          this.answers
-        );
+        if (
+          this.answers.LA_theme != null &&
+          this.answers.LA_theme != 'custom'
+        ) {
+          // try to change the theme in the settings
+          logger(
+            'INFO: trying to setup the theme of current branding settings'
+          );
+          let brandSettingsContent = this.fs.read(
+            this.destinationPath(brandSettings)
+          );
+          brandSettingsContent = brandSettingsContent.replace(
+            /^  theme:.+$/m,
+            `  theme: '${this.answers.LA_theme}',`
+          );
+          this.fs.write(
+            this.destinationPath(brandSettings),
+            brandSettingsContent
+          );
+        } else {
+          // just copy a sample
+          logger('INFO: copying a branding settings sample');
+          this.fs.copyTpl(
+            this.templatePath('base-branding-settings.js'),
+            this.destinationPath(`${brandSettings}.sample`),
+            this.answers
+          );
+        }
       } else {
         logger(
           `INFO: Generating a sample branding in '${brandDest}' directory. Please wait`
