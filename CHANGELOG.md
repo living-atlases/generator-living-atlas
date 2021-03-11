@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
+- Removed default passwords/apikeys that are now in -local-passwords.ini
+- More variables from la-toolkit
+- Theme configuration
+- Change .yml extensions to new .ini in README. Thanks Deniss Marinuks for the feedback
+- Spatial versions upgraded
 
 <a name="v1.1.31"></a>
 ## v1.1.31 - 2021-03-04
