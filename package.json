@@ -40,6 +40,7 @@
     "bcrypt": "^5.0.0",
     "chalk": "^2.1.0",
     "child_process": "^1.0.2",
+    "js-base64": "^3.6.0",
     "niceware": "^1.0.7",
     "onionsay": "github:theonion/onionsay",
     "parse-domain": "^3.0.3",

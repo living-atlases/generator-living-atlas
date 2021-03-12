@@ -33,6 +33,7 @@ Apache 2.0 License
 from docopt import docopt
 import sys
 import subprocess
+from pathlib import Path
 
 def execCmd(cmd, fail_on_error):
     code = subprocess.call(cmd, shell=True)
@@ -54,6 +55,7 @@ if __name__ == '__main__':
     alainstall = args['--alainstall']
     cmdPrefix = "echo "
     extras = ""
+    extraInvs = ""
     pkg = "<%= LA_pkg_name %>"
     extra_vars = args['--extra']
     fail_on_error = not args['--continue']
@@ -81,6 +83,10 @@ if __name__ == '__main__':
     if debug:
         print("Extras: %s" % (extras))
 
+    la_toolkit_inv = Path("%s-toolkit.ini" % pkg)
+    if la_toolkit_inv.is_file():
+        extraInvs = "-i %s-toolkit.ini" % pkg
+
     baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini" % (pkg, pkg)
 
     if main or doall:
@@ -95,7 +101,7 @@ if __name__ == '__main__':
         let extraInv;
 
         %>if args['<%= LA_services_machines[j].map.name %>'] or doall:
-        extraInventories = "<%= extraInv %>"
+        extraInventories = "<%= extraInv %> %s" % extraInvs
         newServerCmd = "%s ansible-playbook %s -u %s %s %s %s/ansible/newserver.yml %s --limit %s --extra-vars 'target=all ala_install_repo=%s'" % (cmdPrefix, additionalParams, user, baseInventories, extraInventories, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>", alainstall)
         execCmd(newServerCmd, fail_on_error)
         otherCmd = "%s ansible-playbook %s -u %s %s %s -i %s-local-passwords.ini %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s --extra-vars 'ala_install_repo=%s'" % (cmdPrefix, additionalParams, user, baseInventories, extraInventories, pkg, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>", alainstall)
