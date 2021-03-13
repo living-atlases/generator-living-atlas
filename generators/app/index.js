@@ -223,7 +223,7 @@ const storeMachine = (name, machine) =>
         });
       }
     } else {
-      reject(new Error(`Invalid hostname ${machine}`));
+      reject(new Error(`Invalid hostname '${machine}' for '${name}'`));
     }
     if (debug) logger(machines);
     if (debug) logger(machinesSorted);
