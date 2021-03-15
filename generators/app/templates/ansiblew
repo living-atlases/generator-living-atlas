@@ -33,7 +33,7 @@ Apache 2.0 License
 from docopt import docopt
 import sys
 import subprocess
-from pathlib import Path
+import os.path
 
 def execCmd(cmd, fail_on_error):
     code = subprocess.call(cmd, shell=True)
@@ -83,8 +83,7 @@ if __name__ == '__main__':
     if debug:
         print("Extras: %s" % (extras))
 
-    la_toolkit_inv = Path("%s-toolkit.ini" % pkg)
-    if la_toolkit_inv.is_file():
+    if os.path.isfile("%s-toolkit.ini" % pkg):
         extraInvs = "-i %s-toolkit.ini" % pkg
 
     baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini" % (pkg, pkg)
