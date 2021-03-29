@@ -1,6 +1,12 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.33"></a>
+## v1.1.33 - 2021-03-29
+- Simplify newServer playbook call
+- Pre-deploy inventories
+- Passwords of spatial service moved from all:vars section
+
 <a name="v1.1.32"></a>
 ## v1.1.32 - 2021-03-24
 - Removed default passwords/apikeys that are now in -local-passwords.ini
