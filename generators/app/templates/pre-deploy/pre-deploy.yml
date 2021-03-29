@@ -1,0 +1,8 @@
+---
+- hosts: all
+  roles:
+    - pre-deploy
+<% if (typeof LA_etc_hosts != 'undefined') { %>
+    - { role: ypsman.hosts }
+<% } %>
+    - { role: weareinteractive.sudo }

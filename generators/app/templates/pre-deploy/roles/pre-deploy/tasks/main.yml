@@ -1,0 +1,72 @@
+# Addionial LA pre deploy tasks
+
+# https://github.com/AtlasOfLivingAustralia/documentation/wiki/Before-Start-Your-LA-Installation#solr-limits
+- name: Add nofile limits for solr domain hard
+  community.general.pam_limits:
+    domain: 'solr'
+    limit_type: hard
+    limit_item: nofile
+    value: "65535"
+- name: Add nofile limits for solr domain soft
+  community.general.pam_limits:
+    domain: 'solr'
+    limit_type: soft
+    limit_item: nofile
+    value: "65535"
+- name: Add nofile limits for solr domain hard
+  community.general.pam_limits:
+    domain: 'solr'
+    limit_type: hard
+    limit_item: nproc
+    value: "65535"
+- name: Add nofile limits for solr domain soft
+  community.general.pam_limits:
+    domain: 'solr'
+    limit_type: soft
+    limit_item: nproc
+    value: "65535"
+  tags: pre-task-solr-limits
+
+# https://github.com/AtlasOfLivingAustralia/documentation/wiki/Before-Start-Your-LA-Installation#default-user-ubuntu
+- name: Add the user "{{def_ansible_user}}"
+  user: name="{{def_ansible_user}}" shell=/bin/bash
+  tags: pre-task-def-user
+
+# https://github.com/AtlasOfLivingAustralia/documentation/wiki/SSH-for-Beginners#ssh-keys
+- name: Add the ssh key to user "{{def_ansible_user}}"
+  authorized_key:
+    user: "{{def_ansible_user}}"
+    state: present
+    key: '{{ item }}'
+  with_file: "{{ ssh_keys }}"
+  tags: pre-task-ssh-keys
+
+  # Comented for security reasons
+  # - name: Add the ssh key to user 'root'
+  # authorized_key:
+  #   user: root
+  #   state: present
+  #   key: '{{ item }}'
+  # with_file: "{{ ssh_keys }}"
+  # tags: pre-task-ssh-keys
+
+- name: Add additional dependencies for monitoring, troubleshooting, ...
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - nagios-plugins
+    - netcat
+    - curl
+    - lsof
+    - iputils-ping
+  tags: pre-task-deps
+
+- name: copy check_mongo for nagios/icinga
+  copy:
+    src: files/check_mongodb.py
+    dest: /usr/lib/nagios/plugins/check_mongodb
+    owner: root
+    group: root
+    mode: 0755
+  tags: pre-task-deps

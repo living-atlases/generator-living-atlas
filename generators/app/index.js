@@ -1254,6 +1254,15 @@ module.exports = class extends Generator {
       `maxmind_license_key = ${this.answers.LA_variable_maxmind_license_key}`
     );
 
+    const preDeployDest = `${this.answers.LA_pkg_name}-pre-deploy`;
+    const postDeployDest = `${this.answers.LA_pkg_name}-post-deploy`;
+
+    this.fs.copyTpl(
+      this.templatePath('pre-deploy'),
+      this.destinationPath(preDeployDest),
+      this.answers
+    );
+
     this.fs.copyTpl(
       this.templatePath('ansiblew'),
       this.destinationPath(`${dest}/ansiblew`),

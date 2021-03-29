@@ -1,0 +1,8 @@
+---
+roles:
+  - name: weareinteractive.sudo
+    version: 1.14.1
+  - name: ypsman.hosts
+collections:
+  - name: community.general
+    version: 2.2.0

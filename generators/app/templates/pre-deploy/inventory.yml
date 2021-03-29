@@ -1,0 +1,17 @@
+all:
+  hosts:<% if (typeof LA_hostnames != 'undefined') { %><% LA_hostnames.split("|").forEach(element => { %>
+    <%- element %>:<% }); %><% } else { %>
+    all:<% } %>
+  vars:<% if (typeof LA_etc_hosts != 'undefined') { %>
+    hosts_entries: |
+<%- LA_etc_hosts %><% } %>
+    # previously ubuntu without quotes:
+    def_ansible_user: '<% if (typeof LA_variable_ansible_user != 'undefined') { %><%- LA_variable_ansible_user %><% } else { %>ubuntu<% } %>'
+    sudo_defaults:
+      - name: '<% if (typeof LA_variable_ansible_user != 'undefined') { %><%- LA_variable_ansible_user %><% } else { %>ubuntu<% } %>'
+        # https://docs.ansible.com/ansible/2.3/intro_configuration.html#pipelining
+        defaults: '!requiretty'
+    sudo_users:
+      - name: '<% if (typeof LA_variable_ansible_user != 'undefined') { %><%- LA_variable_ansible_user %><% } else { %>ubuntu<% } %>'
+        nopasswd: yes
+    ssh_keys: [ <% if (typeof LA_ssh_keys != 'undefined') { %><%- LA_ssh_keys %><% } %> ]
