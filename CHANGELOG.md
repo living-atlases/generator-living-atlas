@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.34"></a>
+## v1.1.34 - 2021-03-30
+- More work in pre-deploy inventories
+
 <a name="v1.1.33"></a>
 ## v1.1.33 - 2021-03-29
 - Simplify newServer playbook call
