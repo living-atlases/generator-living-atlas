@@ -1,6 +1,11 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v1.1.35"></a>
+## v1.1.35 - 2021-03-30
+- Layers and pg should share the same password as by default their share the same user
+- Don't set google-keys/maxmind keys if undefined or empty
+
 <a name="v1.1.34"></a>
 ## v1.1.34 - 2021-03-30
 - More work in pre-deploy inventories
