@@ -21,6 +21,12 @@ const defUseSubdomain = (a) => {
   return a.LA_collectory_uses_subdomain;
 };
 
+const isDefined = (someString) => {
+  return (
+    someString != null && someString != 'undefined' && someString.length > 0
+  );
+};
+
 let debug = false;
 let replay = false;
 let dontAsk = false;
@@ -1230,29 +1236,33 @@ module.exports = class extends Generator {
       );
     }
 
-    replaceLine(
-      localPassDest,
-      'google_apikey[ ]*=',
-      `google_apikey = ${this.answers.LA_variable_google_api_key}`
-    );
+    if (isDefined(this.answers.LA_variable_google_api_key))
+      replaceLine(
+        localPassDest,
+        'google_apikey[ ]*=',
+        `google_apikey = ${this.answers.LA_variable_google_api_key}`
+      );
 
-    replaceLine(
-      localPassDest,
-      'google_api_key[ ]*=',
-      `google_api_key = ${this.answers.LA_variable_google_api_key}`
-    );
+    if (isDefined(this.answers.LA_variable_google_api_key))
+      replaceLine(
+        localPassDest,
+        'google_api_key[ ]*=',
+        `google_api_key = ${this.answers.LA_variable_google_api_key}`
+      );
 
-    replaceLine(
-      localPassDest,
-      'maxmind_account_id[ ]*=',
-      `maxmind_account_id = ${this.answers.LA_variable_maxmind_account_id}`
-    );
+    if (isDefined(this.answers.LA_variable_maxmind_account_id))
+      replaceLine(
+        localPassDest,
+        'maxmind_account_id[ ]*=',
+        `maxmind_account_id = ${this.answers.LA_variable_maxmind_account_id}`
+      );
 
-    replaceLine(
-      localPassDest,
-      'maxmind_license_key[ ]*=',
-      `maxmind_license_key = ${this.answers.LA_variable_maxmind_license_key}`
-    );
+    if (isDefined(this.answers.LA_variable_maxmind_license_key))
+      replaceLine(
+        localPassDest,
+        'maxmind_license_key[ ]*=',
+        `maxmind_license_key = ${this.answers.LA_variable_maxmind_license_key}`
+      );
 
     const preDeployDest = `${this.answers.LA_pkg_name}-pre-deploy`;
     const postDeployDest = `${this.answers.LA_pkg_name}-post-deploy`;
