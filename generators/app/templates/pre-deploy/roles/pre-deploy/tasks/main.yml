@@ -52,14 +52,14 @@
 
 - name: Add additional dependencies for monitoring, troubleshooting, ...
   apt:
-    name: "{{ item }}"
+    name:
+      - nagios-plugins
+      - netcat
+      - curl
+      - lsof
+      - iputils-ping
     state: present
-  with_items:
-    - nagios-plugins
-    - netcat
-    - curl
-    - lsof
-    - iputils-ping
+    autoclean: yes
   tags: pre-task-deps
 
 - name: copy check_mongo for nagios/icinga

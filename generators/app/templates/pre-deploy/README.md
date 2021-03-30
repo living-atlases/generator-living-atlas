@@ -1,4 +1,4 @@
-# Addionial inventory and playbook with LA pre deploy tasks
+# Additional inventory and playbook with LA pre deploy tasks
 
 Run it with:
 ```

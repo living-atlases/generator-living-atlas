@@ -15,3 +15,4 @@ all:
       - name: '<% if (typeof LA_variable_ansible_user != 'undefined') { %><%- LA_variable_ansible_user %><% } else { %>ubuntu<% } %>'
         nopasswd: yes
     ssh_keys: [ <% if (typeof LA_ssh_keys != 'undefined') { %><%- LA_ssh_keys %><% } %> ]
+    ansible_python_interpreter: /usr/bin/python3

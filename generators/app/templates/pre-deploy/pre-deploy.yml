@@ -1,8 +1,14 @@
----
+- hosts: all
+  gather_facts: False
+  tasks:
+  - name: install python minimal
+    raw: sudo bash -c "test -e /usr/bin/python || (apt -qqy update && apt-get install -qy python3-minimal 'python2.*-minimal')"
+
 - hosts: all
   roles:
-    - pre-deploy
 <% if (typeof LA_etc_hosts != 'undefined') { %>
-    - { role: ypsman.hosts }
+    - { role: ypsman.hosts, tags: ["pre-task-etc-hosts"]}
 <% } %>
-    - { role: weareinteractive.sudo }
+    - { role: weareinteractive.sudo, tags: ["pre-task-sudo"] }
+    - pre-deploy
+  become: yes
