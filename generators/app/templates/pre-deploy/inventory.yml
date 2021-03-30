@@ -1,7 +1,4 @@
 all:
-  hosts:<% if (typeof LA_hostnames != 'undefined') { %><% LA_hostnames.split("|").forEach(element => { %>
-    <%- element %>:<% }); %><% } else { %>
-    all:<% } %>
   vars:<% if (typeof LA_etc_hosts != 'undefined') { %>
     hosts_entries: |
 <%- LA_etc_hosts %><% } %>

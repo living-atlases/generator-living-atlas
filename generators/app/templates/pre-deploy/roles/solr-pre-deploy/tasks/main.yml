@@ -1,0 +1,28 @@
+# Addionial LA pre deploy tasks
+
+# https://github.com/AtlasOfLivingAustralia/documentation/wiki/Before-Start-Your-LA-Installation#solr-limits
+- name: Add nofile limits for solr domain hard
+  community.general.pam_limits:
+    domain: 'solr'
+    limit_type: hard
+    limit_item: nofile
+    value: "65535"
+- name: Add nofile limits for solr domain soft
+  community.general.pam_limits:
+    domain: 'solr'
+    limit_type: soft
+    limit_item: nofile
+    value: "65535"
+- name: Add nofile limits for solr domain hard
+  community.general.pam_limits:
+    domain: 'solr'
+    limit_type: hard
+    limit_item: nproc
+    value: "65535"
+- name: Add nofile limits for solr domain soft
+  community.general.pam_limits:
+    domain: 'solr'
+    limit_type: soft
+    limit_item: nproc
+    value: "65535"
+  tags: pre-task-solr-limits

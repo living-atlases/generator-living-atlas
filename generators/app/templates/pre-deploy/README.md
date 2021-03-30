@@ -6,5 +6,5 @@ Run it with:
 ansible-galaxy install -r requirements.yml --force 
 
 # Run the playbook
-ansible-playbook -i inventory.yml pre-deploy.yml
+ansible-playbook -i ../<%= LA_pkg_name %>-inventories/<%= LA_pkg_name %>-inventory.ini ../ -i inventory.yml pre-deploy.yml
 ```

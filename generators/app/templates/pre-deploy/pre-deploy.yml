@@ -12,3 +12,8 @@
     - { role: weareinteractive.sudo, tags: ["pre-task-sudo"] }
     - pre-deploy
   become: yes
+
+- hosts: solr7-server
+  roles:
+    - solr-pre-deploy
+  become: yes
