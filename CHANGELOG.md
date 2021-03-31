@@ -1,5 +1,8 @@
 <a name="unreleased"></a>
 ## [Unreleased]
+
+<a name="v1.1.37"></a>
+## v1.1.37 - 2021-03-31
 - Post-deploy inventories
 
 <a name="v1.1.36"></a>
