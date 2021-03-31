@@ -1,0 +1,9 @@
+# Addionial LA post deploy tasks
+
+- name: Add additional dependencies for monitoring, troubleshooting, ...
+  apt:
+    name:
+      - swaks
+    state: present
+    autoclean: yes
+  tags: post-task-postfix

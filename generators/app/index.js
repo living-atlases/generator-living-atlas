@@ -1274,6 +1274,12 @@ module.exports = class extends Generator {
     );
 
     this.fs.copyTpl(
+      this.templatePath('post-deploy'),
+      this.destinationPath(postDeployDest),
+      this.answers
+    );
+
+    this.fs.copyTpl(
       this.templatePath('ansiblew'),
       this.destinationPath(`${dest}/ansiblew`),
       this.answers

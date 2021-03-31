@@ -1,0 +1,20 @@
+- hosts: all
+  roles:
+    - post-deploy
+  become: yes
+
+- hosts: biocache-hub<%_ if (LA_use_CAS) { _%>, cas-servers<%_ } _%><%_ if (LA_use_alerts) { _%>, alerts-service<%_ } _%><%_ if (LA_use_doi) { _%>, doi-service<%_ } _%>
+
+  vars:
+    postfix_aliases:
+      - user: root
+        alias: <% if (typeof LA_variable_email_sender != 'undefined') { %><%- LA_variable_email_sender %><% } else { %>support@<%= LA_domain %><% } %>
+        postfix_relayhost: <% if (typeof LA_variable_email_sender_server != 'undefined') { %><%- LA_variable_email_sender_server %><% } else { %>mail.<%= LA_domain %><% } %>
+        postfix_relaytls: <% if (typeof LA_variable_email_sender_server_tls != 'undefined') { %><%- LA_variable_email_sender_server_tls %><% } else { %>true<% } %>
+    postfix_sasl_user: '<% if (typeof LA_variable_email_sender != 'undefined') { %><%- LA_variable_email_sender %><% } else { %>support@<%= LA_domain %><% } %>'
+    postfix_sasl_password: 'NoReplyAccountPassword'
+    postfix_relayhost_port: <% if (typeof LA_variable_email_sender_server_port != 'undefined') { %><%- LA_variable_email_sender_server_port %><% } else { %>587<% } %>
+    postfix_smtpd_relay_restrictions: ['permit_mynetworks', 'permit_sasl_authenticated', 'defer_unauth_destination']
+  roles:
+    - { role: oefenweb.postfix, tags: ["post-task-postfix"] }
+  become: yes
