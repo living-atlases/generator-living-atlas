@@ -1,5 +1,8 @@
 <a name="unreleased"></a>
-## [Unreleased]
+
+<a name="v1.1.38"></a>
+## v1.1.38 - 2021-04-05
+- Fix lint errors in pre and post-deploy roles
 
 <a name="v1.1.37"></a>
 ## v1.1.37 - 2021-03-31
