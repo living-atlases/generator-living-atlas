@@ -1,14 +1,14 @@
 # Addionial LA pre deploy tasks
 
 # https://github.com/AtlasOfLivingAustralia/documentation/wiki/Before-Start-Your-LA-Installation#default-user-ubuntu
-- name: Add the user "{{def_ansible_user}}"
-  user: name="{{def_ansible_user}}" shell=/bin/bash
+- name: Add the user "{{ def_ansible_user }}"
+  user: name="{{ def_ansible_user }}" shell=/bin/bash
   tags: pre-task-def-user
 
 # https://github.com/AtlasOfLivingAustralia/documentation/wiki/SSH-for-Beginners#ssh-keys
-- name: Add the ssh key to user "{{def_ansible_user}}"
+- name: Add the ssh key to user "{{ def_ansible_user }}"
   authorized_key:
-    user: "{{def_ansible_user}}"
+    user: "{{ def_ansible_user }}"
     state: present
     key: '{{ item }}'
   with_file: "{{ ssh_keys }}"
@@ -23,6 +23,14 @@
   # with_file: "{{ ssh_keys }}"
   # tags: pre-task-ssh-keys
 
+- name: configure byobu
+  debconf:
+    name: byobu
+    question: byobu/launch-by-default
+    value: 'True'
+    vtype: boolean
+  tags: pre-task-deps
+
 - name: Add additional dependencies for monitoring, troubleshooting, ...
   apt:
     name:
@@ -31,6 +39,7 @@
       - curl
       - lsof
       - iputils-ping
+      - byobu
     state: present
     autoclean: yes
   tags: pre-task-deps

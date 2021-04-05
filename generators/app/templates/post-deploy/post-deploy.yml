@@ -1,9 +1,11 @@
-- hosts: all
+- name: Post-deploy tasks
+  hosts: all
   roles:
-    - post-deploy
+    - post_deploy
   become: yes
 
-- hosts: biocache-hub<%_ if (LA_use_CAS) { _%>, cas-servers<%_ } _%><%_ if (LA_use_alerts) { _%>, alerts-service<%_ } _%><%_ if (LA_use_doi) { _%>, doi-service<%_ } _%>
+- name: Post-deploy postfix tasks
+  hosts: biocache-hub<%_ if (LA_use_CAS) { _%>, cas-servers<%_ } _%><%_ if (LA_use_alerts) { _%>, alerts-service<%_ } _%><%_ if (LA_use_doi) { _%>, doi-service<%_ } _%>
 
   vars:
     postfix_aliases:
