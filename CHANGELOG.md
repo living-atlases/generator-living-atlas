@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.39"></a>
+## v1.1.39 - 2021-04-09
+- Fix lint error
+
 <a name="v1.1.38"></a>
 ## v1.1.38 - 2021-04-05
 - Fix lint errors in pre and post-deploy roles
