@@ -1,9 +1,14 @@
-- name: Pre-deploy preparation tasks
+- name: Pre-install python 2 and 3 needed for ansible
   hosts: all
-  gather_facts: False
-  tasks:
-  - name: install python minimal
-    raw: sudo bash -c "test -e /usr/bin/python || (apt -qqy update && apt-get install -qy python3-minimal 'python2.*-minimal')"
+  gather_facts: false
+  pre_tasks:
+  - name: Install python2 and python3 for Ansible
+    raw: bash -c "test -e /usr/bin/python || (apt -qqy update && apt-get install -qqy python3-minimal 'python2.*-minimal')"
+    register: output
+    changed_when: output.stdout != ""
+  - name: Gathering Facts
+    setup:
+  become: yes
 
 - name: Pre-deploy tasks
   hosts: all
