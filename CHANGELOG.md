@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.40"></a>
+## v1.1.40 - 2021-04-11
+- Added new blacklist_source var
+
 <a name="v1.1.39"></a>
 ## v1.1.39 - 2021-04-09
 - Fix lint error
