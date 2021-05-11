@@ -1,4 +1,5 @@
 <a name="unreleased"></a>
+- Update security deps
 
 <a name="v1.1.40"></a>
 ## v1.1.40 - 2021-04-11
