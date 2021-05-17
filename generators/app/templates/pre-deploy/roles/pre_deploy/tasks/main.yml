@@ -35,6 +35,7 @@
   apt:
     name:
       - nagios-plugins
+      - python-pymongo
       - netcat
       - curl
       - lsof
