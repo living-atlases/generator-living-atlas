@@ -6,4 +6,5 @@
       - swaks
     state: present
     autoclean: yes
+    update_cache: yes
   tags: post-task-postfix

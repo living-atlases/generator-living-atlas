@@ -43,6 +43,7 @@
       - byobu
     state: present
     autoclean: yes
+    update_cache: yes
   tags: pre-task-deps
 
 - name: copy check_mongo for nagios/icinga
