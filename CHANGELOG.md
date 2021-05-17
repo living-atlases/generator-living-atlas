@@ -1,8 +1,12 @@
 <a name="unreleased"></a>
+
+<a name="v1.1.41"></a>
+## v1.1.41 - 2021-05-17
 - Update security deps
+- Spatial 0.4
 
 <a name="v1.1.40"></a>
-## v1.1.40 - 2021-04-11
+## v1.1.40 - 2021-05-11
 - Added new blacklist_source var
 
 <a name="v1.1.39"></a>
