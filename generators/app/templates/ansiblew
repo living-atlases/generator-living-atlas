@@ -22,6 +22,7 @@ Options:
   -e --extra=<vars>      Extra variables to pass to ansible-playbook
   -h --help              Show help options.
   -u --user=<user>       Ansible become user [default: ubuntu]
+  -w --newserver         Prepare the server for the first time (install ansible deps like python)
   -c --continue          Continue even if some ansible cmd fails
   -d --debug             Show debug info.
   -v --version           Show ansiblew version.
@@ -56,6 +57,7 @@ if __name__ == '__main__':
     limit = args['--limit']
     main = args['main']
     doall = args['all']
+    newserver = args['--newserver']
     alainstall = args['--alainstall']
     cmdPrefix = "echo "
     extras = ""
@@ -79,6 +81,8 @@ if __name__ == '__main__':
         extras = "%s --tags %s" % (extras, tags)
     if debug:
         extras = "%s -vvvv" % (extras)
+    if limit:
+        extras = "%s --limit %s" % (extras, limit)
     if extra_vars:
         extras = "%s --extra-vars %s" % (extras, extra_vars)
     if nodryrun:
@@ -92,17 +96,20 @@ if __name__ == '__main__':
 
     baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini" % (pkg, pkg)
 
+    plays = []
+
+    if newserver:
+        plays.append("%s/ansible/newserver.yml" % alainstall)
+
     if main or doall:
-        mainCmd = "%s ansible-playbook %s -u %s %s -i %s-local-passwords.ini %s/ansible/newserver.yml %s/ansible/ala-demo-basic.yml %s --limit %s --extra-vars 'target=all'" % (cmdPrefix, additionalParams, user, baseInventories, pkg, alainstall, alainstall, extras, limit if limit else "<%= LA_main_hostname %>")
-        execCmd(mainCmd, fail_on_error, nodryrun)
-
+        plays.append("%s/ansible/ala-demo-basic.yml" % alainstall)
     <% for(var j=0; j < LA_services_machines.length; j++) {
-        let isSpatialInv = LA_services_machines[j].map.name === 'spatial';
-        let isCasInv = LA_services_machines[j].map.name === 'cas';
-        let extraInv;
-
         %>if args['<%= LA_services_machines[j].map.name %>'] or doall:
-        extraInventories = "<%= extraInv %> %s" % extraInvs
-        otherCmd = "%s ansible-playbook %s -u %s %s %s -i %s-local-passwords.ini %s/ansible/newserver.yml %s/ansible/<%= LA_services_machines[j].map.playbook %>.yml %s --limit %s --extra-vars 'ala_install_repo=%s target=all'" % (cmdPrefix, additionalParams, user, baseInventories, extraInventories, pkg, alainstall, alainstall, extras, limit if limit else "<%= LA_services_machines[j].machine %>", alainstall)
-        execCmd(otherCmd, fail_on_error, nodryrun)
+        plays.append("%s/ansible/<%= LA_services_machines[j].map.playbook %>.yml" % alainstall)
     <% } %>
+
+    inventories = " "
+    inventories = inventories.join(plays)
+
+    playCmd = "%s ansible-playbook %s -u %s %s %s -i %s-local-passwords.ini %s %s --extra-vars 'target=all'" % (cmdPrefix, additionalParams, user, baseInventories, extraInvs, pkg, inventories, extras)
+    execCmd(playCmd, fail_on_error, nodryrun)
