@@ -1,5 +1,15 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.42"></a>
+## v1.1.42 - 2021-05-24
+- ansiblew refactor for multiple playbooks and less commands
+- set limit correct tagging and reload
+- Install requeriments in role dir
+- Use fail2ban by default
+- Use python3 in mongo-check
+- Use ansible packaged limit module
+- Update cache in pre-post deploy apt
+    
 <a name="v1.1.41"></a>
 ## v1.1.41 - 2021-05-17
 - Update security deps
