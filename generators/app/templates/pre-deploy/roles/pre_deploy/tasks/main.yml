@@ -41,6 +41,7 @@
       - lsof
       - iputils-ping
       - byobu
+      - fail2ban
     state: present
     autoclean: yes
     update_cache: yes
