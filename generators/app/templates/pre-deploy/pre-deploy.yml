@@ -1,4 +1,4 @@
-- name: Pre-install python 2 and 3 needed for ansible
+- name: Pre-install python
   hosts: all
   gather_facts: false
   pre_tasks:
