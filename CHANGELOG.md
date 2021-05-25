@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.43"></a>
+## v1.1.43 - 2021-05-25
+- Fix lost ansiblew exec perms
+
 <a name="v1.1.42"></a>
 ## v1.1.42 - 2021-05-24
 - ansiblew refactor for multiple playbooks and less commands
