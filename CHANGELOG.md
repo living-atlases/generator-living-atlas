@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.44"></a>
+## v1.1.44 - 2021-06-03
+- Fix unnecessay '/' in Snack Oil certs. Thanks @cpfaff for the feedback
+
 <a name="v1.1.43"></a>
 ## v1.1.43 - 2021-05-25
 - Fix lost ansiblew exec perms
