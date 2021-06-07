@@ -212,6 +212,19 @@ const servicesRolsMap = {
     playbook: 'nameindexer-standalone',
     desc: 'nameindexer',
   },
+  sds: {
+    name: 'sds',
+    group: 'sds',
+    playbook: 'sds',
+    desc: 'Sensitive Data Service',
+  },
+  /* Disabled for now us depends in many ALA service
+  biocollect: {
+    name: 'biocollect',
+    group: 'biocollect',
+    playbook: 'biocollect-standalone',
+    desc: 'advanced data collection tool for biodiversity science',
+  }, */
 };
 
 const storeMachine = (name, machine) =>
@@ -596,6 +609,24 @@ module.exports = class extends Generator {
           {
             store: true,
             type: 'confirm',
+            name: 'LA_use_sds',
+            message: `Use ${em(
+              'sds'
+            )} sensitive data service (similar to sds.ala.org.au)?`,
+            default: false,
+          },
+          /* {
+            store: true,
+            type: 'confirm',
+            name: 'LA_use_biocollect',
+            message: `Use ${em(
+              'biocollect'
+            )}  data collection tool (similar to biocollect.ala.org.au/acsa)?`,
+            default: false,
+          }, */
+          {
+            store: true,
+            type: 'confirm',
             name: 'LA_use_CAS',
             message: `Use ${em('CAS')} Auth service?`,
             default: true,
@@ -752,6 +783,35 @@ module.exports = class extends Generator {
           new PromptUrlFor('doi', 'doi', (a) => a.LA_use_doi),
           new PromptPathFor('doi', 'doi', (a) => a.LA_use_doi),
 
+          new PromptSubdomainFor('sds', 'sds', (a) => a.LA_use_sds),
+          new PromptHostnameFor('sds', 'sds', (a) => a.LA_use_sds),
+          new PromptHostnameInputFor('sds', (a) => a.LA_use_sds),
+          new PromptUrlFor('sds', 'sds', (a) => a.LA_use_sds),
+          new PromptPathFor('sds', 'sds', (a) => a.LA_use_sds),
+
+          /* Disabled for now
+             new PromptSubdomainFor(
+            'biocollect',
+            'biocollect',
+            (a) => a.LA_use_biocollect
+          ),
+          new PromptHostnameFor(
+            'biocollect',
+            'biocollect',
+            (a) => a.LA_use_biocollect
+          ),
+          new PromptHostnameInputFor('biocollect', (a) => a.LA_use_biocollect),
+          new PromptUrlFor(
+            'biocollect',
+            'biocollect',
+            (a) => a.LA_use_biocollect
+          ),
+          new PromptPathFor(
+            'biocollect',
+            'biocollect',
+            (a) => a.LA_use_biocollect
+          ), */
+
           new PromptSubdomainFor('solr', 'solr'),
           new PromptHostnameFor('solr', 'index'),
           new PromptHostnameInputFor('solr'),
@@ -843,6 +903,12 @@ module.exports = class extends Generator {
       if (typeof this.answers.LA_use_dashboard === 'undefined')
         this.answers.LA_use_dashboard = false;
 
+      if (typeof this.answers.LA_use_sds === 'undefined')
+        this.answers.LA_use_sds = false;
+
+      if (typeof this.answers.LA_use_biocollect === 'undefined')
+        this.answers.LA_use_biocollect = false;
+
       if (typeof this.answers.LA_generate_branding === 'undefined')
         this.answers.LA_generate_branding = false;
 
@@ -865,6 +931,8 @@ module.exports = class extends Generator {
         if (service === 'alerts' && !this.answers.LA_use_alerts) return;
         if (service === 'doi' && !this.answers.LA_use_doi) return;
         if (service === 'dashboard' && !this.answers.LA_use_dashboard) return;
+        if (service === 'sds' && !this.answers.LA_use_sds) return;
+        if (service === 'biocollect' && !this.answers.LA_use_biocollect) return;
 
         const hostVar = `LA_${service}_hostname`;
         const serviceUrl = this.answers[`LA_${service}_url`];
@@ -911,6 +979,8 @@ module.exports = class extends Generator {
       'alerts',
       'doi',
       'dashboard',
+      'sds',
+      /* 'biocollect', */
     ];
 
     services.forEach((service) => {
