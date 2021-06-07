@@ -1,4 +1,7 @@
 <a name="unreleased"></a>
+
+<a name="v1.1.45"></a>
+## v1.1.45 - 2021-06-07
 - Added SDS support and biocollect (but disabled this last one for now)
 
 <a name="v1.1.44"></a>
