@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.46"></a>
+## v1.1.46 - 2021-06-09
+- Refactor biocollect vars
+
 <a name="v1.1.45"></a>
 ## v1.1.45 - 2021-06-07
 - Added SDS support and biocollect (but disabled this last one for now)
