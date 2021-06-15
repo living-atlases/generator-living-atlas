@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.47"></a>
+## v1.1.47 - 2021-06-15
+- Image service updated
+
 <a name="v1.1.46"></a>
 ## v1.1.46 - 2021-06-09
 - Refactor biocollect vars
