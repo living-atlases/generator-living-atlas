@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.49"></a>
+## v1.1.49 - 2021-06-16
+- Image service upgrade to 1.1.5.1
+
 <a name="v1.1.48"></a>
 ## v1.1.48 - 2021-06-15
 - Image service downgrade
