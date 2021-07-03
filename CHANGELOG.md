@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.50"></a>
+## v1.1.50 - 2021-07-03
+- Fix missing var because biocollect is disabled for now
+- region vars commmented in local extras as gets precedence over toolkit region vars
+
 <a name="v1.1.49"></a>
 ## v1.1.49 - 2021-06-16
 - Image service upgrade to 1.1.5.1
