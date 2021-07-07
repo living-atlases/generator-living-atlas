@@ -339,7 +339,8 @@ def mongo_connect(host=None, port=None, ssl=False, user=None, passwd=None, repli
             try:
               db.authenticate(user, password=passwd)
             except PyMongoError:
-                sys.exit("Username/Password incorrect")
+                print("CRITICAL - Username/Password incorrect")
+                sys.exit(2)
 
         # Ping to check that the server is responding.
         con.admin.command("ping")
