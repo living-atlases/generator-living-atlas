@@ -6,10 +6,8 @@ inventories.
 By default don't exec nothing only show the commands. With --nodryrun you can exec
 the real commands.
 
-With 'main' only operates over your main host.
-
 Usage:
-   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ ( main<% for(var j=0; j < LA_services_machines.length; j++) { %> | <%= LA_services_machines[j].map.name %><% } %> )... | all ]
+   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ ( <%= LA_services_machines.map(m => m.map.name).join(' | ') %> )... | all ]
    ansiblew -h | --help
    ansiblew -v | --version
 
@@ -55,7 +53,6 @@ if __name__ == '__main__':
     user = args['--user']
     tags = args['--tags']
     limit = args['--limit']
-    main = args['main']
     doall = args['all']
     newserver = args['--newserver']
     alainstall = args['--alainstall']
@@ -101,8 +98,6 @@ if __name__ == '__main__':
     if newserver:
         plays.append("%s/ansible/newserver.yml" % alainstall)
 
-    if main or doall:
-        plays.append("%s/ansible/ala-demo-basic.yml" % alainstall)
     <% for(var j=0; j < LA_services_machines.length; j++) {
         %>if args['<%= LA_services_machines[j].map.name %>'] or doall:
         plays.append("%s/ansible/<%= LA_services_machines[j].map.playbook %>.yml" % alainstall)

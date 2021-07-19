@@ -91,11 +91,11 @@ const servicesAndMachines = [];
 const vhostsSet = new Set(); // use for nginx_vhost_fragments_to_clear
 
 const servicesRolsMap = {
-  main: {
-    name: 'main',
-    group: 'ala-demo',
-    playbook: 'ala-demo-basic',
-    desc: '',
+  branding: {
+    name: 'branding',
+    group: 'branding',
+    playbook: 'branding',
+    desc: 'LA branding (header and footer theme)',
   },
   collectory: {
     name: 'collectory',
@@ -234,13 +234,11 @@ const storeMachine = (name, machine) =>
       if (debug) logger('We add to the first position');
       if (!machines.includes(machine)) machines.push(machine);
       if (!machinesSorted.includes(machine)) machinesSorted.unshift(machine);
-      if (name !== 'main') {
-        servicesAndMachines.push({
-          service: name,
-          machine,
-          map: servicesRolsMap[name],
-        });
-      }
+      servicesAndMachines.push({
+        service: name,
+        machine,
+        map: servicesRolsMap[name],
+      });
     } else {
       reject(new Error(`Invalid hostname '${machine}' for '${name}'`));
     }
@@ -535,7 +533,7 @@ module.exports = class extends Generator {
             name: 'LA_domain',
             message: `What is your LA node ${em('main domain')}?`,
             default: (answers) => `${answers.LA_pkg_name}.org`,
-            validate: (input) => validateDomain(input, 'main', true),
+            validate: (input) => validateDomain(input, 'branding', true),
           },
           {
             store: true,
@@ -649,15 +647,6 @@ module.exports = class extends Generator {
                 a.LA_urls_prefix = a.LA_enable_ssl ? 'https://' : 'http://';
                 resolve(false);
               }),
-          },
-          {
-            store: true,
-            type: 'input',
-            name: 'LA_main_hostname',
-            message: `Hostname for the basic LA branding?`,
-            filter: (input) => storeMachine('main', input),
-            validate: (input) => isCorrectHostname(input),
-            default: (a) => a.LA_domain,
           },
           {
             store: defaultStore,
@@ -790,27 +779,27 @@ module.exports = class extends Generator {
           new PromptPathFor('sds', 'sds', (a) => a.LA_use_sds),
 
           /* Disabled for now
-             new PromptSubdomainFor(
-            'biocollect',
-            'biocollect',
-            (a) => a.LA_use_biocollect
-          ),
-          new PromptHostnameFor(
-            'biocollect',
-            'biocollect',
-            (a) => a.LA_use_biocollect
-          ),
-          new PromptHostnameInputFor('biocollect', (a) => a.LA_use_biocollect),
-          new PromptUrlFor(
-            'biocollect',
-            'biocollect',
-            (a) => a.LA_use_biocollect
-          ),
-          new PromptPathFor(
-            'biocollect',
-            'biocollect',
-            (a) => a.LA_use_biocollect
-          ), */
+           new PromptSubdomainFor(
+           'biocollect',
+           'biocollect',
+           (a) => a.LA_use_biocollect
+           ),
+           new PromptHostnameFor(
+           'biocollect',
+           'biocollect',
+           (a) => a.LA_use_biocollect
+           ),
+           new PromptHostnameInputFor('biocollect', (a) => a.LA_use_biocollect),
+           new PromptUrlFor(
+           'biocollect',
+           'biocollect',
+           (a) => a.LA_use_biocollect
+           ),
+           new PromptPathFor(
+           'biocollect',
+           'biocollect',
+           (a) => a.LA_use_biocollect
+           ), */
 
           new PromptSubdomainFor('solr', 'solr'),
           new PromptHostnameFor('solr', 'index'),
@@ -850,6 +839,13 @@ module.exports = class extends Generator {
           new PromptHostnameFor('spatial', 'spatial', (a) => a.LA_use_spatial),
           new PromptHostnameInputFor('spatial', (a) => a.LA_use_spatial),
           new PromptUrlFor('spatial', 'spatial', (a) => a.LA_use_spatial),
+
+          new PromptSubdomainFor('branding', 'branding'),
+          new PromptHostnameFor('branding', 'branding'),
+          new PromptHostnameInputFor('branding'),
+          new PromptUrlFor('branding', 'branding'),
+          new PromptPathFor('branding', 'branding'),
+
           {
             store: true,
             type: 'confirm',
@@ -911,6 +907,13 @@ module.exports = class extends Generator {
 
       if (typeof this.answers.LA_generate_branding === 'undefined')
         this.answers.LA_generate_branding = false;
+
+      if (typeof this.answers.LA_branding_hostname === 'undefined')
+        this.answers.LA_branding_hostname = this.answers.LA_domain;
+      if (typeof this.answers.LA_branding_path === 'undefined')
+        this.answers.LA_branding_path = '/';
+      if (typeof this.answers.LA_branding_url === 'undefined')
+        this.answers.LA_branding_url = this.answers.LA_domain;
 
       this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
         ? 'https://'
@@ -980,6 +983,7 @@ module.exports = class extends Generator {
       'doi',
       'dashboard',
       'sds',
+      'branding',
       /* 'biocollect', */
     ];
 
@@ -1206,6 +1210,7 @@ module.exports = class extends Generator {
 
     const brandDest = `${this.answers.LA_pkg_name}-branding`;
     const brandSettings = `${brandDest}/app/js/settings.js`;
+    const brandDeploy = `${brandDest}/deploy.sh`;
 
     const replaceLine = (filePath, oldContent, newContent) => {
       let content = this.fs.read(this.destinationPath(filePath));
@@ -1215,6 +1220,11 @@ module.exports = class extends Generator {
     };
 
     if (useBranding) {
+      this.fs.copyTpl(
+        this.templatePath('deploy-branding.sh'),
+        this.destinationPath(brandDeploy),
+        this.answers
+      );
       if (this.fs.exists(brandSettings)) {
         if (
           this.answers.LA_theme != null &&
