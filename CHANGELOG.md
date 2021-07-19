@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.51"></a>
+## v1.1.51 - 2021-07-19
+- main task renamed to branding task. Use of new branding role.
+- Branding deploy script generation
+
 <a name="v1.1.50"></a>
 ## v1.1.50 - 2021-07-03
 - Fix missing var because biocollect is disabled for now
