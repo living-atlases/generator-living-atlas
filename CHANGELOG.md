@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.1.52"></a>
+## v1.1.52 - 2021-07-21
+- Postinstall of email server with correct configuration
+
 <a name="v1.1.51"></a>
 ## v1.1.51 - 2021-07-19
 - main task renamed to branding task. Use of new branding role.
