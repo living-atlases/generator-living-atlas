@@ -111,7 +111,7 @@
 <a name="v1.1.30"></a>
 ## v1.1.30 - 2021-03-04
 - Breaking change: We are joining our inventories in a single one + a single local-extras.ini.
-Please join all your local-extras.ini files into a single one. Follow the generator suggestions.
+Please join yourportal-cas-local-extras.ini and yourportal-spatial-local-extra.ini into yourportal-local-extras.ini. Follow the generator suggestions. 
 - Added new variables to inventories when provided by the la-toolkit.
 - Fix parse-domain call.
 - Stable logger version.
