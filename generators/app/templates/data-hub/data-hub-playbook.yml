@@ -1,0 +1,51 @@
+<%_ LA_hubs.forEach(hub => { _%>
+# Playbooks for hub-<%= hub.LA_pkg_name %>
+
+- name:  biocache-hub-<%= hub.LA_pkg_name %>
+  hosts:  biocache-hub-<%= hub.LA_pkg_name %>
+  roles:
+    - common
+    - java
+    - webserver
+    - tomcat
+    - i18n
+    - { role: biocache-hub, biocache_hub_artifact: ala-hub, biocache_hub: <%= hub.LA_pkg_name %>-hub, grouped_facets_json: grouped_facets_ala.json
+    # grouped_facets_json: {{inventory_dir}}/files/grouped_facets_<%= hub.LA_pkg_name %>.json,
+    # overlays_json: {{inventory_dir}}/files/overlays-<%= hub.LA_pkg_name %>.json,
+    }
+
+- name: branding-<%= hub.LA_pkg_name %>
+  hosts: branding-<%= hub.LA_pkg_name %>
+  roles:
+    - common
+    - webserver
+    - branding
+
+<%_ if (hub.LA_use_species) { _%>
+- name: bie-hub-<%= hub.LA_pkg_name %>
+  hosts: bie-hub-<%= hub.LA_pkg_name %>
+  roles:
+    - common
+    - java
+    - webserver
+    - tomcat
+    - i18n
+    - nameindex
+    - { role: bie-hub, bie_hub: <%= hub.LA_pkg_name %>-bie-hub, bie_hub_artifact: ala-bie }
+<%_ } _%>
+<%_ if (hub.LA_use_regions) { _%>
+
+- name: regions-<%= hub.LA_pkg_name %>
+  hosts: regions-<%= hub.LA_pkg_name %>
+  roles:
+    - common
+    - java
+    - webserver
+    - tomcat
+    - i18n
+    - { role: regions, regions: regions-<%= hub.LA_pkg_name %>,
+    # menu_config_json: {{inventory_dir}}/files/menu-config-<%= hub.LA_pkg_name %>.json
+    }
+<%_ } _%>
+
+<%_ }) _%>

@@ -1346,6 +1346,7 @@ module.exports = class extends Generator {
 
     const preDeployDest = `${this.answers.LA_pkg_name}-pre-deploy`;
     const postDeployDest = `${this.answers.LA_pkg_name}-post-deploy`;
+    const hubsDest = `${this.answers.LA_pkg_name}-hubs`;
 
     this.fs.copyTpl(
       this.templatePath('pre-deploy'),
@@ -1358,6 +1359,14 @@ module.exports = class extends Generator {
       this.destinationPath(postDeployDest),
       this.answers
     );
+
+    if (isDefined(this.answers.LA_hubs)) {
+      this.fs.copyTpl(
+        this.templatePath('data-hub'),
+        this.destinationPath(hubsDest),
+        this.answers
+      );
+    }
 
     this.fs.copyTpl(
       this.templatePath('ansiblew'),
