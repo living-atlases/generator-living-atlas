@@ -5,69 +5,30 @@
 
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
+
 const yosay = require('onionsay');
-const { parseDomain } = require('parse-domain');
 const niceware = require('niceware');
 const fsN = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const Base64 = require('js-base64');
+const {
+  defUseSubdomain,
+  defUseSubdomainPrompt,
+  isCorrectHostname,
+  isDefined,
+  em,
+  validateDomain,
+} = require('./libs.js');
+const { services, servicesRolesMap } = require('./services.js');
 
 let defaultStore = false;
 let logger;
-
-const defUseSubdomain = (a) => {
-  return a.LA_collectory_uses_subdomain;
-};
-
-const isDefined = (someString) => {
-  return (
-    someString != null && someString != 'undefined' && someString.length > 0
-  );
-};
-
 let debug = false;
 let replay = false;
 let dontAsk = false;
 let previousConfig;
 let firstRun;
-const hostnameRegexp = /^[._\-a-z0-9A-Z, ]+$/;
-const parseDomainOpts = {};
-const isCorrectDomain = (domain) =>
-  parseDomain(domain, parseDomainOpts) !== null;
-const isCorrectHostname = (hostname) => {
-  var isCorrect = hostnameRegexp.test(hostname);
-  return isCorrect
-    ? true
-    : 'Invalid hostname: should be something like host.example.org, myvm1, or somehost.amazonaws.com';
-};
-const em = (text) => chalk.keyword('orange')(text);
-
-const defUseSubdomainPrompt = (a, service) => {
-  var desc =
-    servicesRolsMap[service].desc.length > 0
-      ? ` (${servicesRolsMap[service].desc})`
-      : '';
-  return `Will the ${em(service)} module${desc} use a http${
-    a.LA_enable_ssl ? 's' : ''
-  }://${em('subdomain')}.${a.LA_domain} or not?`;
-};
-
-const validateDomain = (input, name) =>
-  new Promise((resolve) => {
-    if (debug) logger(`Validate ${input} ${name}`);
-    // It's a domain not a https://url
-    const isValid = isCorrectDomain(input) && input.split('/').length === 1;
-    // As is a url we don't store now
-    // if (isValid && store) storeMachine(name, input);
-    if (isValid || input === 'other') {
-      resolve(true);
-    } else {
-      if (debug) logger(input);
-      resolve('You need to provide some-example-domain.org');
-    }
-  });
 
 /*
    Set of used machines
@@ -90,143 +51,6 @@ const servicesAndMachines = [];
 
 const vhostsSet = new Set(); // use for nginx_vhost_fragments_to_clear
 
-const servicesRolsMap = {
-  branding: {
-    name: 'branding',
-    group: 'branding',
-    playbook: 'branding',
-    desc: 'LA branding (header and footer theme)',
-  },
-  collectory: {
-    name: 'collectory',
-    group: 'collectory',
-    playbook: 'collectory-standalone',
-    desc: 'biodiversity collections',
-  },
-  ala_hub: {
-    name: 'ala_hub',
-    group: 'biocache-hub',
-    playbook: 'biocache-hub-standalone',
-    desc: 'occurrences search frontend',
-  },
-  biocache_service: {
-    name: 'biocache_service',
-    group: 'biocache-service-clusterdb',
-    playbook: 'biocache-service-clusterdb',
-    desc: 'occurrences web service',
-  },
-  ala_bie: {
-    name: 'ala_bie',
-    group: 'bie-hub',
-    playbook: 'bie-hub',
-    desc: 'species search frontend',
-  },
-  bie_index: {
-    name: 'bie_index',
-    group: 'bie-index',
-    playbook: 'bie-index',
-    desc: 'species web service',
-  },
-  images: {
-    name: 'images',
-    group: 'image-service',
-    playbook: 'image-service',
-    desc: '',
-  },
-  lists: {
-    name: 'lists',
-    group: 'species-list',
-    playbook: 'species-list-standalone',
-    desc: '',
-  },
-  regions: {
-    name: 'regions',
-    group: 'regions',
-    playbook: 'regions-standalone',
-    desc: 'regional data frontend',
-  },
-  logger: {
-    name: 'logger',
-    group: 'logger-service',
-    playbook: 'logger-standalone',
-    desc: 'event logging',
-  },
-  solr: {
-    name: 'solr',
-    group: 'solr7-server',
-    playbook: 'solr7-standalone',
-    desc: 'indexing',
-  },
-  cas: {
-    name: 'cas',
-    group: 'cas-servers',
-    playbook: 'cas5-standalone',
-    desc: 'authentication system',
-  },
-  biocache_backend: {
-    name: 'biocache_backend',
-    group: 'biocache-db',
-    playbook: 'biocache-db',
-    desc: 'cassandra',
-  },
-  biocache_cli: {
-    name: 'biocache_cli',
-    group: 'biocache-cli',
-    playbook: 'biocache-cli',
-    desc:
-      'manages the loading, sampling, processing and indexing of occurrence records',
-  },
-  spatial: {
-    name: 'spatial',
-    group: 'spatial',
-    playbook: 'spatial',
-    desc: 'spatial front-end',
-  },
-  webapi: {
-    name: 'webapi',
-    group: 'webapi_standalone',
-    playbook: 'webapi_standalone',
-    desc: 'API front-end',
-  },
-  dashboard: {
-    name: 'dashboard',
-    group: 'dashboard',
-    playbook: 'dashboard',
-    desc: 'dashboard',
-  },
-  alerts: {
-    name: 'alerts',
-    group: 'alerts-service',
-    playbook: 'alerts-standalone',
-    desc: 'alerts',
-  },
-  doi: {
-    name: 'doi',
-    group: 'doi-service',
-    playbook: 'doi-service-standalone',
-    desc: 'DOI service',
-  },
-  nameindexer: {
-    name: 'nameindexer',
-    group: 'nameindexer',
-    playbook: 'nameindexer-standalone',
-    desc: 'nameindexer',
-  },
-  sds: {
-    name: 'sds',
-    group: 'sds',
-    playbook: 'sds',
-    desc: 'Sensitive Data Service',
-  },
-  /* Disabled for now us depends in many ALA service
-  biocollect: {
-    name: 'biocollect',
-    group: 'biocollect',
-    playbook: 'biocollect-standalone',
-    desc: 'advanced data collection tool for biodiversity science',
-  }, */
-};
-
 const storeMachine = (name, machine) =>
   new Promise((resolve, reject) => {
     if (debug) logger(`Store: ${name} -> ${machine}`);
@@ -237,7 +61,7 @@ const storeMachine = (name, machine) =>
       servicesAndMachines.push({
         service: name,
         machine,
-        map: servicesRolsMap[name],
+        map: servicesRolesMap[name],
       });
     } else {
       reject(new Error(`Invalid hostname '${machine}' for '${name}'`));
@@ -275,15 +99,15 @@ function urlDefValue(a, varUsesSubdomain, subdomain, varName) {
     return previousConfig[varName];
   }
   if (typeof varUsesSubdomain !== 'undefined' && a[varUsesSubdomain]) {
-    return `${subdomain}.${a.LA_domain}`;
+    return `${subdomain}.${a['LA_domain']}`;
   }
-  return `${a.LA_domain}`;
+  return `${a['LA_domain']}`;
 }
 
 function hostChoices(a, varUsesSubdomain, subdomain, varName) {
   let choices;
   if (typeof varUsesSubdomain !== 'undefined' && a[varUsesSubdomain]) {
-    choices = [...machinesSorted, `${subdomain}.${a.LA_domain}`, 'other'];
+    choices = [...machinesSorted, `${subdomain}.${a['LA_domain']}`, 'other'];
   } else {
     choices = [...machinesSorted, 'other'];
   }
@@ -296,7 +120,7 @@ function hostChoices(a, varUsesSubdomain, subdomain, varName) {
   if (replay && hasPrevious) {
     if (choices.includes(previousHostname)) {
       // Remove and later put in the first position
-      for (var i = 0; i < choices.length; i++) {
+      for (let i = 0; i < choices.length; i++) {
         if (choices[i] === previousHostname) {
           choices.splice(i, 1);
         }
@@ -345,7 +169,6 @@ function PromptHostnameInputFor(name, when) {
     // And don't ask again
     return false;
   };
-  this.askAnswered = true;
   this.validate = (input) => isCorrectHostname(input);
 }
 
@@ -360,15 +183,15 @@ function PromptUrlFor(name, subdomain, when) {
     this.when = when;
   }
   this.default = (a) => urlDefValue(a, varUsesSubdomain, subdomain, varName);
-  this.validate = (input, a) => {
+  this.validate = async (input, a) => {
     // Store previous hostname from choices or input request for later use
     const varHostName = `LA_${name}_hostname`;
     const varUrl = `LA_${name}_url`;
     if (debug) logger(`We store ${name} hostname with ${a[varHostName]}`);
-    storeMachine(name, a[varHostName]);
+    await storeMachine(name, a[varHostName]);
     vhostsSet.add(a[varUrl]);
     // Now we verify the url
-    return validateDomain(input, name, true);
+    return validateDomain(input, name, logger);
   };
 }
 
@@ -429,6 +252,100 @@ function PromptPathFor(name, path, when) {
       machinesAndPaths[hostname][url][path] = true;
       resolve(true);
     });
+}
+
+
+function replaceLine(filePath, oldContent, newContent) {
+  let content = this.fs.read(this.destinationPath(filePath));
+  const regexp = new RegExp(`^[ \\t]*${oldContent}.+$`, 'm');
+  content = content.replace(regexp, newContent);
+  this.fs.write(this.destinationPath(filePath), content);
+}
+
+function generateBranding(conf, brandDest) {
+  const brandSettings = `${brandDest}/app/js/settings.js`;
+  const brandDeployDest = `${brandDest}/deploy.sh`;
+  this.fs.copyTpl(
+    this.templatePath('deploy-branding.sh'),
+    this.destinationPath(brandDeployDest),
+    conf
+  );
+  if (this.fs.exists(brandSettings)) {
+    if (
+      conf['LA_theme'] != null &&
+      conf['LA_theme'] !== 'custom'
+    ) {
+      // try to change the theme in the settings
+      logger(
+        'INFO: trying to setup the theme of current branding settings'
+      );
+      replaceLine.call(this,
+        brandSettings,
+        'theme:',
+        `  theme: '${conf['LA_theme']}',`
+      );
+    } else {
+      // just copy a sample
+      logger('INFO: copying a branding settings sample');
+      this.fs.copyTpl(
+        this.templatePath('base-branding-settings.js'),
+        this.destinationPath(`${brandSettings}.sample`),
+        conf
+      );
+    }
+  } else {
+    logger(
+      `INFO: Generating a sample branding in '${brandDest}' directory. Please wait`
+    );
+
+    let cmdResult = this.spawnCommandSync(
+      'git',
+      [
+        'clone',
+        '--depth=1',
+        'https://github.com/living-atlases/base-branding.git',
+        brandDest,
+      ],
+      {
+        // accessing this._destinationRoot
+        cwd: this.destinationRoot(),
+        shell: true,
+        stdio: null,
+        // stdio: "inherit",
+      }
+    );
+    if (cmdResult.status === 0) {
+      // Async update submodules
+      logger(
+        `INFO: Do a "git submodule update --init --recursive --depth=1" in '${brandDest}' directory later`
+      );
+      // we remove the default branding settings
+      this.spawnCommandSync('rm', ['-f', brandSettings], {
+        cwd: this.destinationPath(),
+        shell: true,
+        stdio: null,
+      });
+      this.fs.copyTpl(
+        this.templatePath('base-branding-settings.js'),
+        this.destinationPath(brandSettings),
+        conf
+      );
+    } else {
+      logger(
+        `Error: Failed to clone base-branding, error: ${JSON.stringify(
+          cmdResult
+        )}`
+      );
+    }
+  }
+}
+
+function generateAnsiblew(conf, dest) {
+  this.fs.copyTpl(
+    this.templatePath('ansiblew'),
+    this.destinationPath(`${dest}/ansiblew`),
+    conf
+  );
 }
 
 module.exports = class extends Generator {
@@ -533,7 +450,7 @@ module.exports = class extends Generator {
             name: 'LA_domain',
             message: `What is your LA node ${em('main domain')}?`,
             default: (answers) => `${answers.LA_pkg_name}.org`,
-            validate: (input) => validateDomain(input, 'branding', true),
+            validate: (input) => validateDomain(input, 'branding', logger),
           },
           {
             store: true,
@@ -923,7 +840,7 @@ module.exports = class extends Generator {
 
       if (debug) logger(this.answers);
 
-      Object.keys(servicesRolsMap).forEach((service) => {
+      Object.keys(servicesRolesMap).forEach((service) => {
         if (service === 'spatial' && !this.answers.LA_use_spatial) return;
         if (service === 'regions' && !this.answers.LA_use_regions) return;
         if (service === 'ala_bie' && !this.answers.LA_use_species) return;
@@ -953,6 +870,7 @@ module.exports = class extends Generator {
 
   writing() {
     let dest = this.answers.LA_pkg_name;
+    // Old destination check, for back compatibility
     // For now we use with "pkgname-inventories"
     if (!fsN.existsSync(dest)) dest = `${this.answers.LA_pkg_name}-inventories`;
 
@@ -964,28 +882,6 @@ module.exports = class extends Generator {
 
     if (debug) logger(`Destination root: ${this.destinationRoot()}`);
     if (debug) logger(`cmdOpts: ${JSON.stringify(cmdOpts)}`);
-
-    const services = [
-      'collectory',
-      'ala_hub',
-      'biocache_service',
-      'biocache_backend',
-      'biocache_cli',
-      'nameindexer',
-      'ala_bie',
-      'bie_index',
-      'images',
-      'logger',
-      'lists',
-      'regions',
-      'webapi',
-      'alerts',
-      'doi',
-      'dashboard',
-      'sds',
-      'branding',
-      /* 'biocollect', */
-    ];
 
     services.forEach((service) => {
       const path = this.answers[`LA_${service}_path`];
@@ -1054,7 +950,7 @@ module.exports = class extends Generator {
       'spatial-inventory.yml',
       'spatial-local-extras.yml',
     ];
-    for (var i = 0; i < templateFiles.length; i++) {
+    for (let i = 0; i < templateFiles.length; i++) {
       const currentFile = `${dest}/quick-start-${templateFiles[i]}`;
       if (this.fs.exists(currentFile)) {
         this.fs.move(currentFile, `${dest}/${filePrefix}-${templateFiles[i]}`);
@@ -1066,7 +962,7 @@ module.exports = class extends Generator {
       const oldFile = `${dest}/${filePrefix}-inventory.yml`;
       if (debug) logger(`Trying to rename yml to ini: ${oldFile}`);
       if (this.fs.exists(oldFile)) {
-        var inventories = ['inventory', 'local-extras', 'local-passwords'];
+        let inventories = ['inventory', 'local-extras', 'local-passwords'];
         if (useSpatial) {
           inventories.push('spatial-inventory', 'spatial-local-extras');
         }
@@ -1208,90 +1104,9 @@ module.exports = class extends Generator {
       );
     }
 
-    const brandDest = `${this.answers.LA_pkg_name}-branding`;
-    const brandSettings = `${brandDest}/app/js/settings.js`;
-    const brandDeploy = `${brandDest}/deploy.sh`;
-
-    const replaceLine = (filePath, oldContent, newContent) => {
-      let content = this.fs.read(this.destinationPath(filePath));
-      const regexp = new RegExp(`^[ \\t]*${oldContent}.+$`, 'm');
-      content = content.replace(regexp, newContent);
-      this.fs.write(this.destinationPath(filePath), content);
-    };
-
     if (useBranding) {
-      this.fs.copyTpl(
-        this.templatePath('deploy-branding.sh'),
-        this.destinationPath(brandDeploy),
-        this.answers
-      );
-      if (this.fs.exists(brandSettings)) {
-        if (
-          this.answers.LA_theme != null &&
-          this.answers.LA_theme != 'custom'
-        ) {
-          // try to change the theme in the settings
-          logger(
-            'INFO: trying to setup the theme of current branding settings'
-          );
-          replaceLine(
-            brandSettings,
-            'theme:',
-            `  theme: '${this.answers.LA_theme}',`
-          );
-        } else {
-          // just copy a sample
-          logger('INFO: copying a branding settings sample');
-          this.fs.copyTpl(
-            this.templatePath('base-branding-settings.js'),
-            this.destinationPath(`${brandSettings}.sample`),
-            this.answers
-          );
-        }
-      } else {
-        logger(
-          `INFO: Generating a sample branding in '${brandDest}' directory. Please wait`
-        );
-
-        let cmdResult = this.spawnCommandSync(
-          'git',
-          [
-            'clone',
-            '--depth=1',
-            'https://github.com/living-atlases/base-branding.git',
-            brandDest,
-          ],
-          {
-            cwd: this.destinationRoot(),
-            shell: true,
-            stdio: null,
-            // stdio: "inherit",
-          }
-        );
-        if (cmdResult.status === 0) {
-          // Async update submodules
-          logger(
-            `INFO: Do a "git submodule update --init --recursive --depth=1" in '${brandDest}' directory later`
-          );
-          // we remove the default branding settings
-          this.spawnCommandSync('rm', ['-f', brandSettings], {
-            cwd: this.destinationPath(),
-            shell: true,
-            stdio: null,
-          });
-          this.fs.copyTpl(
-            this.templatePath('base-branding-settings.js'),
-            this.destinationPath(brandSettings),
-            this.answers
-          );
-        } else {
-          logger(
-            `Error: Failed to clone base-branding, error: ${JSON.stringify(
-              cmdResult
-            )}`
-          );
-        }
-      }
+      const brandDest = `${this.answers['LA_pkg_name']}-branding`;
+      generateBranding.call(this, this.answers, brandDest);
     }
 
     if (this.answers.LA_additionalVariables != null) {
@@ -1317,28 +1132,28 @@ module.exports = class extends Generator {
     }
 
     if (isDefined(this.answers.LA_variable_google_api_key))
-      replaceLine(
+      replaceLine.call(this,
         localPassDest,
         'google_apikey[ ]*=',
         `google_apikey = ${this.answers.LA_variable_google_api_key}`
       );
 
     if (isDefined(this.answers.LA_variable_google_api_key))
-      replaceLine(
+      replaceLine.call(this,
         localPassDest,
         'google_api_key[ ]*=',
         `google_api_key = ${this.answers.LA_variable_google_api_key}`
       );
 
     if (isDefined(this.answers.LA_variable_maxmind_account_id))
-      replaceLine(
+      replaceLine.call(this,
         localPassDest,
         'maxmind_account_id[ ]*=',
         `maxmind_account_id = ${this.answers.LA_variable_maxmind_account_id}`
       );
 
     if (isDefined(this.answers.LA_variable_maxmind_license_key))
-      replaceLine(
+      replaceLine.call(this,
         localPassDest,
         'maxmind_license_key[ ]*=',
         `maxmind_license_key = ${this.answers.LA_variable_maxmind_license_key}`
@@ -1360,19 +1175,42 @@ module.exports = class extends Generator {
       this.answers
     );
 
+    generateAnsiblew.call(this, this.answers, dest);
+
     if (isDefined(this.answers.LA_hubs)) {
       this.fs.copyTpl(
         this.templatePath('data-hub'),
         this.destinationPath(hubsDest),
         this.answers
       );
+
+      let ansiblewHubConf = {};
+      ansiblewHubConf.LA_pkg_name = this.answers.LA_pkg_name;
+      ansiblewHubConf.LA_services_machines = [];
+      ansiblewHubConf.LA_services_machines.push({
+        service: 'ala_hub',
+        map: servicesRolesMap['ala_hub'],
+      });
+      ansiblewHubConf.LA_services_machines.push({
+        service: 'ala_bie',
+        map: servicesRolesMap['ala_bie'],
+      });
+      ansiblewHubConf.LA_services_machines.push({
+        service: 'regions',
+        map: servicesRolesMap['regions'],
+      });
+
+      for (let hub of this.answers['LA_hubs']) {
+        const hubBrandDest = `${hub['LA_pkg_name']}-branding`;
+        let joinedConf = {
+          ...this.answers,
+          ...hub
+        };
+        generateBranding.call(this, joinedConf, hubBrandDest);
+      }
+      generateAnsiblew.call(this, ansiblewHubConf, hubsDest);
     }
 
-    this.fs.copyTpl(
-      this.templatePath('ansiblew'),
-      this.destinationPath(`${dest}/ansiblew`),
-      this.answers
-    );
   }
 
   install() {
@@ -1398,12 +1236,16 @@ module.exports = class extends Generator {
 
         if (cmdResult !== 0) {
           cmdResult = this.spawnCommandSync('git', ['init'], cmdOpts);
-          cmdResult = this.spawnCommandSync('git', ['add', '--all'], cmdOpts);
-          this.spawnCommandSync(
-            'git',
-            ['commit', '-am', '"Initial commit"'],
-            cmdOpts
-          );
+          if (cmdResult === 0) {
+            cmdResult = this.spawnCommandSync('git', ['add', '--all'], cmdOpts);
+            if (cmdResult === 0) {
+              this.spawnCommandSync(
+                'git',
+                ['commit', '-am', '"Initial commit"'],
+                cmdOpts
+              );
+            }
+          }
         }
       } else {
         logger(
