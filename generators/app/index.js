@@ -9,7 +9,7 @@ const Generator = require('yeoman-generator');
 const yosay = require('onionsay');
 const niceware = require('niceware');
 const fsN = require('fs');
-const { v4: uuidv4 } = require('uuid');
+const {v4: uuidv4} = require('uuid');
 const bcrypt = require('bcrypt');
 const Base64 = require('js-base64');
 const {
@@ -20,7 +20,7 @@ const {
   em,
   validateDomain,
 } = require('./libs.js');
-const { services, servicesRolesMap } = require('./services.js');
+const {services, servicesRolesMap} = require('./services.js');
 
 let defaultStore = false;
 let logger;
@@ -265,7 +265,9 @@ function replaceLine(filePath, oldContent, newContent) {
 function generateBranding(conf, brandDest) {
   const brandSettings = `${brandDest}/app/js/settings.js`;
   const brandDeployDest = `${brandDest}/deploy.sh`;
-  this.fs.copyTpl(
+
+   // noinspection JSUnresolvedFunction
+this.fs.copyTpl(
     this.templatePath('deploy-branding.sh'),
     this.destinationPath(brandDeployDest),
     conf
@@ -287,7 +289,8 @@ function generateBranding(conf, brandDest) {
     } else {
       // just copy a sample
       logger('INFO: copying a branding settings sample');
-      this.fs.copyTpl(
+       // noinspection JSUnresolvedFunction
+this.fs.copyTpl(
         this.templatePath('base-branding-settings.js'),
         this.destinationPath(`${brandSettings}.sample`),
         conf
@@ -298,6 +301,7 @@ function generateBranding(conf, brandDest) {
       `INFO: Generating a sample branding in '${brandDest}' directory. Please wait`
     );
 
+    // noinspection JSCheckFunctionSignatures
     let cmdResult = this.spawnCommandSync(
       'git',
       [
@@ -325,7 +329,8 @@ function generateBranding(conf, brandDest) {
         shell: true,
         stdio: null,
       });
-      this.fs.copyTpl(
+       // noinspection JSUnresolvedFunction
+this.fs.copyTpl(
         this.templatePath('base-branding-settings.js'),
         this.destinationPath(brandSettings),
         conf
@@ -341,6 +346,7 @@ function generateBranding(conf, brandDest) {
 }
 
 function generateAnsiblew(conf, dest) {
+  // noinspection JSUnresolvedFunction
   this.fs.copyTpl(
     this.templatePath('ansiblew'),
     this.destinationPath(`${dest}/ansiblew`),
@@ -348,23 +354,25 @@ function generateAnsiblew(conf, dest) {
   );
 }
 
+// noinspection JSUnusedGlobalSymbols
 module.exports = class extends Generator {
+  // noinspection JSUnresolvedVariable
   constructor(args, opts) {
     super(args, opts);
 
-    this.argument('debug', { type: Boolean, required: false });
-    this.argument('replay', { type: Boolean, required: false });
-    this.argument('replay-dont-ask', { type: Boolean, required: false });
+    this.argument('debug', {type: Boolean, required: false});
+    this.argument('replay', {type: Boolean, required: false});
+    this.argument('replay-dont-ask', {type: Boolean, required: false});
 
     debug = this.options.debug;
-    replay = this.options.replay || this.options['replay-dont-ask'];
+    replay = this.options['replay'] || this.options['replay-dont-ask'];
     dontAsk = this.options['replay-dont-ask'];
 
     const previousConfigAll = this.config.getAll();
     previousConfig =
       typeof previousConfigAll === 'undefined'
         ? []
-        : previousConfigAll.promptValues;
+        : previousConfigAll['promptValues'];
 
     firstRun = previousConfigAll.firstRun !== false;
     if (firstRun) {
@@ -389,7 +397,7 @@ module.exports = class extends Generator {
     if (debug && firstRun) {
       logger('Running generator for the first time in this location');
     }
-    defaultStore = firstRun || this.options.replay;
+    defaultStore = firstRun || this.options['replay'];
     if (debug) logger('Current config:');
     if (debug) logger(previousConfig);
     if (typeof previousConfig === 'undefined' && replay) {
@@ -411,448 +419,450 @@ module.exports = class extends Generator {
     this.answers = dontAsk
       ? previousConfig
       : await this.prompt([
-          {
-            store: true,
-            type: 'input',
-            name: 'LA_project_name',
-            message: `Your LA Project ${em('Long Name')}:`,
-            default: 'Living Atlas of Wakanda',
-          },
-          {
-            store: true,
-            type: 'input',
-            name: 'LA_project_shortname',
-            message: `Your LA Project ${em('Shortname')}:`,
-            default: (answers) =>
-              answers.LA_project_name.replace(/Living Atlas of /g, 'LA '),
-          },
-          {
-            store: true,
-            type: 'input',
-            name: 'LA_pkg_name',
-            message: `Your LA ${em(
-              'short-lowercase-name'
-            )} (we'll put your inventories in that directory):`,
-            default: (answers) =>
-              answers.LA_project_name.toLowerCase().replace(/ /g, '-'),
-            validate: (input) =>
-              new Promise((resolve) => {
-                if (input.match(/^[a-z0-9-]+$/g)) {
-                  resolve(true);
-                } else {
-                  resolve('You need to provide some-example-short-name');
-                }
-              }),
-          },
-          {
-            store: true,
-            type: 'input',
-            name: 'LA_domain',
-            message: `What is your LA node ${em('main domain')}?`,
-            default: (answers) => `${answers.LA_pkg_name}.org`,
-            validate: (input) => validateDomain(input, 'branding', logger),
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_species',
-            message: `Use ${em('species')} service?`,
-            default: true,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_species_lists',
-            message: `Use ${em('specieslists')} service?`,
-            when: (a) => a.LA_use_species,
-            default: true,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_images',
-            message: `Use ${em('images')} service?`,
-            default: true,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_spatial',
-            message: `Use ${em('spatial')} service?`,
-            default: true,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_regions',
-            message: `Use ${em('regions')} service?`,
-            default: true,
-          },
+        {
+          store: true,
+          type: 'input',
+          name: 'LA_project_name',
+          message: `Your LA Project ${em('Long Name')}:`,
+          default: 'Living Atlas of Wakanda',
+        },
+        {
+          store: true,
+          type: 'input',
+          name: 'LA_project_shortname',
+          message: `Your LA Project ${em('Shortname')}:`,
+          default: (answers) =>
+            answers['LA_project_name'].replace(/Living Atlas of /g, 'LA '),
+        },
+        {
+          store: true,
+          type: 'input',
+          name: 'LA_pkg_name',
+          message: `Your LA ${em(
+            'short-lowercase-name'
+          )} (we'll put your inventories in that directory):`,
+          default: (answers) =>
+            answers['LA_project_name'].toLowerCase().replace(/ /g, '-'),
+          validate: (input) =>
+            new Promise((resolve) => {
+              if (input.match(/^[a-z0-9-]+$/g)) {
+                resolve(true);
+              } else {
+                resolve('You need to provide some-example-short-name');
+              }
+            }),
+        },
+        {
+          store: true,
+          type: 'input',
+          name: 'LA_domain',
+          message: `What is your LA node ${em('main domain')}?`,
+          default: (answers) => `${answers['LA_pkg_name']}.org`,
+          validate: (input) => validateDomain(input, 'branding', logger),
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_species',
+          message: `Use ${em('species')} service?`,
+          default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_species_lists',
+          message: `Use ${em('specieslists')} service?`,
+          when: (a) => a['LA_use_species'],
+          default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_images',
+          message: `Use ${em('images')} service?`,
+          default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_spatial',
+          message: `Use ${em('spatial')} service?`,
+          default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_regions',
+          message: `Use ${em('regions')} service?`,
+          default: true,
+        },
 
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_webapi',
-            message: `Use ${em(
-              'webapi'
-            )} an API documentation service (similar to api.ala.org.au but empty)?`,
-            default: false,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_dashboard',
-            message: `Use ${em(
-              'dashboard'
-            )} view stats service (similar to dashboard.ala.org.au)?`,
-            default: false,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_alerts',
-            message: `Use ${em('alerts')} service?`,
-            default: false,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_doi',
-            message: `Use ${em('doi')} service?`,
-            default: false,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_sds',
-            message: `Use ${em(
-              'sds'
-            )} sensitive data service (similar to sds.ala.org.au)?`,
-            default: false,
-          },
-          /* {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_biocollect',
-            message: `Use ${em(
-              'biocollect'
-            )}  data collection tool (similar to biocollect.ala.org.au/acsa)?`,
-            default: false,
-          }, */
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_CAS',
-            message: `Use ${em('CAS')} Auth service?`,
-            default: true,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_enable_ssl',
-            message: `Enable ${em('SSL')}?`,
-            default: true,
-          },
-          {
-            store: defaultStore,
-            type: 'input',
-            name: 'check-ssl',
-            message: '',
-            default: '',
-            when: (a) =>
-              new Promise((resolve) => {
-                a.LA_urls_prefix = a.LA_enable_ssl ? 'https://' : 'http://';
-                resolve(false);
-              }),
-          },
-          {
-            store: defaultStore,
-            type: 'list',
-            name: 'LA_collectory_uses_subdomain',
-            message: (a) =>
-              `Will the ${em('collectory')} service use a ${
-                a.LA_urls_prefix
-              }${em('subdomain')}.${a.LA_domain} or a ${a.LA_urls_prefix}${
-                a.LA_domain
-              }${em('/service-path')} ?`,
-            choices: [
-              { name: 'subdomain', value: true },
-              { name: 'service-path', value: false },
-            ],
-          },
-          new PromptHostnameFor('collectory', 'collections'),
-          new PromptHostnameInputFor('collectory'),
-          new PromptUrlFor('collectory', 'collections'),
-          new PromptPathFor('collectory', 'collections'),
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_webapi',
+          message: `Use ${em(
+            'webapi'
+          )} an API documentation service (similar to api.ala.org.au but empty)?`,
+          default: false,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_dashboard',
+          message: `Use ${em(
+            'dashboard'
+          )} view stats service (similar to dashboard.ala.org.au)?`,
+          default: false,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_alerts',
+          message: `Use ${em('alerts')} service?`,
+          default: false,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_doi',
+          message: `Use ${em('doi')} service?`,
+          default: false,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_sds',
+          message: `Use ${em(
+            'sds'
+          )} sensitive data service (similar to sds.ala.org.au)?`,
+          default: false,
+        },
+        /* {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_biocollect',
+          message: `Use ${em(
+            'biocollect'
+          )}  data collection tool (similar to biocollect.ala.org.au/acsa)?`,
+          default: false,
+        }, */
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_CAS',
+          message: `Use ${em('CAS')} Auth service?`,
+          default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_enable_ssl',
+          message: `Enable ${em('SSL')}?`,
+          default: true,
+        },
+        {
+          store: defaultStore,
+          type: 'input',
+          name: 'check-ssl',
+          message: '',
+          default: '',
+          when: (a) =>
+            new Promise((resolve) => {
+              // noinspection HttpUrlsUsage
+              a['LA_urls_prefix'] = a['LA_enable_ssl'] ? 'https://' : 'http://';
+              resolve(false);
+            }),
+        },
+        {
+          store: defaultStore,
+          type: 'list',
+          name: 'LA_collectory_uses_subdomain',
+          message: (a) =>
+            `Will the ${em('collectory')} service use a ${
+              a['LA_urls_prefix']
+            }${em('subdomain')}.${a['LA_domain']} or a ${a['LA_urls_prefix']}${
+              a['LA_domain']
+            }${em('/service-path')} ?`,
+          choices: [
+            {name: 'subdomain', value: true},
+            {name: 'service-path', value: false},
+          ],
+        },
+        new PromptHostnameFor('collectory', 'collections'),
+        new PromptHostnameInputFor('collectory'),
+        new PromptUrlFor('collectory', 'collections'),
+        new PromptPathFor('collectory', 'collections'),
 
-          new PromptSubdomainFor('ala_hub', 'records'),
-          new PromptHostnameFor('ala_hub', 'records'),
-          new PromptHostnameInputFor('ala_hub'),
-          new PromptUrlFor('ala_hub', 'records'),
-          new PromptPathFor('ala_hub', 'records'),
+        new PromptSubdomainFor('ala_hub', 'records'),
+        new PromptHostnameFor('ala_hub', 'records'),
+        new PromptHostnameInputFor('ala_hub'),
+        new PromptUrlFor('ala_hub', 'records'),
+        new PromptPathFor('ala_hub', 'records'),
 
-          new PromptSubdomainFor('biocache_service', 'records-ws'),
-          new PromptHostnameFor('biocache_service', 'records-ws'),
-          new PromptHostnameInputFor('biocache_service'),
-          new PromptUrlFor('biocache_service', 'records-ws'),
-          new PromptPathFor('biocache_service', 'records-ws'),
+        new PromptSubdomainFor('biocache_service', 'records-ws'),
+        new PromptHostnameFor('biocache_service', 'records-ws'),
+        new PromptHostnameInputFor('biocache_service'),
+        new PromptUrlFor('biocache_service', 'records-ws'),
+        new PromptPathFor('biocache_service', 'records-ws'),
 
-          new PromptSubdomainFor('ala_bie', 'species', (a) => a.LA_use_species),
-          new PromptHostnameFor('ala_bie', 'species', (a) => a.LA_use_species),
-          new PromptHostnameInputFor('ala_bie', (a) => a.LA_use_species),
-          new PromptUrlFor('ala_bie', 'species', (a) => a.LA_use_species),
-          new PromptPathFor('ala_bie', 'species', (a) => a.LA_use_species),
+        new PromptSubdomainFor('ala_bie', 'species', (a) => a['LA_use_species']),
+        new PromptHostnameFor('ala_bie', 'species', (a) => a['LA_use_species']),
+        new PromptHostnameInputFor('ala_bie', (a) => a['LA_use_species']),
+        new PromptUrlFor('ala_bie', 'species', (a) => a['LA_use_species']),
+        new PromptPathFor('ala_bie', 'species', (a) => a['LA_use_species']),
 
-          new PromptSubdomainFor(
-            'bie_index',
-            'species-service',
-            (a) => a.LA_use_species
-          ),
-          new PromptHostnameFor(
-            'bie_index',
-            'species-ws',
-            (a) => a.LA_use_species
-          ),
-          new PromptHostnameInputFor('bie_index', (a) => a.LA_use_species),
-          new PromptUrlFor('bie_index', 'species-ws', (a) => a.LA_use_species),
-          new PromptPathFor('bie_index', 'species-ws', (a) => a.LA_use_species),
+        new PromptSubdomainFor(
+          'bie_index',
+          'species-service',
+          (a) => a['LA_use_species']
+        ),
+        new PromptHostnameFor(
+          'bie_index',
+          'species-ws',
+          (a) => a['LA_use_species']
+        ),
+        new PromptHostnameInputFor('bie_index', (a) => a['LA_use_species']),
+        new PromptUrlFor('bie_index', 'species-ws', (a) => a['LA_use_species']),
+        new PromptPathFor('bie_index', 'species-ws', (a) => a['LA_use_species']),
 
-          new PromptSubdomainFor('images', 'images', (a) => a.LA_use_images),
-          new PromptHostnameFor('images', 'images', (a) => a.LA_use_images),
-          new PromptHostnameInputFor('images', (a) => a.LA_use_images),
-          new PromptUrlFor('images', 'images', (a) => a.LA_use_images),
-          new PromptPathFor('images', 'images', (a) => a.LA_use_images),
+        new PromptSubdomainFor('images', 'images', (a) => a['LA_use_images']),
+        new PromptHostnameFor('images', 'images', (a) => a['LA_use_images']),
+        new PromptHostnameInputFor('images', (a) => a['LA_use_images']),
+        new PromptUrlFor('images', 'images', (a) => a['LA_use_images']),
+        new PromptPathFor('images', 'images', (a) => a['LA_use_images']),
 
-          new PromptSubdomainFor(
-            'lists',
-            'specieslists',
-            (a) => a.LA_use_species_lists
-          ),
-          new PromptHostnameFor(
-            'lists',
-            'lists',
-            (a) => a.LA_use_species_lists
-          ),
-          new PromptHostnameInputFor('lists', (a) => a.LA_use_species_lists),
-          new PromptUrlFor('lists', 'lists', (a) => a.LA_use_species_lists),
-          new PromptPathFor(
-            'lists',
-            'specieslists',
-            (a) => a.LA_use_species_lists
-          ),
+        new PromptSubdomainFor(
+          'lists',
+          'specieslists',
+          (a) => a['LA_use_species_lists']
+        ),
+        new PromptHostnameFor(
+          'lists',
+          'lists',
+          (a) => a['LA_use_species_lists']
+        ),
+        new PromptHostnameInputFor('lists', (a) => a['LA_use_species_lists']),
+        new PromptUrlFor('lists', 'lists', (a) => a['LA_use_species_lists']),
+        new PromptPathFor(
+          'lists',
+          'specieslists',
+          (a) => a['LA_use_species_lists']
+        ),
 
-          new PromptSubdomainFor('regions', 'regions', (a) => a.LA_use_regions),
-          new PromptHostnameFor('regions', 'regions', (a) => a.LA_use_regions),
-          new PromptHostnameInputFor('regions', (a) => a.LA_use_regions),
-          new PromptUrlFor('regions', 'regions', (a) => a.LA_use_regions),
-          new PromptPathFor('regions', 'regions', (a) => a.LA_use_regions),
+        new PromptSubdomainFor('regions', 'regions', (a) => a['LA_use_regions']),
+        new PromptHostnameFor('regions', 'regions', (a) => a['LA_use_regions']),
+        new PromptHostnameInputFor('regions', (a) => a['LA_use_regions']),
+        new PromptUrlFor('regions', 'regions', (a) => a['LA_use_regions']),
+        new PromptPathFor('regions', 'regions', (a) => a['LA_use_regions']),
 
-          new PromptSubdomainFor('logger', 'logger'),
-          new PromptHostnameFor('logger', 'logger'),
-          new PromptHostnameInputFor('logger'),
-          new PromptUrlFor('logger', 'logger'),
-          new PromptPathFor('logger', 'logger-service'),
+        new PromptSubdomainFor('logger', 'logger'),
+        new PromptHostnameFor('logger', 'logger'),
+        new PromptHostnameInputFor('logger'),
+        new PromptUrlFor('logger', 'logger'),
+        new PromptPathFor('logger', 'logger-service'),
 
-          new PromptSubdomainFor('webapi', 'webapi', (a) => a.LA_use_webapi),
-          new PromptHostnameFor('webapi', 'api', (a) => a.LA_use_webapi),
-          new PromptHostnameInputFor('webapi', (a) => a.LA_use_webapi),
-          new PromptUrlFor('webapi', 'api', (a) => a.LA_use_webapi),
-          new PromptPathFor('webapi', 'webapi', (a) => a.LA_use_webapi),
+        new PromptSubdomainFor('webapi', 'webapi', (a) => a['LA_use_webapi']),
+        new PromptHostnameFor('webapi', 'api', (a) => a['LA_use_webapi']),
+        new PromptHostnameInputFor('webapi', (a) => a['LA_use_webapi']),
+        new PromptUrlFor('webapi', 'api', (a) => a['LA_use_webapi']),
+        new PromptPathFor('webapi', 'webapi', (a) => a['LA_use_webapi']),
 
-          new PromptSubdomainFor(
-            'dashboard',
-            'dashboard',
-            (a) => a.LA_use_dashboard
-          ),
-          new PromptHostnameFor(
-            'dashboard',
-            'dashboard',
-            (a) => a.LA_use_dashboard
-          ),
-          new PromptHostnameInputFor('dashboard', (a) => a.LA_use_dashboard),
-          new PromptUrlFor('dashboard', 'dashboard', (a) => a.LA_use_dashboard),
-          new PromptPathFor(
-            'dashboard',
-            'dashboard',
-            (a) => a.LA_use_dashboard
-          ),
+        new PromptSubdomainFor(
+          'dashboard',
+          'dashboard',
+          (a) => a['LA_use_dashboard']
+        ),
+        new PromptHostnameFor(
+          'dashboard',
+          'dashboard',
+          (a) => a['LA_use_dashboard']
+        ),
+        new PromptHostnameInputFor('dashboard', (a) => a['LA_use_dashboard']),
+        new PromptUrlFor('dashboard', 'dashboard', (a) => a['LA_use_dashboard']),
+        new PromptPathFor(
+          'dashboard',
+          'dashboard',
+          (a) => a['LA_use_dashboard']
+        ),
 
-          new PromptSubdomainFor('alerts', 'alerts', (a) => a.LA_use_alerts),
-          new PromptHostnameFor('alerts', 'alerts', (a) => a.LA_use_alerts),
-          new PromptHostnameInputFor('alerts', (a) => a.LA_use_alerts),
-          new PromptUrlFor('alerts', 'alerts', (a) => a.LA_use_alerts),
-          new PromptPathFor('alerts', 'alerts', (a) => a.LA_use_alerts),
+        new PromptSubdomainFor('alerts', 'alerts', (a) => a['LA_use_alerts']),
+        new PromptHostnameFor('alerts', 'alerts', (a) => a['LA_use_alerts']),
+        new PromptHostnameInputFor('alerts', (a) => a['LA_use_alerts']),
+        new PromptUrlFor('alerts', 'alerts', (a) => a['LA_use_alerts']),
+        new PromptPathFor('alerts', 'alerts', (a) => a['LA_use_alerts']),
 
-          new PromptSubdomainFor('doi', 'doi', (a) => a.LA_use_doi),
-          new PromptHostnameFor('doi', 'doi', (a) => a.LA_use_doi),
-          new PromptHostnameInputFor('doi', (a) => a.LA_use_doi),
-          new PromptUrlFor('doi', 'doi', (a) => a.LA_use_doi),
-          new PromptPathFor('doi', 'doi', (a) => a.LA_use_doi),
+        new PromptSubdomainFor('doi', 'doi', (a) => a['LA_use_doi']),
+        new PromptHostnameFor('doi', 'doi', (a) => a['LA_use_doi']),
+        new PromptHostnameInputFor('doi', (a) => a['LA_use_doi']),
+        new PromptUrlFor('doi', 'doi', (a) => a['LA_use_doi']),
+        new PromptPathFor('doi', 'doi', (a) => a['LA_use_doi']),
 
-          new PromptSubdomainFor('sds', 'sds', (a) => a.LA_use_sds),
-          new PromptHostnameFor('sds', 'sds', (a) => a.LA_use_sds),
-          new PromptHostnameInputFor('sds', (a) => a.LA_use_sds),
-          new PromptUrlFor('sds', 'sds', (a) => a.LA_use_sds),
-          new PromptPathFor('sds', 'sds', (a) => a.LA_use_sds),
+        new PromptSubdomainFor('sds', 'sds', (a) => a['LA_use_sds']),
+        new PromptHostnameFor('sds', 'sds', (a) => a['LA_use_sds']),
+        new PromptHostnameInputFor('sds', (a) => a['LA_use_sds']),
+        new PromptUrlFor('sds', 'sds', (a) => a['LA_use_sds']),
+        new PromptPathFor('sds', 'sds', (a) => a['LA_use_sds']),
 
-          /* Disabled for now
-           new PromptSubdomainFor(
-           'biocollect',
-           'biocollect',
-           (a) => a.LA_use_biocollect
-           ),
-           new PromptHostnameFor(
-           'biocollect',
-           'biocollect',
-           (a) => a.LA_use_biocollect
-           ),
-           new PromptHostnameInputFor('biocollect', (a) => a.LA_use_biocollect),
-           new PromptUrlFor(
-           'biocollect',
-           'biocollect',
-           (a) => a.LA_use_biocollect
-           ),
-           new PromptPathFor(
-           'biocollect',
-           'biocollect',
-           (a) => a.LA_use_biocollect
-           ), */
+        /* Disabled for now
+         new PromptSubdomainFor(
+         'biocollect',
+         'biocollect',
+         (a) => a['LA_use_biocollect']
+         ),
+         new PromptHostnameFor(
+         'biocollect',
+         'biocollect',
+         (a) => a['LA_use_biocollect']
+         ),
+         new PromptHostnameInputFor('biocollect', (a) => a['LA_use_biocollect']),
+         new PromptUrlFor(
+         'biocollect',
+         'biocollect',
+         (a) => a['LA_use_biocollect']
+         ),
+         new PromptPathFor(
+         'biocollect',
+         'biocollect',
+         (a) => a['LA_use_biocollect']
+         ), */
 
-          new PromptSubdomainFor('solr', 'solr'),
-          new PromptHostnameFor('solr', 'index'),
-          new PromptHostnameInputFor('solr'),
-          new PromptUrlFor('solr', 'index'),
-          new PromptPathFor('solr', 'solr'),
+        new PromptSubdomainFor('solr', 'solr'),
+        new PromptHostnameFor('solr', 'index'),
+        new PromptHostnameInputFor('solr'),
+        new PromptUrlFor('solr', 'index'),
+        new PromptPathFor('solr', 'solr'),
 
-          new PromptSubdomainFor('cas', 'auth', true, true),
-          new PromptHostnameFor('cas', 'auth'),
-          new PromptHostnameInputFor('cas'),
-          new PromptUrlFor('cas', 'auth'),
-          {
-            store: true,
-            type: 'input',
-            name: 'LA_biocache_backend_hostname',
-            message: `LA ${em('biocache-backend')} hostname`,
-            validate: (input) => isCorrectHostname(input),
-            filter: (input) =>
-              new Promise((resolve) => {
-                storeMachine('biocache_backend', input).then((input) =>
-                  storeMachine('biocache_cli', input).then((input) =>
-                    storeMachine('nameindexer', input).then((input) =>
-                      resolve(input)
-                    )
+        new PromptSubdomainFor('cas', 'auth', true, true),
+        new PromptHostnameFor('cas', 'auth'),
+        new PromptHostnameInputFor('cas'),
+        new PromptUrlFor('cas', 'auth'),
+        {
+          store: true,
+          type: 'input',
+          name: 'LA_biocache_backend_hostname',
+          message: `LA ${em('biocache-backend')} hostname`,
+          validate: (input) => isCorrectHostname(input),
+          filter: (input) =>
+            new Promise((resolve) => {
+              storeMachine('biocache_backend', input).then((input) =>
+                storeMachine('biocache_cli', input).then((input) =>
+                  storeMachine('nameindexer', input).then((input) =>
+                    resolve(input)
                   )
-                );
-              }),
-            default: (a) => `${a.LA_main_hostname}`,
-          },
+                )
+              );
+            }),
+          default: (a) => `${a['LA_main_hostname']}`,
+        },
 
-          new PromptSubdomainFor(
-            'spatial',
-            'spatial',
-            (a) => a.LA_use_spatial,
-            true
-          ),
-          new PromptHostnameFor('spatial', 'spatial', (a) => a.LA_use_spatial),
-          new PromptHostnameInputFor('spatial', (a) => a.LA_use_spatial),
-          new PromptUrlFor('spatial', 'spatial', (a) => a.LA_use_spatial),
+        new PromptSubdomainFor(
+          'spatial',
+          'spatial',
+          (a) => a['LA_use_spatial'],
+          true
+        ),
+        new PromptHostnameFor('spatial', 'spatial', (a) => a['LA_use_spatial']),
+        new PromptHostnameInputFor('spatial', (a) => a['LA_use_spatial']),
+        new PromptUrlFor('spatial', 'spatial', (a) => a['LA_use_spatial']),
 
-          new PromptSubdomainFor('branding', 'branding'),
-          new PromptHostnameFor('branding', 'branding'),
-          new PromptHostnameInputFor('branding'),
-          new PromptUrlFor('branding', 'branding'),
-          new PromptPathFor('branding', 'branding'),
+        new PromptSubdomainFor('branding', 'branding'),
+        new PromptHostnameFor('branding', 'branding'),
+        new PromptHostnameInputFor('branding'),
+        new PromptUrlFor('branding', 'branding'),
+        new PromptPathFor('branding', 'branding'),
 
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_generate_branding',
-            message: `Do you want to generate also a sample compatible ${em(
-              'LA branding'
-            )}? (Recommended to start, later you can improve it with your site style)`,
-            default: true,
-          },
-          {
-            store: true,
-            type: 'confirm',
-            name: 'LA_use_git',
-            message: `Use ${em(
-              'git'
-            )} in your generated inventories to track their changes? (Very recommended)`,
-            default: true,
-          },
-        ]);
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_generate_branding',
+          message: `Do you want to generate also a sample compatible ${em(
+            'LA branding'
+          )}? (Recommended to start, later you can improve it with your site style)`,
+          default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_git',
+          message: `Use ${em(
+            'git'
+          )} in your generated inventories to track their changes? (Very recommended)`,
+          default: true,
+        },
+      ]);
 
     // For back-compatibility
-    if (typeof this.answers.LA_main_hostname === 'undefined') {
-      this.answers.LA_main_hostname = this.answers.LA_domain;
+    if (typeof this.answers['LA_main_hostname'] === 'undefined') {
+      this.answers['LA_main_hostname'] = this.answers['LA_domain'];
     }
-    this.answers.LA_biocache_cli_hostname = this.answers.LA_biocache_backend_hostname;
-    this.answers.LA_nameindexer_hostname = this.answers.LA_biocache_backend_hostname;
+    this.answers['LA_biocache_cli_hostname'] = this.answers['LA_biocache_backend_hostname'];
+    this.answers['LA_nameindexer_hostname'] = this.answers['LA_biocache_backend_hostname'];
 
-    if (typeof this.answers.LA_spatial_uses_subdomain === 'undefined')
-      this.answers.LA_spatial_uses_subdomain = true;
-    if (typeof this.answers.LA_cas_uses_subdomain === 'undefined')
-      this.answers.LA_cas_uses_subdomain = true;
+    if (typeof this.answers['LA_spatial_uses_subdomain'] === 'undefined')
+      this.answers['LA_spatial_uses_subdomain'] = true;
+    if (typeof this.answers['LA_cas_uses_subdomain'] === 'undefined')
+      this.answers['LA_cas_uses_subdomain'] = true;
 
-    if (typeof this.answers.LA_use_images === 'undefined')
-      this.answers.LA_use_images = true;
-    if (typeof this.answers.LA_use_species_lists === 'undefined')
-      this.answers.LA_use_species_lists = false;
-    if (typeof this.answers.LA_use_species === 'undefined')
-      this.answers.LA_use_species = true;
+    if (typeof this.answers['LA_use_images'] === 'undefined')
+      this.answers['LA_use_images'] = true;
+    if (typeof this.answers['LA_use_species_lists'] === 'undefined')
+      this.answers['LA_use_species_lists'] = false;
+    if (typeof this.answers['LA_use_species'] === 'undefined')
+      this.answers['LA_use_species'] = true;
 
     if (dontAsk) {
       // Compatible with old generated inventories and don-ask
-      if (typeof this.answers.LA_use_webapi === 'undefined')
-        this.answers.LA_use_webapi = false;
+      if (typeof this.answers['LA_use_webapi'] === 'undefined')
+        this.answers['LA_use_webapi'] = false;
 
-      if (typeof this.answers.LA_use_alerts === 'undefined')
-        this.answers.LA_use_alerts = false;
+      if (typeof this.answers['LA_use_alerts'] === 'undefined')
+        this.answers['LA_use_alerts'] = false;
 
-      if (typeof this.answers.LA_use_doi === 'undefined')
-        this.answers.LA_use_doi = false;
+      if (typeof this.answers['LA_use_doi'] === 'undefined')
+        this.answers['LA_use_doi'] = false;
 
-      if (typeof this.answers.LA_use_dashboard === 'undefined')
-        this.answers.LA_use_dashboard = false;
+      if (typeof this.answers['LA_use_dashboard'] === 'undefined')
+        this.answers['LA_use_dashboard'] = false;
 
-      if (typeof this.answers.LA_use_sds === 'undefined')
-        this.answers.LA_use_sds = false;
+      if (typeof this.answers['LA_use_sds'] === 'undefined')
+        this.answers['LA_use_sds'] = false;
 
-      if (typeof this.answers.LA_use_biocollect === 'undefined')
-        this.answers.LA_use_biocollect = false;
+      if (typeof this.answers['LA_use_biocollect'] === 'undefined')
+        this.answers['LA_use_biocollect'] = false;
 
-      if (typeof this.answers.LA_generate_branding === 'undefined')
-        this.answers.LA_generate_branding = false;
+      if (typeof this.answers['LA_generate_branding'] === 'undefined')
+        this.answers['LA_generate_branding'] = false;
 
-      if (typeof this.answers.LA_branding_hostname === 'undefined')
-        this.answers.LA_branding_hostname = this.answers.LA_domain;
-      if (typeof this.answers.LA_branding_path === 'undefined')
-        this.answers.LA_branding_path = '/';
-      if (typeof this.answers.LA_branding_url === 'undefined')
-        this.answers.LA_branding_url = this.answers.LA_domain;
+      if (typeof this.answers['LA_branding_hostname'] === 'undefined')
+        this.answers['LA_branding_hostname'] = this.answers['LA_domain'];
+      if (typeof this.answers['LA_branding_path'] === 'undefined')
+        this.answers['LA_branding_path'] = '/';
+      if (typeof this.answers['LA_branding_url'] === 'undefined')
+        this.answers['LA_branding_url'] = this.answers['LA_domain'];
 
-      this.answers.LA_urls_prefix = this.answers.LA_enable_ssl
+      // noinspection HttpUrlsUsage
+      this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
         ? 'https://'
         : 'http://';
 
-      vhostsSet.add(this.answers.LA_domain);
+      vhostsSet.add(this.answers['LA_domain']);
 
       if (debug) logger(this.answers);
 
       Object.keys(servicesRolesMap).forEach((service) => {
-        if (service === 'spatial' && !this.answers.LA_use_spatial) return;
-        if (service === 'regions' && !this.answers.LA_use_regions) return;
-        if (service === 'ala_bie' && !this.answers.LA_use_species) return;
-        if (service === 'bie_index' && !this.answers.LA_use_species) return;
-        if (service === 'lists' && !this.answers.LA_use_species_lists) return;
-        if (service === 'images' && !this.answers.LA_use_images) return;
-        if (service === 'webapi' && !this.answers.LA_use_webapi) return;
-        if (service === 'alerts' && !this.answers.LA_use_alerts) return;
-        if (service === 'doi' && !this.answers.LA_use_doi) return;
-        if (service === 'dashboard' && !this.answers.LA_use_dashboard) return;
-        if (service === 'sds' && !this.answers.LA_use_sds) return;
-        if (service === 'biocollect' && !this.answers.LA_use_biocollect) return;
+        if (service === 'spatial' && !this.answers['LA_use_spatial']) return;
+        if (service === 'regions' && !this.answers['LA_use_regions']) return;
+        if (service === 'ala_bie' && !this.answers['LA_use_species']) return;
+        if (service === 'bie_index' && !this.answers['LA_use_species']) return;
+        if (service === 'lists' && !this.answers['LA_use_species_lists']) return;
+        if (service === 'images' && !this.answers['LA_use_images']) return;
+        if (service === 'webapi' && !this.answers['LA_use_webapi']) return;
+        if (service === 'alerts' && !this.answers['LA_use_alerts']) return;
+        if (service === 'doi' && !this.answers['LA_use_doi']) return;
+        if (service === 'dashboard' && !this.answers['LA_use_dashboard']) return;
+        if (service === 'sds' && !this.answers['LA_use_sds']) return;
+        if (service === 'biocollect' && !this.answers['LA_use_biocollect']) return;
 
         const hostVar = `LA_${service}_hostname`;
         const serviceUrl = this.answers[`LA_${service}_url`];
@@ -869,10 +879,11 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    let dest = this.answers.LA_pkg_name;
+    const conf = this.answers;
+    let dest = conf['LA_pkg_name'];
     // Old destination check, for back compatibility
-    // For now we use with "pkgname-inventories"
-    if (!fsN.existsSync(dest)) dest = `${this.answers.LA_pkg_name}-inventories`;
+    // For now we use with "LA_pkg_name-inventories"
+    if (!fsN.existsSync(dest)) dest = `${conf['LA_pkg_name']}-inventories`;
 
     const cmdOpts = {
       cwd: this.destinationPath(dest),
@@ -880,66 +891,74 @@ module.exports = class extends Generator {
       stdio: 'inherit',
     };
 
-    if (debug) logger(`Destination root: ${this.destinationRoot()}`);
+    // accessing this._destinationRoot
+    if (debug) { // noinspection JSCheckFunctionSignatures
+      logger(`Destination root: ${this.destinationRoot()}`);
+    }
     if (debug) logger(`cmdOpts: ${JSON.stringify(cmdOpts)}`);
 
     services.forEach((service) => {
-      const path = this.answers[`LA_${service}_path`];
+      const path = conf[`LA_${service}_path`];
       if (path === '/') {
-        this.answers[`LA_${service}_path`] = '';
+        conf[`LA_${service}_path`] = '';
       }
       // url var is new, so we use hostname for old generated inventories
-      if (typeof this.answers[`LA_${service}_url`] === 'undefined') {
-        this.answers[`LA_${service}_url`] = this.answers[
+      if (typeof conf[`LA_${service}_url`] === 'undefined') {
+        conf[`LA_${service}_url`] = conf[
           `LA_${service}_hostname`
-        ];
+          ];
       }
     });
-    if (this.answers.LA_solr_uses_subdomain) {
-      this.answers.LA_solr_path = '';
+    if (conf['LA_solr_uses_subdomain']) {
+      conf['LA_solr_path'] = '';
     }
     // Backward compatibility
-    if (typeof this.answers.LA_solr_url === 'undefined') {
-      this.answers.LA_solr_url = this.answers.LA_solr_hostname;
+    if (typeof conf['LA_solr_url'] === 'undefined') {
+      conf['LA_solr_url'] = conf['LA_solr_hostname'];
     }
-    if (typeof this.answers.LA_cas_url === 'undefined') {
-      this.answers.LA_cas_url = this.answers.LA_cas_hostname;
+    if (typeof conf['LA_cas_url'] === 'undefined') {
+      conf['LA_cas_url'] = conf['LA_cas_hostname'];
     }
-    if (typeof this.answers.LA_spatial_url === 'undefined') {
-      this.answers.LA_spatial_url = this.answers.LA_spatial_hostname;
+    if (typeof conf['LA_spatial_url'] === 'undefined') {
+      conf['LA_spatial_url'] = conf['LA_spatial_hostname'];
     }
-    if (typeof this.answers.LA_generate_branding === 'undefined') {
-      this.answers.LA_generate_branding = false;
+    if (typeof conf['LA_generate_branding'] === 'undefined') {
+      conf['LA_generate_branding'] = false;
     }
-    this.answers.LA_machines = machines;
-    this.answers.LA_services_machines = servicesAndMachines;
+    conf['LA_machines'] = machines;
+    conf['LA_services_machines'] = servicesAndMachines;
 
-    const useCAS = this.answers.LA_use_CAS;
-    const useSpatial = this.answers.LA_use_spatial;
-    const useBranding = this.answers.LA_generate_branding;
+    const useCAS = conf['LA_use_CAS'];
+    const useSpatial = conf['LA_use_spatial'];
+    const useBranding = conf['LA_generate_branding'];
 
-    const filePrefix = this.answers.LA_pkg_name;
+    const filePrefix = conf['LA_pkg_name'];
 
-    this.answers.LA_nginx_vhosts = [...new Set(vhostsSet)];
+    conf['LA_nginx_vhosts'] = [...new Set(vhostsSet)];
 
-    if (debug) logger(this.answers);
-
-    this.fs.copyTpl(
+    if (debug) logger(conf);
+    // noinspection JSUnresolvedFunction
+    this.fs.copyTpl
+    (
       this.templatePath('README-main.md'),
       this.destinationPath('README.md'),
-      this.answers
+      conf
     );
+
+    // noinspection JSUnresolvedFunction
     this.fs.copyTpl(
       this.templatePath('README.md'),
       this.destinationPath(`${dest}/README.md`),
-      this.answers
+      conf
     );
 
     if (!this.fs.exists(`${dest}/dot-ssh-config`)) {
+      // noinspection JSUnresolvedFunction
+      // noinspection JSUnresolvedFunction
       this.fs.copyTpl(
         this.templatePath('dot-ssh-config.sample'),
         this.destinationPath(`${dest}/dot-ssh-config`),
-        this.answers
+        conf
       );
     }
 
@@ -953,6 +972,7 @@ module.exports = class extends Generator {
     for (let i = 0; i < templateFiles.length; i++) {
       const currentFile = `${dest}/quick-start-${templateFiles[i]}`;
       if (this.fs.exists(currentFile)) {
+        // noinspection JSUnresolvedFunction
         this.fs.move(currentFile, `${dest}/${filePrefix}-${templateFiles[i]}`);
       }
     }
@@ -976,7 +996,7 @@ module.exports = class extends Generator {
 
           if (this.fs.exists(`${dest}/${currentFile}`)) {
             if (debug) logger(`Moving ${currentFile} to ${destFile}`);
-            const useGit = this.answers.LA_use_git;
+            const useGit = conf['LA_use_git'];
             if (useGit) {
               cmdResult = this.spawnCommandSync(
                 'git',
@@ -1001,44 +1021,48 @@ module.exports = class extends Generator {
     if (firstRun || !this.fs.exists(localPassDest)) {
       // We'll generate some easy but strong passwords for our new database, etc
 
-      this.answers.LA_passwords = [];
+      conf['LA_passwords'] = [];
       for (let num = 0; num < 50; num++) {
-        this.answers.LA_passwords.push(niceware.generatePassphrase(6).join(''));
+        conf['LA_passwords'].push(niceware.generatePassphrase(6).join(''));
       }
 
       const salt = bcrypt.genSaltSync(10, 'a');
-      this.answers.LA_admin_bcrypt_password = bcrypt.hashSync(
-        this.answers.LA_passwords[23],
+      conf['LA_admin_bcrypt_password'] = bcrypt.hashSync(
+        conf['LA_passwords'][23],
         salt
       );
 
       logger(
-        `Important: We'll create an admin user with email: support@${this.answers.LA_domain} and password: ${this.answers.LA_passwords[23]}`
+        `Important: We'll create an admin user with email: support@${conf['LA_domain']} and password: ${conf['LA_passwords'][23]}`
       );
 
       logger(`To create a different one modify this in: ${localPassDest}`);
       logger('prior to deploy the CAS auth system.');
     }
 
-    this.answers.LA_apikeys = [];
+    conf['LA_apikeys'] = [];
     for (let num = 0; num < 50; num++) {
-      this.answers.LA_apikeys.push(uuidv4());
+      conf['LA_apikeys'].push(uuidv4());
     }
 
     if (!this.fs.exists(`${dest}/${filePrefix}-local-extras.ini`)) {
       // When only create the extras inventory in the first run
+      // noinspection JSUnresolvedFunction
+      // noinspection JSUnresolvedFunction
       this.fs.copyTpl(
         this.templatePath(`quick-start-local-extras.ini`),
         this.destinationPath(`${dest}/${filePrefix}-local-extras.ini`),
-        this.answers
+        conf
       );
     }
 
     // .sample is always updated with new versions
+    // noinspection JSUnresolvedFunction
+    // noinspection JSUnresolvedFunction
     this.fs.copyTpl(
       this.templatePath(`quick-start-local-extras.ini`),
       this.destinationPath(`${dest}/${filePrefix}-local-extras.sample`),
-      this.answers
+      conf
     );
 
     if (
@@ -1066,10 +1090,11 @@ module.exports = class extends Generator {
       this.fs.delete(`${dest}/${filePrefix}-cas-local-extras.sample`);
     }
 
+    // noinspection JSUnresolvedFunction
     this.fs.copyTpl(
       this.templatePath(`quick-start-inventory.ini`),
       this.destinationPath(`${dest}/${filePrefix}-inventory.ini`),
-      this.answers
+      conf
     );
 
     if (
@@ -1097,21 +1122,23 @@ module.exports = class extends Generator {
     }
 
     if (!this.fs.exists(localPassDest)) {
+      // noinspection JSUnresolvedFunction
+      // noinspection JSUnresolvedFunction
       this.fs.copyTpl(
         this.templatePath(`quick-start-local-passwords.ini`),
         this.destinationPath(localPassDest),
-        this.answers
+        conf
       );
     }
 
     if (useBranding) {
-      const brandDest = `${this.answers['LA_pkg_name']}-branding`;
-      generateBranding.call(this, this.answers, brandDest);
+      const brandDest = `${conf['LA_pkg_name']}-branding`;
+      generateBranding.call(this, conf, brandDest);
     }
 
-    if (this.answers.LA_additionalVariables != null) {
+    if (conf['LA_additionalVariables'] != null) {
       let additionalVariables = Base64.decode(
-        this.answers.LA_additionalVariables
+        conf['LA_additionalVariables']
       );
       additionalVariables =
         '\n' +
@@ -1131,61 +1158,64 @@ module.exports = class extends Generator {
       );
     }
 
-    if (isDefined(this.answers.LA_variable_google_api_key))
+    if (isDefined(conf['LA_variable_google_api_key']))
       replaceLine.call(this,
         localPassDest,
         'google_apikey[ ]*=',
-        `google_apikey = ${this.answers.LA_variable_google_api_key}`
+        `google_apikey = ${conf['LA_variable_google_api_key']}`
       );
 
-    if (isDefined(this.answers.LA_variable_google_api_key))
+    if (isDefined(conf['LA_variable_google_api_key']))
       replaceLine.call(this,
         localPassDest,
         'google_api_key[ ]*=',
-        `google_api_key = ${this.answers.LA_variable_google_api_key}`
+        `google_api_key = ${conf['LA_variable_google_api_key']}`
       );
 
-    if (isDefined(this.answers.LA_variable_maxmind_account_id))
+    if (isDefined(conf['LA_variable_maxmind_account_id']))
       replaceLine.call(this,
         localPassDest,
         'maxmind_account_id[ ]*=',
-        `maxmind_account_id = ${this.answers.LA_variable_maxmind_account_id}`
+        `maxmind_account_id = ${conf['LA_variable_maxmind_account_id']}`
       );
 
-    if (isDefined(this.answers.LA_variable_maxmind_license_key))
+    if (isDefined(conf['LA_variable_maxmind_license_key']))
       replaceLine.call(this,
         localPassDest,
         'maxmind_license_key[ ]*=',
-        `maxmind_license_key = ${this.answers.LA_variable_maxmind_license_key}`
+        `maxmind_license_key = ${conf['LA_variable_maxmind_license_key']}`
       );
 
-    const preDeployDest = `${this.answers.LA_pkg_name}-pre-deploy`;
-    const postDeployDest = `${this.answers.LA_pkg_name}-post-deploy`;
-    const hubsDest = `${this.answers.LA_pkg_name}-hubs`;
+    const preDeployDest = `${conf['LA_pkg_name']}-pre-deploy`;
+    const postDeployDest = `${conf['LA_pkg_name']}-post-deploy`;
+    const hubsDest = `${conf['LA_pkg_name']}-hubs`;
 
+    // noinspection JSUnresolvedFunction
     this.fs.copyTpl(
       this.templatePath('pre-deploy'),
       this.destinationPath(preDeployDest),
-      this.answers
+      conf
     );
 
+    // noinspection JSUnresolvedFunction
     this.fs.copyTpl(
       this.templatePath('post-deploy'),
       this.destinationPath(postDeployDest),
-      this.answers
+      conf
     );
 
-    generateAnsiblew.call(this, this.answers, dest);
+    generateAnsiblew.call(this, conf, dest);
 
-    if (isDefined(this.answers.LA_hubs)) {
+    if (isDefined(conf['LA_hubs'])) {
+      // noinspection JSUnresolvedFunction
       this.fs.copyTpl(
         this.templatePath('data-hub'),
         this.destinationPath(hubsDest),
-        this.answers
+        conf
       );
 
       let ansiblewHubConf = {};
-      ansiblewHubConf.LA_pkg_name = this.answers.LA_pkg_name;
+      ansiblewHubConf.LA_pkg_name = conf['LA_pkg_name'];
       ansiblewHubConf.LA_services_machines = [];
       ansiblewHubConf.LA_services_machines.push({
         service: 'ala_hub',
@@ -1200,10 +1230,10 @@ module.exports = class extends Generator {
         map: servicesRolesMap['regions'],
       });
 
-      for (let hub of this.answers['LA_hubs']) {
+      for (let hub of conf['LA_hubs']) {
         const hubBrandDest = `${hub['LA_pkg_name']}-branding`;
         let joinedConf = {
-          ...this.answers,
+          ...conf,
           ...hub
         };
         generateBranding.call(this, joinedConf, hubBrandDest);
@@ -1214,10 +1244,10 @@ module.exports = class extends Generator {
   }
 
   install() {
-    let dest = this.answers.LA_pkg_name;
-    // For now we use with "pkgname-inventories"
-    if (!fsN.existsSync(dest)) dest = `${this.answers.LA_pkg_name}-inventories`;
-    const useGit = this.answers.LA_use_git;
+    let dest = this.answers['LA_pkg_name'];
+    // For now we use with "LA_pkg_name-inventories"
+    if (!fsN.existsSync(dest)) dest = `${this.answers['LA_pkg_name']}-inventories`;
+    const useGit = this.answers['LA_use_git'];
     const cmdOpts = {
       cwd: this.destinationPath(dest),
       shell: true,
