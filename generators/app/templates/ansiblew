@@ -60,6 +60,9 @@ if __name__ == '__main__':
     extras = ""
     extraInvs = ""
     pkg = "<%= LA_pkg_name %>"
+    isHub = <% if (typeof LA_is_hub != 'undefined') { %>True<% } else { %>False<% } %>
+    hub_pkg = <% if (typeof LA_hub_pkg_name != 'undefined') { %>"<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
+    inv_path = <% if (typeof LA_hub_pkg_name != 'undefined') { %>"../<%= LA_pkg_name %>-inventories/<%= LA_pkg_name %>"<% } else { %>"<%= LA_pkg_name %>"<% } %>
     extra_vars = args['--extra']
     fail_on_error = not args['--continue']
 
@@ -79,7 +82,12 @@ if __name__ == '__main__':
     if debug:
         extras = "%s -vvvv" % (extras)
     if limit:
-        extras = "%s --limit %s" % (extras, limit)
+        hubLimit=<% if (typeof LA_hub_pkg_name != 'undefined') { %>",hub-<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
+        extras = "%s --limit %s%s" % (extras, limit, hubLimit)
+    else:
+        if isHub:
+            hubLimit=<% if (typeof LA_hub_pkg_name != 'undefined') { %>"hub-<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
+            extras = "%s --limit %s" % (extras, hubLimit)
     if extra_vars:
         extras = "%s --extra-vars %s" % (extras, extra_vars)
     if nodryrun:
@@ -88,10 +96,23 @@ if __name__ == '__main__':
     if debug:
         print("Extras: %s" % (extras))
 
+    <%_ if (typeof LA_is_hub != 'undefined' && LA_is_hub) { _%>
+    if os.path.isfile("../%s-inventories/%s-toolkit.ini" % (pkg, pkg)):
+        extraInvs = "-i ../%s-inventories/%s-toolkit.ini" % (pkg, pkg)
+    if os.path.isfile("%s-toolkit.ini" % (hub_pkg)):
+        extraInvs = "%s -i %s-toolkit.ini" % (extraInvs, hub_pkg)
+    <%_ } else { _%>
     if os.path.isfile("%s-toolkit.ini" % pkg):
         extraInvs = "-i %s-toolkit.ini" % pkg
+    <%_ } _%>
 
+    <%_ if (typeof LA_is_hub != 'undefined' && LA_is_hub) { _%>
+    baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini -i ./%s-inventory.ini " % (inv_path, inv_path, hub_pkg)
+    extraVars = ' ala_install_repo=%s' % alainstall
+    <%_ } else { _%>
     baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini" % (pkg, pkg)
+    extraVars = ''
+    <%_ } _%>
 
     plays = []
 
@@ -106,5 +127,5 @@ if __name__ == '__main__':
     inventories = " "
     inventories = inventories.join(plays)
 
-    playCmd = "%s ansible-playbook %s -u %s %s %s -i %s-local-passwords.ini %s %s --extra-vars 'target=all'" % (cmdPrefix, additionalParams, user, baseInventories, extraInvs, pkg, inventories, extras)
+    playCmd = "%s ansible-playbook %s -u %s %s %s -i %s-local-passwords.ini %s %s --extra-vars 'target=all%s'" % (cmdPrefix, additionalParams, user, baseInventories, extraInvs, inv_path, inventories, extras, extraVars)
     execCmd(playCmd, fail_on_error, nodryrun)
