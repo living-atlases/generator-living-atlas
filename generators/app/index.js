@@ -1236,6 +1236,11 @@ module.exports = class extends Generator {
           service: name,
           map: servicesRolesMap[name],
         });
+        joinedConf.LA_services_machines = ansiblewHubConf.LA_services_machines;
+
+        if (typeof hub['LA_additionalVariables'] === 'undefined') {
+          joinedConf['LA_additionalVariables'] = null;
+        }
         generateAnsiblew.call(this, ansiblewHubConf, hubDest);
         generate.call(this, joinedConf, hubDest, filePrefix);
       }
