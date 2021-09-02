@@ -108,7 +108,9 @@ if __name__ == '__main__':
 
     <%_ if (typeof LA_is_hub != 'undefined' && LA_is_hub) { _%>
     baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini -i ./%s-inventory.ini " % (inv_path, inv_path, hub_pkg)
-    extraVars = ' ala_install_repo=%s' % alainstall
+    # for now disabled that extraVars
+    # extraVars = ',ala_install_repo=%s' % alainstall
+    extraVars = ' biocache_hub=%s-hub bie_hub=%s-bie-hub regions=%s-regions' % (hub_pkg, hub_pkg, hub_pkg)
     <%_ } else { _%>
     baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini" % (pkg, pkg)
     extraVars = ''
