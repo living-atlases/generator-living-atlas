@@ -1,3 +1,5 @@
 node_modules
 coverage
 .yo-rc.*
+.idea
+*.iml
