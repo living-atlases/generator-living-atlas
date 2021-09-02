@@ -314,11 +314,11 @@ function generateBranding(conf, brandDest) {
         // accessing this._destinationRoot
         cwd: this.destinationRoot(),
         shell: true,
-        stdio: null,
+        stdio: 'ignore',
         // stdio: "inherit",
       }
     );
-    if (cmdResult.status === 0) {
+    if (cmdResult.exitCode === 0) {
       // Async update submodules
       logger(
         `INFO: Do a "git submodule update --init --recursive --depth=1" in '${brandDest}' directory later`
@@ -327,7 +327,7 @@ function generateBranding(conf, brandDest) {
       this.spawnCommandSync('rm', ['-f', brandSettings], {
         cwd: this.destinationPath(),
         shell: true,
-        stdio: null,
+        stdio: 'ignore',
       });
       // noinspection JSUnresolvedFunction
       this.fs.copyTpl(
@@ -431,9 +431,10 @@ module.exports = class extends Generator {
 
     let cmdResult = this.spawnCommandSync('which', ['git'], {
       shell: true,
-      stdio: null,
+      stdio: 'ignore',
     });
-    if (cmdResult.status !== 0) {
+
+    if (cmdResult.exitCode !== 0) {
       logger(
         `${em('Error')}: Please install git before running this generator`
       );
@@ -1255,7 +1256,7 @@ const useGit = this.answers['LA_use_git'];
 const cmdOpts = {
 cwd: this.destinationPath(dest),
 shell: true,
-stdio: null,
+stdio: 'ignore',
 };
 
 // Should be useful in the future but we don't have dependencies in the
@@ -1265,9 +1266,10 @@ stdio: null,
 if (firstRun && useGit) {
 let cmdResult = this.spawnCommandSync('which', ['git'], cmdOpts);
 
-if (cmdResult.status === 0) {
-  cmdResult = this.spawnCommandSync('git', ['status'], cmdOpts);
-
+if (cmdResult.exitCode === 0) {
+  try {
+    cmdResult = this.spawnCommandSync('git', ['status'], cmdOpts);
+  } catch (e) {
   if (cmdResult !== 0) {
     cmdResult = this.spawnCommandSync('git', ['init'], cmdOpts);
     if (cmdResult === 0) {
@@ -1280,6 +1282,7 @@ if (cmdResult.status === 0) {
         );
       }
     }
+  }
   }
 } else {
   logger(
