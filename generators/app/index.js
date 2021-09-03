@@ -1234,9 +1234,9 @@ module.exports = class extends Generator {
         ansiblewHubConf.LA_services_machines = [];
         for (let name of ['branding', 'ala_hub', 'ala_bie', 'regions'])
           ansiblewHubConf.LA_services_machines.push({
-          service: name,
-          map: servicesRolesMap[name],
-        });
+            service: name,
+            map: servicesRolesMap[name],
+          });
         joinedConf.LA_services_machines = ansiblewHubConf.LA_services_machines;
 
         if (typeof hub['LA_additionalVariables'] === 'undefined') {
@@ -1246,49 +1246,49 @@ module.exports = class extends Generator {
         generate.call(this, joinedConf, hubDest, filePrefix);
       }
     }
-}
+  }
 
-install() {
-let dest = this.answers['LA_pkg_name'];
+  install() {
+    let dest = this.answers['LA_pkg_name'];
 // For now we use with "LA_pkg_name-inventories"
-if (!fsN.existsSync(dest)) dest = `${this.answers['LA_pkg_name']}-inventories`;
-const useGit = this.answers['LA_use_git'];
-const cmdOpts = {
-cwd: this.destinationPath(dest),
-shell: true,
-stdio: 'ignore',
-};
+    if (!fsN.existsSync(dest)) dest = `${this.answers['LA_pkg_name']}-inventories`;
+    const useGit = this.answers['LA_use_git'];
+    const cmdOpts = {
+      cwd: this.destinationPath(dest),
+      shell: true,
+      stdio: 'ignore',
+    };
 
 // Should be useful in the future but we don't have dependencies in the
 // generated code (more than ansible):
 // this.installDependencies();
 
-if (firstRun && useGit) {
-let cmdResult = this.spawnCommandSync('which', ['git'], cmdOpts);
+    if (firstRun && useGit) {
+      let cmdResult = this.spawnCommandSync('which', ['git'], cmdOpts);
 
-if (cmdResult.exitCode === 0) {
-  try {
-    cmdResult = this.spawnCommandSync('git', ['status'], cmdOpts);
-  } catch (e) {
-  if (cmdResult !== 0) {
-    cmdResult = this.spawnCommandSync('git', ['init'], cmdOpts);
-    if (cmdResult === 0) {
-      cmdResult = this.spawnCommandSync('git', ['add', '--all'], cmdOpts);
-      if (cmdResult === 0) {
-        this.spawnCommandSync(
-          'git',
-          ['commit', '-am', '"Initial commit"'],
-          cmdOpts
+      if (cmdResult.exitCode === 0) {
+        try {
+          cmdResult = this.spawnCommandSync('git', ['status'], cmdOpts);
+        } catch (e) {
+          if (cmdResult !== 0) {
+            cmdResult = this.spawnCommandSync('git', ['init'], cmdOpts);
+            if (cmdResult === 0) {
+              cmdResult = this.spawnCommandSync('git', ['add', '--all'], cmdOpts);
+              if (cmdResult === 0) {
+                this.spawnCommandSync(
+                  'git',
+                  ['commit', '-am', '"Initial commit"'],
+                  cmdOpts
+                );
+              }
+            }
+          }
+        }
+      } else {
+        logger(
+          'Error: Please install git to track changes in your inventories'
         );
       }
     }
   }
-  }
-} else {
-  logger(
-    'Error: Please install git to track changes in your inventories'
-  );
-}
-}
-}
 };
