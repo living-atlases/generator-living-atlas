@@ -60,7 +60,7 @@ if __name__ == '__main__':
     extras = ""
     extraInvs = ""
     pkg = "<%= LA_pkg_name %>"
-    isHub = <% if (typeof LA_is_hub != 'undefined') { %>True<% } else { %>False<% } %>
+    isHub = <% if (typeof LA_is_hub != 'undefined' && LA_is_hub) { %>True<% } else { %>False<% } %>
     hub_pkg = <% if (typeof LA_hub_pkg_name != 'undefined') { %>"<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
     inv_path = <% if (typeof LA_hub_pkg_name != 'undefined') { %>"../<%= LA_pkg_name %>-inventories/<%= LA_pkg_name %>"<% } else { %>"<%= LA_pkg_name %>"<% } %>
     extra_vars = args['--extra']
