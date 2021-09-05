@@ -1,5 +1,16 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.0"></a>
+## v1.2.0 - 2021-09-05
+- Added SDS FAQ variable
+- Correct isHub variable check
+- Update yeoman and deps
+- Remove unused deps
+- Update dependencies for security vulnerabilities
+- Data hubs support
+- Refactor of index.js
+- Postinstall of email server with correct configuration
+
 <a name="v1.1.52"></a>
 ## v1.1.52 - 2021-07-21
 - Postinstall of email server with correct configuration
