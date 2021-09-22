@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.1"></a>
+## v1.2.1 - 2021-09-22
+- Added component version selection for the la-toolkit
+
 <a name="v1.2.0"></a>
 ## v1.2.0 - 2021-09-05
 - Added SDS FAQ variable
