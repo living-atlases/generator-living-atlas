@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.2"></a>
+## v1.2.2 - 2021-10-07
+- Added component version selection for the la-toolkit
+- Updated all LA module versions to versions pre pipelines integration
+- Added new vars for ala-hub and regions artifact selection
+
 <a name="v1.2.1"></a>
 ## v1.2.1 - 2021-09-22
 - Added component version selection for the la-toolkit
