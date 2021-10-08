@@ -19,6 +19,7 @@ const services = [
   'dashboard',
   'sds',
   'branding',
+  'pipelines',
   /* 'biocollect', */
 ];
 
@@ -150,6 +151,13 @@ const servicesRolesMap = {
     playbook: 'sds',
     desc: 'Sensitive Data Service',
   },
+  pipelines: {
+    name: 'pipelines',
+    group: 'pipelines',
+    playbook: 'pipelines',
+    desc:
+      'Pipelines for data processing and indexing of biodiversity data (replacement to biocache-store)',
+  },
   /* Disabled for now us depends in many ALA service
      biocollect: {
      name: 'biocollect',
@@ -161,5 +169,5 @@ const servicesRolesMap = {
 
 module.exports = {
   services,
-  servicesRolesMap
+  servicesRolesMap,
 };
