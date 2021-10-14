@@ -1,6 +1,6 @@
 ## <%= LA_project_name %>: Ansible Inventories
 
-These are some generated inventories to use to set up some machines on EC2 or other cloud provider with LA software.
+These are some generated inventories to use to set up some servers on EC2 or other cloud provider with LA software.
 
 ### Urls of your LA node
 
@@ -55,17 +55,17 @@ These are some generated inventories to use to set up some machines on EC2 or ot
 
 ### Initial Setup
 
-To use this, add the following into your `/etc/hosts` (of your working machine, and new service machine/s) and/or in your <%= LA_domain %> `DNS`. So these hostname should be accessible from your local working machine but also remotely between each machine/s so the hostname should resolve correctly.
+To use this, add the following into your `/etc/hosts` (of your working server, and new service server/s) and/or in your <%= LA_domain %> `DNS`. So these hostname should be accessible from your local working server but also remotely between each server/s so the hostname should resolve correctly.
 
-```<% let i=12; LA_machines.forEach(machine => { %>
-12.12.12.<%= i %>  <%= machine %><%; i++ }) %>
+```<% let i=12; LA_servers.forEach(server => { %>
+12.12.12.<%= i %>  <%= server %><%; i++ }) %>
 ```
 
 You'll need to replace `12.12.12.1` etc with the IP address of some new Ubuntu instances in your provider.
 
-These machines should have an user `ubuntu` with `sudo` permissions.
+These servers should have an user `ubuntu` with `sudo` permissions.
 
-You should generate and use some ssh key and copy `~/.ssh/MyKey.pub` in those machines under `~ubuntu/.ssh/authorized_keys` (via `ssh-copy-id` for avoid issues). See the `dot-ssh-config` as sample.
+You should generate and use some ssh key and copy `~/.ssh/MyKey.pub` in those servers under `~ubuntu/.ssh/authorized_keys` (via `ssh-copy-id` for avoid issues). See the `dot-ssh-config` as sample.
 
 You can test your initial setup with some `ssh` command like:
 ```
@@ -75,20 +75,22 @@ that should work.
 
 ### Run ansible
 
-With access to this machine/s you can run ansible with commands like:
+With access to this server/s you can run ansible with commands like:
 
 ```
 export AI=<location-of-your-cloned-ala-install-repo>
 
-#  For this demo to run well, we recommend a machine of 16GB RAM, 4 CPUs.
+#  For this demo to run well, we recommend a server of 16GB RAM, 4 CPUs.
 <% let baseInv=`-i ${LA_pkg_name}-inventory.ini -i ${LA_pkg_name}-local-extras.ini`; let passInv = `-i ${LA_pkg_name}-local-passwords.ini`; %>
 ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%= passInv %> $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
-<% for(var j=0; j < LA_services_machines.length; j++) {
-let isSpatialInv = LA_services_machines[j].map.name === 'spatial';
-let isCasInv = LA_services_machines[j].map.name === 'cas';
+<% for(var j=0; j < LA_services_in_use.length; j++) {
+let isSpatialInv = LA_services_in_use[j].map.name === 'spatial';
+let isCasInv = LA_services_in_use[j].map.name === 'cas';
 let extraInv = `-i ${LA_pkg_name}-local-passwords.ini`;
+let group = LA_services_in_use[j].map.group;
+let servers = LA_groups_and_servers[group].join(','); 
 %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%- extraInv %> $AI/ansible/<%= LA_services_machines[j].map.playbook %>.yml --limit <%= LA_services_machines[j].machine %><% } %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%- extraInv %> $AI/ansible/<%= LA_services_in_use[j].map.playbook %>.yml --limit <%= servers %><% } %>
 ```
 #### ansible-playbook wrapper
 

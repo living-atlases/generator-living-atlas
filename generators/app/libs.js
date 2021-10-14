@@ -2,7 +2,7 @@
 
 const { parseDomain } = require('parse-domain');
 const chalk = require('chalk');
-const { servicesRolesMap } = require('./services.js');
+const { servicesDesc } = require('./services.js');
 
 const defUseSubdomain = (a) => {
   return a['LA_collectory_uses_subdomain'];
@@ -30,8 +30,8 @@ const em = (text) => chalk.keyword('orange')(text);
 
 const defUseSubdomainPrompt = (a, service) => {
   let desc =
-    servicesRolesMap[service].desc.length > 0
-      ? ` (${servicesRolesMap[service].desc})`
+    servicesDesc[service].desc.length > 0
+      ? ` (${servicesDesc[service].desc})`
       : '';
   return `Will the ${em(service)} module${desc} use a http${
     a['LA_enable_ssl'] ? 's' : ''

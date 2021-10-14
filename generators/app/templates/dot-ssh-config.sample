@@ -12,8 +12,8 @@ Host *
   # Comment this line in production
   StrictHostKeyChecking no
 
-<%_ LA_machines.forEach(machine => { -%>
-Host <%= machine %>
+<%_ LA_servers.forEach(server => { -%>
+Host <%= server %>
   # If you have to jump to another (bastion) host to access this,
   # uncoment and adjust this ProxyJump line
   # ProxyJump ubuntu@bastion_host:22

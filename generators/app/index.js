@@ -20,7 +20,7 @@ const {
   em,
   validateDomain,
 } = require('./libs.js');
-const {services, servicesRolesMap} = require('./services.js');
+const {services, servicesDesc, serviceUseVar} = require('./services.js');
 
 let defaultStore = false;
 let logger;
@@ -31,44 +31,76 @@ let previousConfig;
 let firstRun;
 
 /*
-   Set of used machines
+   Set of used servers
  */
-const machines = [];
-const machinesSorted = [];
+const servers = new Set();
+let serversSorted = [];
 
 /*
    We store used `context` like this:
 
-   machinesAndPaths["machine"]["url"]["path"] = true;
+   serversAndPaths["server"]["url"]["path"] = true;
 
-   so we can check that in a same machine we don't configure two servers
+   so we can check that in a same server we don't configure two servers
    with the same domain and the same path
 
  */
-const machinesAndPaths = {};
-
-const servicesAndMachines = [];
-
+const serversAndPaths = {};
+const servicesInUse = [];
+let groupsAndServers = {};
 const vhostsSet = new Set(); // use for nginx_vhost_fragments_to_clear
 
-const storeMachine = (name, machine) =>
-  new Promise((resolve, reject) => {
-    if (debug) logger(`Store: ${name} -> ${machine}`);
-    if (isCorrectHostname(machine) === true) {
-      if (debug) logger('We add to the first position');
-      if (!machines.includes(machine)) machines.push(machine);
-      if (!machinesSorted.includes(machine)) machinesSorted.unshift(machine);
-      servicesAndMachines.push({
-        service: name,
-        machine,
-        map: servicesRolesMap[name],
-      });
+function storeGroupServer(name, server) {
+  let desc = servicesDesc[name];
+  let group = desc.group;
+  if (server != null) {
+    if (groupsAndServers[group] == null) {
+      groupsAndServers[group] = [server];
     } else {
-      reject(new Error(`Invalid hostname '${machine}' for '${name}'`));
+      if (!groupsAndServers[group].includes(server)) {
+        groupsAndServers[group] = [...groupsAndServers[group], server];
+      }
     }
-    if (debug) logger(machines);
-    if (debug) logger(machinesSorted);
-    resolve(machine);
+    let serviceInUse = {
+      service: name,
+      map: desc,
+    };
+    // Don't add twice
+    if (servicesInUse.filter(e => e.service === name).length === 0) {
+      servicesInUse.push(serviceInUse);
+    }
+  }
+  if (name === 'biocache_backend') {
+    storeGroupServer('biocache_cli', server);
+    storeGroupServer('nameindexer', server);
+  }
+}
+
+const hostSepRegexp = /[,\s]+/;
+
+const validateAndStoreServer = (name, serversOrServersList) =>
+  new Promise((resolve, reject) => {
+    if (serversOrServersList == null || serversOrServersList === '') {
+      reject(new Error(`Please select some server for deploy '${name}'`));
+    }
+    if (debug) logger(`store: ${serversOrServersList} typeof ${typeof serversOrServersList}`);
+    let groupServers = typeof serversOrServersList === 'string' ? serversOrServersList.split(hostSepRegexp) : serversOrServersList;
+    if (debug) logger(`store: ${groupServers} (${groupServers.length}) typeof ${typeof groupServers}`);
+    for (let server of groupServers) {
+      if (debug) logger(`Store: ${name} -> ${server}`);
+      if (isCorrectHostname(server) === true) {
+        if (debug) logger('We add to the first position');
+        servers.add(server);
+        if (!serversSorted.includes(server)) serversSorted.unshift(server);
+        // add this server for its groups (we can add several to allow redundancy of services)
+        storeGroupServer(name, server);
+      } else {
+        reject(new Error(`Invalid hostname '${server}' for '${name}'`));
+      }
+    }
+    if (debug) logger(servers);
+    if (debug) logger(serversSorted)
+    resolve(true);
   });
 
 function PromptSubdomainFor(name, subdomain, when, force) {
@@ -104,29 +136,33 @@ function urlDefValue(a, varUsesSubdomain, subdomain, varName) {
   return `${a['LA_domain']}`;
 }
 
-function hostChoices(a, varUsesSubdomain, subdomain, varName) {
-  let choices;
-  if (typeof varUsesSubdomain !== 'undefined' && a[varUsesSubdomain]) {
-    choices = [...machinesSorted, `${subdomain}.${a['LA_domain']}`, 'other'];
-  } else {
-    choices = [...machinesSorted, 'other'];
-  }
-  // Add previous selected hostname at the start of the array
-  const hasPrevious =
-    typeof previousConfig !== 'undefined' &&
-    typeof previousConfig[varName] !== 'undefined';
-  const previousHostname = hasPrevious ? previousConfig[varName] : null;
-  if (debug) logger(`hasPrevious: ${hasPrevious} ${previousHostname}`);
-  if (replay && hasPrevious) {
-    if (choices.includes(previousHostname)) {
-      // Remove and later put in the first position
-      for (let i = 0; i < choices.length; i++) {
-        if (choices[i] === previousHostname) {
-          choices.splice(i, 1);
+function hostChoices(a, varUsesSubdomain, subdomain, multi, name) {
+  let serverList = a['LA_hostnames'].split(hostSepRegexp)
+  let group = servicesDesc[name].group;
+  let choices = [];
+  if (!multi) {
+    choices = serverList;
+    // Add previous selected hostname at the start of the array
+    const hasPrevious = groupsAndServers[group] != null && groupsAndServers[group].length > 0;
+    const previousHostname = hasPrevious ? groupsAndServers[group][0] : null;
+    if (debug) logger(`hasPrevious: ${hasPrevious} ${previousHostname}`);
+    if (replay && hasPrevious && choices.includes(previousHostname)) {
+      if (choices.includes(previousHostname)) {
+        // Remove and later put in the first position
+        for (let i = 0; i < choices.length; i++) {
+          if (choices[i] === previousHostname) {
+            choices.splice(i, 1);
+          }
         }
       }
+      choices.unshift(previousHostname);
     }
-    choices.unshift(previousHostname);
+  } else {
+    // multi select
+    for (let host of serverList) {
+      let checked = groupsAndServers[group] != null && groupsAndServers[group].length > 0 && groupsAndServers[group].includes(host);
+      choices.push({name: host, checked: checked});
+    }
   }
   if (debug) logger(choices);
   return choices;
@@ -134,43 +170,33 @@ function hostChoices(a, varUsesSubdomain, subdomain, varName) {
 
 function PromptHostnameFor(name, subdomain, when) {
   this.store = defaultStore;
-  this.type = 'list';
+  const multi = servicesDesc[name].allowMultipleDeploys;
+  this.type = multi ? 'checkbox' : 'list'; // checkbox
   const varName = `LA_${name}_hostname`;
   const varUsesSubdomain = `LA_${name}_uses_subdomain`;
   this.name = varName;
   this.message = `LA ${em(
     name
   )} hostname (like myvm1, somehost.amazonaws.com, ...) ?`;
-  this.choices = (a) => hostChoices(a, varUsesSubdomain, subdomain, varName);
+  this.choices = (a) => hostChoices(a, varUsesSubdomain, subdomain, multi, name);
   if (when) {
     this.when = when;
   }
-  // This does not work with list:
-  // this.filter = input => storeMachine(name, input);
+  this.filter = async (input, a) => {
+    if (this.type == 'list') {
+      await validateAndStoreServer(name, input);
+    }
+    return typeof input === 'string' ? input : input.join(', ');
+  }
+  if (this.type == 'checkbox') {
+    this.validate = (input, a) =>
+      validateAndStoreServer(name, input);
+  }
+  // Validation does not work with list, so we add to the filter
+  // this.validate = input => validateAndStoreServer(name, input);
   // https://github.com/SBoudrias/Inquirer.js/issues/383
 }
 
-function PromptHostnameInputFor(name, when) {
-  this.store = defaultStore;
-  this.type = 'input';
-  const varName = `LA_${name}_hostname`;
-  this.name = varName;
-  this.message = `LA ${em(name)} hostname ?`;
-  this.when = (a) => {
-    if (debug) logger(`We ask for other ${name}/${a[varName]}?`);
-    if (typeof when !== 'undefined' && !when(a)) {
-      if (debug) logger("We don't ask for other hostname");
-      return false;
-    }
-    if (a[varName] === 'other') {
-      if (debug) logger("We ask for 'other' hostname");
-      return true;
-    }
-    // And don't ask again
-    return false;
-  };
-  this.validate = (input) => isCorrectHostname(input);
-}
 
 function PromptUrlFor(name, subdomain, when) {
   this.store = defaultStore;
@@ -187,9 +213,7 @@ function PromptUrlFor(name, subdomain, when) {
     // Store previous hostname from choices or input request for later use
     const varHostName = `LA_${name}_hostname`;
     const varUrl = `LA_${name}_url`;
-    if (debug) logger(`We store ${name} hostname with ${a[varHostName]}`);
-    await storeMachine(name, a[varHostName]);
-    vhostsSet.add(a[varUrl]);
+    vhostsSet.add(input);
     // Now we verify the url
     return validateDomain(input, name, logger);
   };
@@ -217,9 +241,9 @@ function PromptPathFor(name, path, when) {
       const hostname = a[varHostname];
       const url = a[varUrl];
       const rootUsed =
-        typeof machinesAndPaths[hostname] !== 'undefined' &&
-        typeof machinesAndPaths[hostname][url] !== 'undefined' &&
-        machinesAndPaths[hostname][url]['/'];
+        typeof serversAndPaths[hostname] !== 'undefined' &&
+        typeof serversAndPaths[hostname][url] !== 'undefined' &&
+        serversAndPaths[hostname][url]['/'];
       return rootUsed ? `/${typeof path === 'undefined' ? '' : path}` : '/';
     }
     return typeof path === 'undefined' ? '' : `/${path}`;
@@ -229,7 +253,8 @@ function PromptPathFor(name, path, when) {
   }
   this.validate = (path, answers) =>
     new Promise((resolve) => {
-      // Check if in this machine this path is already used
+      // Check if in this server this path is already used
+      // logger(`path '${path}'`);
       if (!path.startsWith('/')) {
         resolve("Please enter something like '/path'");
       }
@@ -237,19 +262,19 @@ function PromptPathFor(name, path, when) {
       const hostname = answers[`LA_${name}_hostname`];
       const url = answers[`LA_${name}_url`];
       const used =
-        machinesAndPaths[hostname] &&
-        machinesAndPaths[hostname][url] &&
-        machinesAndPaths[hostname][url][path];
+        serversAndPaths[hostname] &&
+        serversAndPaths[hostname][url] &&
+        serversAndPaths[hostname][url][path];
       if (used) {
-        resolve(`This context /path is already in use in this machine`);
+        resolve(`This context /path is already in use in this server`);
       }
-      if (!machinesAndPaths[hostname]) {
-        machinesAndPaths[hostname] = {};
+      if (!serversAndPaths[hostname]) {
+        serversAndPaths[hostname] = {};
       }
-      if (!machinesAndPaths[hostname][url]) {
-        machinesAndPaths[hostname][url] = {};
+      if (!serversAndPaths[hostname][url]) {
+        serversAndPaths[hostname][url] = {};
       }
-      machinesAndPaths[hostname][url][path] = true;
+      serversAndPaths[hostname][url][path] = true;
       resolve(true);
     });
 }
@@ -259,6 +284,12 @@ function replaceLine(filePath, oldContent, newContent) {
   const regexp = new RegExp(`^[ \\t]*${oldContent}.+$`, 'm');
   content = content.replace(regexp, newContent);
   this.fs.write(this.destinationPath(filePath), content);
+}
+
+function isPasswordNotDefined(filePath, pass_variable) {
+  let content = this.fs.read(this.destinationPath(filePath));
+  const regexp = new RegExp(`^[ \\t]*${pass_variable}.+$`, 'm');
+  return !content.match(regexp);
 }
 
 function generateBranding(conf, brandDest) {
@@ -286,7 +317,7 @@ function generateBranding(conf, brandDest) {
       logger('INFO: copying a branding settings sample');
       // noinspection JSUnresolvedFunction
       this.fs.copyTpl(
-        this.templatePath('base-branding-settings.js'),
+        this.templatePath('base-branding-settings.ejs'),
         this.destinationPath(`${brandSettings}.sample`),
         conf
       );
@@ -326,7 +357,7 @@ function generateBranding(conf, brandDest) {
       });
       // noinspection JSUnresolvedFunction
       this.fs.copyTpl(
-        this.templatePath('base-branding-settings.js'),
+        this.templatePath('base-branding-settings.ejs'),
         this.destinationPath(brandSettings),
         conf
       );
@@ -408,6 +439,9 @@ module.exports = class extends Generator {
     replay = this.options['replay'] || this.options['replay-dont-ask'];
     dontAsk = this.options['replay-dont-ask'];
 
+    // https://github.com/yeoman/environment/issues/298
+    this.options.skipLocalCache = false;
+
     const previousConfigAll = this.config.getAll();
     previousConfig =
       typeof previousConfigAll === 'undefined'
@@ -415,12 +449,13 @@ module.exports = class extends Generator {
         : previousConfigAll['promptValues'];
 
     firstRun = previousConfigAll.firstRun !== false;
+
+    logger = this.log;
+
     if (firstRun) {
       // Set firstRun so in the future we can check it
       this.config.set('firstRun', false);
     }
-
-    logger = this.log;
 
     let cmdResult = this.spawnCommandSync('which', ['git'], {
       shell: true,
@@ -446,6 +481,29 @@ module.exports = class extends Generator {
         `${em('Error')}: We cannot replay without a previous configuration`
       );
       process.exit(1);
+    }
+
+    if (replay) {
+      Object.keys(servicesDesc).forEach((service) => {
+        const hostVar = `LA_${service}_hostname`;
+        const groupServers = previousConfig[hostVar] == null ? null : previousConfig[hostVar].split(hostSepRegexp);
+        if (serviceUseVar(service, previousConfig)) {
+          if (groupServers != null) {
+            groupServers.forEach(servers.add, servers);
+            for (let server of groupServers) {
+              storeGroupServer(service, server);
+            }
+          }
+        }
+        // delete previousConfig[hostVar];
+      });
+      serversSorted = [...servers];
+      if (debug) logger(groupsAndServers);
+      if (debug) logger(servers);
+      if (debug) logger(serversSorted)
+      // This doesn't work
+      // this.config.set("promptValues", previousConfig);
+      // this.config.set("LA_groups_and_servers", groupsAndServers);
     }
   }
 
@@ -483,7 +541,7 @@ module.exports = class extends Generator {
             'short-lowercase-name'
           )} (we'll put your inventories in that directory):`,
           default: (answers) =>
-            answers['LA_project_name'].toLowerCase().replace(/ /g, '-'),
+            answers['LA_project_shortname'].toLowerCase().replace(/ /g, '-'),
           validate: (input) =>
             new Promise((resolve) => {
               if (input.match(/^[a-z0-9-]+$/g)) {
@@ -500,6 +558,15 @@ module.exports = class extends Generator {
           message: `What is your LA node ${em('main domain')}?`,
           default: (answers) => `${answers['LA_pkg_name']}.org`,
           validate: (input) => validateDomain(input, 'branding', logger),
+        },
+        {
+          store: true,
+          type: 'input',
+          name: 'LA_hostnames',
+          message: 'Names of the servers you will use (comma or space separated)',
+          default: (a) => firstRun ? 'vm1, vm2, vm3' : previousConfig['LA_hostnames'] == null && servers.size > 0 ? [...servers].join(',') : previousConfig['LA_hostnames'],
+          validate: (input) => /^[._\-a-z0-9A-Z, ]+$/.test(input),
+          // filter: (input, a) => input.split(hostSepRegexp).join('|')
         },
         {
           store: true,
@@ -651,19 +718,16 @@ module.exports = class extends Generator {
           ],
         },
         new PromptHostnameFor('collectory', 'collections'),
-        new PromptHostnameInputFor('collectory'),
         new PromptUrlFor('collectory', 'collections'),
         new PromptPathFor('collectory', 'collections'),
 
         new PromptSubdomainFor('ala_hub', 'records'),
         new PromptHostnameFor('ala_hub', 'records'),
-        new PromptHostnameInputFor('ala_hub'),
         new PromptUrlFor('ala_hub', 'records'),
         new PromptPathFor('ala_hub', 'records'),
 
         new PromptSubdomainFor('biocache_service', 'records-ws'),
         new PromptHostnameFor('biocache_service', 'records-ws'),
-        new PromptHostnameInputFor('biocache_service'),
         new PromptUrlFor('biocache_service', 'records-ws'),
         new PromptPathFor('biocache_service', 'records-ws'),
 
@@ -677,7 +741,6 @@ module.exports = class extends Generator {
           'species',
           (a) => a['LA_use_species']
         ),
-        new PromptHostnameInputFor('ala_bie', (a) => a['LA_use_species']),
         new PromptUrlFor('ala_bie', 'species', (a) => a['LA_use_species']),
         new PromptPathFor('ala_bie', 'species', (a) => a['LA_use_species']),
 
@@ -691,7 +754,6 @@ module.exports = class extends Generator {
           'species-ws',
           (a) => a['LA_use_species']
         ),
-        new PromptHostnameInputFor('bie_index', (a) => a['LA_use_species']),
         new PromptUrlFor(
           'bie_index',
           'species-ws',
@@ -705,7 +767,6 @@ module.exports = class extends Generator {
 
         new PromptSubdomainFor('images', 'images', (a) => a['LA_use_images']),
         new PromptHostnameFor('images', 'images', (a) => a['LA_use_images']),
-        new PromptHostnameInputFor('images', (a) => a['LA_use_images']),
         new PromptUrlFor('images', 'images', (a) => a['LA_use_images']),
         new PromptPathFor('images', 'images', (a) => a['LA_use_images']),
 
@@ -719,7 +780,6 @@ module.exports = class extends Generator {
           'lists',
           (a) => a['LA_use_species_lists']
         ),
-        new PromptHostnameInputFor('lists', (a) => a['LA_use_species_lists']),
         new PromptUrlFor('lists', 'lists', (a) => a['LA_use_species_lists']),
         new PromptPathFor(
           'lists',
@@ -737,19 +797,16 @@ module.exports = class extends Generator {
           'regions',
           (a) => a['LA_use_regions']
         ),
-        new PromptHostnameInputFor('regions', (a) => a['LA_use_regions']),
         new PromptUrlFor('regions', 'regions', (a) => a['LA_use_regions']),
         new PromptPathFor('regions', 'regions', (a) => a['LA_use_regions']),
 
         new PromptSubdomainFor('logger', 'logger'),
         new PromptHostnameFor('logger', 'logger'),
-        new PromptHostnameInputFor('logger'),
         new PromptUrlFor('logger', 'logger'),
         new PromptPathFor('logger', 'logger-service'),
 
         new PromptSubdomainFor('webapi', 'webapi', (a) => a['LA_use_webapi']),
         new PromptHostnameFor('webapi', 'api', (a) => a['LA_use_webapi']),
-        new PromptHostnameInputFor('webapi', (a) => a['LA_use_webapi']),
         new PromptUrlFor('webapi', 'api', (a) => a['LA_use_webapi']),
         new PromptPathFor('webapi', 'webapi', (a) => a['LA_use_webapi']),
 
@@ -763,7 +820,7 @@ module.exports = class extends Generator {
           'dashboard',
           (a) => a['LA_use_dashboard']
         ),
-        new PromptHostnameInputFor('dashboard', (a) => a['LA_use_dashboard']),
+
         new PromptUrlFor(
           'dashboard',
           'dashboard',
@@ -777,20 +834,16 @@ module.exports = class extends Generator {
 
         new PromptSubdomainFor('alerts', 'alerts', (a) => a['LA_use_alerts']),
         new PromptHostnameFor('alerts', 'alerts', (a) => a['LA_use_alerts']),
-        new PromptHostnameInputFor('alerts', (a) => a['LA_use_alerts']),
         new PromptUrlFor('alerts', 'alerts', (a) => a['LA_use_alerts']),
         new PromptPathFor('alerts', 'alerts', (a) => a['LA_use_alerts']),
 
         new PromptSubdomainFor('doi', 'doi', (a) => a['LA_use_doi']),
         new PromptHostnameFor('doi', 'doi', (a) => a['LA_use_doi']),
-        new PromptHostnameInputFor('doi', (a) => a['LA_use_doi']),
         new PromptUrlFor('doi', 'doi', (a) => a['LA_use_doi']),
         new PromptPathFor('doi', 'doi', (a) => a['LA_use_doi']),
 
         new PromptSubdomainFor('sds', 'sds', (a) => a['LA_use_sds']),
-        new PromptHostnameFor('sds', 'sds', (a) => a['LA_use_sds']),
-        new PromptHostnameInputFor('sds', (a) => a['LA_use_sds']),
-        new PromptUrlFor('sds', 'sds', (a) => a['LA_use_sds']),
+        new PromptHostnameFor('sds', 'sds', (a) => a['LA_use_sds']), new PromptUrlFor('sds', 'sds', (a) => a['LA_use_sds']),
         new PromptPathFor('sds', 'sds', (a) => a['LA_use_sds']),
 
         /* Disabled for now
@@ -804,7 +857,7 @@ module.exports = class extends Generator {
        'biocollect',
        (a) => a['LA_use_biocollect']
        ),
-       new PromptHostnameInputFor('biocollect', (a) => a['LA_use_biocollect']),
+
        new PromptUrlFor(
        'biocollect',
        'biocollect',
@@ -818,16 +871,18 @@ module.exports = class extends Generator {
 
         new PromptSubdomainFor('solr', 'solr'),
         new PromptHostnameFor('solr', 'index'),
-        new PromptHostnameInputFor('solr'),
         new PromptUrlFor('solr', 'index'),
         new PromptPathFor('solr', 'solr'),
 
         new PromptSubdomainFor('cas', 'auth', true, true),
         new PromptHostnameFor('cas', 'auth'),
-        new PromptHostnameInputFor('cas'),
         new PromptUrlFor('cas', 'auth'),
 
-        {
+
+        new PromptHostnameFor('biocache_backend', 'biocache_backend', (a) => a['LA_use_biocache_store']),
+
+        new PromptHostnameFor('pipelines', 'pipelines', (a) => a['LA_use_pipelines']),
+        /* {
           store: true,
           type: 'input',
           name: 'LA_biocache_backend_hostname',
@@ -836,15 +891,15 @@ module.exports = class extends Generator {
           validate: (input) => isCorrectHostname(input),
           filter: (input) =>
             new Promise((resolve) => {
-              storeMachine('biocache_backend', input).then((input) =>
-                storeMachine('biocache_cli', input).then((input) =>
-                  storeMachine('nameindexer', input).then((input) =>
+              validateAndStoreServer('biocache_backend', input).then((input) =>
+                validateAndStoreServer('biocache_cli', input).then((input) =>
+                  validateAndStoreServer('nameindexer', input).then((input) =>
                     resolve(input)
                   )
                 )
               );
             }),
-          default: (a) => `${a['LA_main_hostname']}`,
+          default: (a) => `${a['LA_domain']}`,
         },
 
         {
@@ -856,18 +911,14 @@ module.exports = class extends Generator {
           validate: (input) => isCorrectHostname(input),
           filter: (input) =>
             new Promise((resolve) => {
-              storeMachine('pipelines', input).then((input) =>
-                /* storeMachine('biocache_cli', input).then((input) =>
-                  storeMachine('nameindexer', input).then((input) =>
-                    resolve(input)
-                  )
-                )*/
+              validateAndStoreServer('pipelines', input).then((input) =>
 
-                resolve(input)
+
+
               );
             }),
-          default: (a) => `${a['LA_main_hostname']}`,
-        },
+          default: (a) => `${a['LA_domain']}`,
+        },*/
 
         new PromptSubdomainFor(
           'spatial',
@@ -880,12 +931,11 @@ module.exports = class extends Generator {
           'spatial',
           (a) => a['LA_use_spatial']
         ),
-        new PromptHostnameInputFor('spatial', (a) => a['LA_use_spatial']),
+
         new PromptUrlFor('spatial', 'spatial', (a) => a['LA_use_spatial']),
 
         new PromptSubdomainFor('branding', 'branding'),
         new PromptHostnameFor('branding', 'branding'),
-        new PromptHostnameInputFor('branding'),
         new PromptUrlFor('branding', 'branding'),
         new PromptPathFor('branding', 'branding'),
 
@@ -932,6 +982,8 @@ module.exports = class extends Generator {
     if (typeof this.answers['LA_use_species'] === 'undefined')
       this.answers['LA_use_species'] = true;
 
+    vhostsSet.add(this.answers['LA_domain']);
+
     if (dontAsk) {
       // Compatible with old generated inventories and don-ask
       if (typeof this.answers['LA_use_webapi'] === 'undefined')
@@ -962,8 +1014,10 @@ module.exports = class extends Generator {
       if (typeof this.answers['LA_branding_url'] === 'undefined')
         this.answers['LA_branding_url'] = this.answers['LA_domain'];
 
-      if (typeof this.answers['LA_use_pipelines'] === 'undefined')
+      if (typeof this.answers['LA_use_pipelines'] === 'undefined') {
         this.answers['LA_use_pipelines'] = true;
+        this.answers['LA_pipelines_hostname'] = this.answers['LA_main_hostname'];
+      }
 
       if (typeof this.answers['LA_use_biocache_store'] === 'undefined')
         this.answers['LA_use_biocache_store'] = true;
@@ -973,11 +1027,10 @@ module.exports = class extends Generator {
         ? 'https://'
         : 'http://';
 
-      vhostsSet.add(this.answers['LA_domain']);
-
       if (debug) logger(this.answers);
 
-      Object.keys(servicesRolesMap).forEach((service) => {
+      // TODO Rewrite this
+      Object.keys(servicesDesc).forEach((service) => {
         if (service === 'spatial' && !this.answers['LA_use_spatial']) return;
         if (service === 'regions' && !this.answers['LA_use_regions']) return;
         if (service === 'ala_bie' && !this.answers['LA_use_species']) return;
@@ -993,23 +1046,29 @@ module.exports = class extends Generator {
         if (service === 'sds' && !this.answers['LA_use_sds']) return;
         if (service === 'biocollect' && !this.answers['LA_use_biocollect'])
           return;
+        if (service === 'biocache_backend' && !this.answers['LA_use_biocache_store'])
+          return;
+        if (service === 'pipelines' && !this.answers['LA_use_pipelines'])
+          return;
 
         const hostVar = `LA_${service}_hostname`;
         const serviceUrl = this.answers[`LA_${service}_url`];
         const hostname = this.answers[hostVar];
         if (debug)
           logger(`${service}: ${hostVar} -> ${hostname}, url: ${serviceUrl}`);
-        storeMachine(service, hostname);
         if (typeof serviceUrl !== 'undefined') vhostsSet.add(serviceUrl);
       });
 
-      if (debug) logger(machines);
-      if (debug) logger(servicesAndMachines);
+      this.answers["LA_groups_and_servers"] = groupsAndServers;
+
+      if (debug) logger(servers);
+      if (debug) logger(servicesInUse);
     }
   }
 
   writing() {
     const conf = this.answers;
+
     let dest = conf['LA_pkg_name'];
     // Old destination check, for back compatibility
     // For now we use with "LA_pkg_name-inventories"
@@ -1057,14 +1116,16 @@ module.exports = class extends Generator {
     if (typeof conf['LA_generate_branding'] === 'undefined') {
       conf['LA_generate_branding'] = false;
     }
-    conf['LA_machines'] = machines;
-    conf['LA_services_machines'] = servicesAndMachines;
+    conf['LA_servers'] = servers;
+    conf['LA_services_in_use'] = servicesInUse;
+    conf['LA_groups_and_servers'] = groupsAndServers;
 
     const filePrefix = conf['LA_pkg_name'];
     const useCAS = conf['LA_use_CAS'];
     const useSpatial = conf['LA_use_spatial'];
 
-    conf['LA_nginx_vhosts'] = [...new Set(vhostsSet)];
+    // logger(`vhost: ${vhostsSet.size}`);
+    conf['LA_nginx_vhosts'] = [...vhostsSet].sort();
 
     if (debug) logger(conf);
     // noinspection JSUnresolvedFunction
@@ -1292,6 +1353,14 @@ module.exports = class extends Generator {
         `maxmind_license_key = ${conf['LA_variable_maxmind_license_key']}`
       );
 
+    if (isPasswordNotDefined.call(this, localPassDest, 'pipelines_api_key'))
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `pipelines_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+
     generate.call(this, conf, dest, filePrefix);
     generateAnsiblew.call(this, conf, dest);
 
@@ -1315,13 +1384,13 @@ module.exports = class extends Generator {
         ansiblewHubConf.LA_pkg_name = conf['LA_pkg_name'];
         ansiblewHubConf.LA_hub_pkg_name = hub['LA_pkg_name'];
         ansiblewHubConf.LA_is_hub = true;
-        ansiblewHubConf.LA_services_machines = [];
+        ansiblewHubConf.LA_services_in_use = [];
         for (let name of ['branding', 'ala_hub', 'ala_bie', 'regions'])
-          ansiblewHubConf.LA_services_machines.push({
+          ansiblewHubConf.LA_services_in_use.push({
             service: name,
-            map: servicesRolesMap[name],
+            map: servicesDesc[name],
           });
-        joinedConf.LA_services_machines = ansiblewHubConf.LA_services_machines;
+        joinedConf.LA_services_in_use = ansiblewHubConf.LA_services_in_use;
 
         if (typeof hub['LA_additionalVariables'] === 'undefined') {
           joinedConf['LA_additionalVariables'] = null;

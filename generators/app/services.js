@@ -19,88 +19,95 @@ const services = [
   'dashboard',
   'sds',
   'branding',
+  'spatial',
   'pipelines',
   /* 'biocollect', */
 ];
 
-const servicesRolesMap = {
-  branding: {
-    name: 'branding',
-    group: 'branding',
-    playbook: 'branding',
-    desc: 'LA branding (header and footer theme)',
-  },
+const servicesDesc = {
   collectory: {
     name: 'collectory',
     group: 'collectory',
     playbook: 'collectory-standalone',
     desc: 'biodiversity collections',
+    allowMultipleDeploys: false,
   },
   ala_hub: {
     name: 'ala_hub',
     group: 'biocache-hub',
     playbook: 'biocache-hub-standalone',
     desc: 'occurrences search frontend',
+    allowMultipleDeploys: true,
   },
   biocache_service: {
     name: 'biocache_service',
     group: 'biocache-service-clusterdb',
     playbook: 'biocache-service-clusterdb',
     desc: 'occurrences web service',
+    allowMultipleDeploys: true,
   },
   ala_bie: {
     name: 'ala_bie',
     group: 'bie-hub',
     playbook: 'bie-hub',
     desc: 'species search frontend',
+    allowMultipleDeploys: true,
   },
   bie_index: {
     name: 'bie_index',
     group: 'bie-index',
     playbook: 'bie-index',
     desc: 'species web service',
+    allowMultipleDeploys: false,
   },
   images: {
     name: 'images',
     group: 'image-service',
     playbook: 'image-service',
     desc: '',
+    allowMultipleDeploys: false,
   },
   lists: {
     name: 'lists',
     group: 'species-list',
     playbook: 'species-list-standalone',
     desc: '',
+    allowMultipleDeploys: false,
   },
   regions: {
     name: 'regions',
     group: 'regions',
     playbook: 'regions-standalone',
     desc: 'regional data frontend',
+    allowMultipleDeploys: true, // ALA does not uses redundant regions
   },
   logger: {
     name: 'logger',
     group: 'logger-service',
     playbook: 'logger-standalone',
     desc: 'event logging',
+    allowMultipleDeploys: false,
   },
   solr: {
     name: 'solr',
     group: 'solr7-server',
     playbook: 'solr7-standalone',
     desc: 'indexing',
+    allowMultipleDeploys: true,
   },
   cas: {
     name: 'cas',
     group: 'cas-servers',
     playbook: 'cas5-standalone',
     desc: 'authentication system',
+    allowMultipleDeploys: false,
   },
   biocache_backend: {
     name: 'biocache_backend',
     group: 'biocache-db',
     playbook: 'biocache-db',
     desc: 'cassandra',
+    allowMultipleDeploys: true,
   },
   biocache_cli: {
     name: 'biocache_cli',
@@ -108,48 +115,56 @@ const servicesRolesMap = {
     playbook: 'biocache-cli',
     desc:
       'manages the loading, sampling, processing and indexing of occurrence records',
+    allowMultipleDeploys: true,
   },
   spatial: {
     name: 'spatial',
     group: 'spatial',
     playbook: 'spatial',
     desc: 'spatial front-end',
+    allowMultipleDeploys: false,
   },
   webapi: {
     name: 'webapi',
     group: 'webapi_standalone',
     playbook: 'webapi_standalone',
     desc: 'API front-end',
+    allowMultipleDeploys: false,
   },
   dashboard: {
     name: 'dashboard',
     group: 'dashboard',
     playbook: 'dashboard',
     desc: 'dashboard',
+    allowMultipleDeploys: false,
   },
   alerts: {
     name: 'alerts',
     group: 'alerts-service',
     playbook: 'alerts-standalone',
     desc: 'alerts',
+    allowMultipleDeploys: false,
   },
   doi: {
     name: 'doi',
     group: 'doi-service',
     playbook: 'doi-service-standalone',
     desc: 'DOI service',
+    allowMultipleDeploys: false,
   },
   nameindexer: {
     name: 'nameindexer',
     group: 'nameindexer',
     playbook: 'nameindexer-standalone',
     desc: 'nameindexer',
+    allowMultipleDeploys: true,
   },
   sds: {
     name: 'sds',
     group: 'sds',
     playbook: 'sds',
     desc: 'Sensitive Data Service',
+    allowMultipleDeploys: false,
   },
   pipelines: {
     name: 'pipelines',
@@ -157,6 +172,14 @@ const servicesRolesMap = {
     playbook: 'pipelines',
     desc:
       'Pipelines for data processing and indexing of biodiversity data (replacement to biocache-store)',
+    allowMultipleDeploys: true,
+  },
+  branding: {
+    name: 'branding',
+    group: 'branding',
+    playbook: 'branding',
+    desc: 'LA branding (header and footer theme)',
+    allowMultipleDeploys: true,
   },
   /* Disabled for now us depends in many ALA service
      biocollect: {
@@ -167,7 +190,37 @@ const servicesRolesMap = {
      }, */
 };
 
+function confExistOrFalse(conf, varName) {
+  let value = conf[varName];
+  return value != null ? value: false;
+}
+
+function serviceUseVar(name, conf) {
+  switch (name) {
+    case 'collectory':
+    case 'ala_hub':
+    case 'biocache_service':
+    case 'logger':
+    case 'branding':
+    case 'solr':
+        return true;
+    case "ala_bie":
+      return  confExistOrFalse(conf, "LA_use_species");
+    case "bie_index":
+      return  confExistOrFalse(conf,"LA_use_species");
+    case "lists":
+      return  confExistOrFalse(conf,"LA_use_species_lists");
+    case "cas":
+      return  confExistOrFalse(conf,"LA_use_CAS");
+    case "biocache_backend":
+      return confExistOrFalse(conf,"LA_use_biocache_store");
+    default:
+      return confExistOrFalse(conf,`LA_use_${name}`);
+  }
+}
+
 module.exports = {
   services,
-  servicesRolesMap,
+  servicesDesc,
+  serviceUseVar
 };
