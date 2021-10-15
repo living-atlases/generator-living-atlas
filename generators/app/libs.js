@@ -53,6 +53,22 @@ const validateDomain = (input, name, logger) =>
     }
   });
 
+function removeOnce(arr, value) {
+  let index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
+}
+
+function addOnce(arr, value) {
+  let index = arr.indexOf(value);
+  if (index === -1) {
+    arr.push(value);
+  }
+  return arr;
+}
+
 module.exports = {
   defUseSubdomain,
   defUseSubdomainPrompt,
@@ -60,5 +76,7 @@ module.exports = {
   isCorrectHostname,
   isDefined,
   validateDomain,
-  em
+  em,
+  removeOnce,
+  addOnce,
 };

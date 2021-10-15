@@ -174,6 +174,46 @@ const servicesDesc = {
       'Pipelines for data processing and indexing of biodiversity data (replacement to biocache-store)',
     allowMultipleDeploys: true,
   },
+  spark: {
+    name: 'spark',
+    group: 'spark',
+    playbook: 'spark',
+    desc:
+      'Spark cluster for Pipelines',
+    allowMultipleDeploys: true,
+  },
+  spark: {
+    name: 'spark',
+    group: 'spark',
+    playbook: 'spark',
+    desc:
+      'Spark cluster for Pipelines',
+    allowMultipleDeploys: true,
+  },
+  hadoop: {
+    name: 'hadoop',
+    group: 'hadoop',
+    playbook: 'hadoop',
+    desc:
+      'Hadoop cluster for Pipelines',
+    allowMultipleDeploys: true,
+  },
+  jenkins: {
+    name: 'jenkins',
+    group: 'jenkins',
+    playbook: 'jenkins',
+    desc:
+      'Jenkins master for Pipelines',
+    allowMultipleDeploys: false,
+  },
+  pipelines_jenkins: {
+    name: 'pipelines_jenkins',
+    group: 'pipelines_jenkins',
+    playbook: 'pipelines_jenkins',
+    desc:
+      'Jenkins slaves for Pipelines',
+    allowMultipleDeploys: true,
+  },
   branding: {
     name: 'branding',
     group: 'branding',

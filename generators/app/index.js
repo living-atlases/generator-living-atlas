@@ -19,6 +19,8 @@ const {
   isDefined,
   em,
   validateDomain,
+  addOnce,
+  removeOnce
 } = require('./libs.js');
 const {services, servicesDesc, serviceUseVar} = require('./services.js');
 
@@ -48,6 +50,22 @@ let serversSorted = [];
 const serversAndPaths = {};
 const servicesInUse = [];
 let groupsAndServers = {};
+let groupsChildren = {};
+/* To create this hierarchy:
+
+[childgroup2]
+host1
+host2
+
+[childgroup1]
+host2
+host3
+
+[parent1:children]
+childgroup1
+childgroup2
+*/
+
 const vhostsSet = new Set(); // use for nginx_vhost_fragments_to_clear
 
 function storeGroupServer(name, server) {
@@ -74,6 +92,23 @@ function storeGroupServer(name, server) {
     storeGroupServer('biocache_cli', server);
     storeGroupServer('nameindexer', server);
   }
+  if (name === 'pipelines') {
+    storeGroupServer('spark', server);
+    storeGroupServer('hadoop', server);
+    if (groupsAndServers['jenkins'] == null) {
+      // we only use as master the first server
+      storeGroupServer('jenkins', server);
+      groupsChildren['spark'] = { cluster_nodes: []};
+      // To avoid dup children:
+      // groupsChildren['hadoop'] = { cluster_nodes: []};
+      groupsChildren['pipelines_jenkins'] = { jenkins_slaves: []};
+    }
+    addOnce(groupsChildren['spark']['cluster_nodes'], server);
+    // To avoid dup children:
+    // addOnce(groupsChildren['hadoop']['cluster_nodes'], server);
+    addOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], server);
+    storeGroupServer('pipelines_jenkins', server);
+  }
 }
 
 const hostSepRegexp = /[,\s]+/;
@@ -86,6 +121,9 @@ const validateAndStoreServer = (name, serversOrServersList) =>
     if (debug) logger(`store: ${serversOrServersList} typeof ${typeof serversOrServersList}`);
     let groupServers = typeof serversOrServersList === 'string' ? serversOrServersList.split(hostSepRegexp) : serversOrServersList;
     if (debug) logger(`store: ${groupServers} (${groupServers.length}) typeof ${typeof groupServers}`);
+    if (name === 'pipelines' && groupServers.length < 3) {
+      reject(`You'll need at least 3 servers to use pipelines with a spark cluster`);
+    }
     for (let server of groupServers) {
       if (debug) logger(`Store: ${name} -> ${server}`);
       if (isCorrectHostname(server) === true) {
@@ -882,6 +920,21 @@ module.exports = class extends Generator {
         new PromptHostnameFor('biocache_backend', 'biocache_backend', (a) => a['LA_use_biocache_store']),
 
         new PromptHostnameFor('pipelines', 'pipelines', (a) => a['LA_use_pipelines']),
+
+    {
+      store: true,
+        type: 'list',
+      name: 'LA_pipelines_master',
+      when: (a) => a['LA_use_pipelines'],
+      message: `${em('pipelines')} cluster master:`,
+      choices: () => {
+        let choices = [];
+        for (let host of groupsAndServers['pipelines']) {
+          choices.push({name: host, checked: false});
+        }
+        return choices;
+      },
+    },
         /* {
           store: true,
           type: 'input',
@@ -1059,11 +1112,29 @@ module.exports = class extends Generator {
         if (typeof serviceUrl !== 'undefined') vhostsSet.add(serviceUrl);
       });
 
-      this.answers["LA_groups_and_servers"] = groupsAndServers;
-
       if (debug) logger(servers);
       if (debug) logger(servicesInUse);
     }
+
+    if (this.answers['LA_use_pipelines']) {
+      if (this.answers["LA_pipelines_master"] == null) {
+        // Set master to first one if not defined by the toolkit
+        this.answers["LA_pipelines_master"] = groupsChildren['spark']['cluster_nodes'][0];
+      }
+      const pipelinesMaster = this.answers["LA_pipelines_master"];
+      groupsChildren['spark']['cluster_master'] = [ pipelinesMaster ];
+      // To avoid dup children:
+      // groupsChildren['hadoop']['cluster_master'] = [ pipelinesMaster ];
+      groupsChildren['pipelines_jenkins']['jenkins_master'] = [ pipelinesMaster ];
+      removeOnce(groupsChildren['spark']['cluster_nodes'], pipelinesMaster);
+      // To avoid dup children:
+      // removeOnce(groupsChildren['hadoop']['cluster_nodes'], pipelinesMaster);
+      removeOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], pipelinesMaster);
+    }
+
+    this.answers["LA_groups_and_servers"] = groupsAndServers;
+    this.answers["LA_groups_children"] = groupsChildren;
+     logger(groupsChildren);
   }
 
   writing() {
