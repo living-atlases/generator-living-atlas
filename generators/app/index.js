@@ -31,6 +31,7 @@ let replay = false;
 let dontAsk = false;
 let previousConfig;
 let firstRun;
+let useJenkins = false;
 
 /*
    Set of used servers
@@ -97,17 +98,15 @@ function storeGroupServer(name, server) {
     storeGroupServer('hadoop', server);
     if (groupsAndServers['jenkins'] == null) {
       // we only use as master the first server
-      storeGroupServer('jenkins', server);
+      if (useJenkins) storeGroupServer('jenkins', server);
       groupsChildren['spark'] = { cluster_nodes: []};
       // To avoid dup children:
-      // groupsChildren['hadoop'] = { cluster_nodes: []};
-      groupsChildren['pipelines_jenkins'] = { jenkins_slaves: []};
+      if (useJenkins) groupsChildren['pipelines_jenkins'] = { jenkins_slaves: []};
     }
     addOnce(groupsChildren['spark']['cluster_nodes'], server);
     // To avoid dup children:
-    // addOnce(groupsChildren['hadoop']['cluster_nodes'], server);
-    addOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], server);
-    storeGroupServer('pipelines_jenkins', server);
+    if (useJenkins) addOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], server);
+    if (useJenkins) storeGroupServer('pipelines_jenkins', server);
   }
 }
 
@@ -721,6 +720,16 @@ module.exports = class extends Generator {
         {
           store: true,
           type: 'confirm',
+          name: 'LA_use_pipelines_jenkins',
+          message: `Use ${em(
+            'jenkins'
+          )} with pipelines?`,
+          when: (a) => a['LA_use_pipelines'],
+          default: false,
+        },
+        {
+          store: true,
+          type: 'confirm',
           name: 'LA_enable_ssl',
           message: `Enable ${em('SSL')}?`,
           default: true,
@@ -1037,6 +1046,8 @@ module.exports = class extends Generator {
 
     vhostsSet.add(this.answers['LA_domain']);
 
+    useJenkins = serviceUseVar(this.answers, 'pipelines_jenkins');
+
     if (dontAsk) {
       // Compatible with old generated inventories and don-ask
       if (typeof this.answers['LA_use_webapi'] === 'undefined')
@@ -1125,11 +1136,11 @@ module.exports = class extends Generator {
       groupsChildren['spark']['cluster_master'] = [ pipelinesMaster ];
       // To avoid dup children:
       // groupsChildren['hadoop']['cluster_master'] = [ pipelinesMaster ];
-      groupsChildren['pipelines_jenkins']['jenkins_master'] = [ pipelinesMaster ];
+      if (useJenkins) groupsChildren['pipelines_jenkins']['jenkins_master'] = [ pipelinesMaster ];
       removeOnce(groupsChildren['spark']['cluster_nodes'], pipelinesMaster);
       // To avoid dup children:
       // removeOnce(groupsChildren['hadoop']['cluster_nodes'], pipelinesMaster);
-      removeOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], pipelinesMaster);
+      if (useJenkins) removeOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], pipelinesMaster);
     }
 
     this.answers["LA_groups_and_servers"] = groupsAndServers;
