@@ -1134,7 +1134,7 @@ module.exports = class extends Generator {
 
     this.answers["LA_groups_and_servers"] = groupsAndServers;
     this.answers["LA_groups_children"] = groupsChildren;
-     logger(groupsChildren);
+    if (debug) logger(groupsChildren);
   }
 
   writing() {
