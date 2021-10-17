@@ -1043,6 +1043,8 @@ module.exports = class extends Generator {
       this.answers['LA_use_species_lists'] = false;
     if (typeof this.answers['LA_use_species'] === 'undefined')
       this.answers['LA_use_species'] = true;
+    if (typeof this.answers['LA_use_pipelines_jenkins'] === 'undefined')
+      this.answers['LA_use_pipelines_jenkins'] = false;
 
     vhostsSet.add(this.answers['LA_domain']);
 
