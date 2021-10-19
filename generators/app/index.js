@@ -20,7 +20,8 @@ const {
   em,
   validateDomain,
   addOnce,
-  removeOnce
+  removeOnce, additionalToolkitPrompts
+
 } = require('./libs.js');
 const {services, servicesDesc, serviceUseVar} = require('./services.js');
 
@@ -1019,7 +1020,7 @@ module.exports = class extends Generator {
           )} in your generated inventories to track their changes? (Very recommended)`,
           default: true,
         },
-      ]);
+      ] + additionalToolkitPrompts() );
 
     // For back-compatibility
     if (typeof this.answers['LA_main_hostname'] === 'undefined') {

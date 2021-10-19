@@ -69,6 +69,49 @@ function addOnce(arr, value) {
   return arr;
 }
 
+
+const additionalToolkitVariables = [
+  "LA_etc_hosts",
+  "LA_hostnames",
+  "LA_ssh_keys",
+  "LA_variable_ansible_user",
+  "LA_variable_caches_auth_enabled",
+  "LA_variable_caches_collections_enabled",
+  "LA_variable_caches_layers_enabled",
+  "LA_variable_caches_logs_enabled",
+  "LA_variable_cas_webflow_encryption_key",
+  "LA_variable_cas_webflow_signing_key",
+  "LA_variable_email_sender",
+  "LA_variable_email_sender_password",
+  "LA_variable_email_sender_server",
+  "LA_variable_email_sender_server_port",
+  "LA_variable_email_sender_server_tls",
+  "LA_variable_favicon_url",
+  "LA_variable_google_api_key",
+  "LA_variable_header_and_footer_baseurl",
+  "LA_variable_map_zone_name",
+  "LA_variable_maxmind_account_id",
+  "LA_variable_maxmind_license_key",
+  "LA_variable_orgAddress",
+  "LA_variable_orgCountry",
+  "LA_variable_orgEmail",
+  "LA_variable_pac4j_cookie_encryption_key",
+  "LA_variable_pac4j_cookie_signing_key",
+  "LA_variable_support_email",
+  "LA_variable_sds_faq_url",
+  "LA_is_hub",
+  "LA_software_versions",
+];
+
+function additionalToolkitPrompts() {
+  let addPrompt = [];
+  for(let variable in additionalToolkitVariables) {
+    // we store it but we do not show it, so we don't lost these variables configured by the la-toolkit
+    addPrompt.push({store: true, when: (a)=> false, type: 'input', name: variable });
+  }
+  return addPrompt;
+}
+
 module.exports = {
   defUseSubdomain,
   defUseSubdomainPrompt,
@@ -79,4 +122,5 @@ module.exports = {
   em,
   removeOnce,
   addOnce,
+  additionalToolkitPrompts
 };
