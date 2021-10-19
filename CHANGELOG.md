@@ -1,7 +1,8 @@
 <a name="unreleased"></a>
 - Support to multiple deploy host per service. This changed the generator quite deeply so verify your changes in your inventories to review that all is ok.
-- Basic pipelines support. 
-- Fix bug that prevent to generate .yo-rc.json correctly (so to store previous prompt answers with yeoman > 4 in the same way that versions < 4.0).
+- Pipelines support. 
+- Fix bug that prevent to generate .yo-rc.json correctly (so to store previous prompt answers with yeoman > 4 in the same way that versions < 4.0). 
+- Preserve the extra la-toolkit variables when running from the cmd line.
 
 <a name="v1.2.2"></a>
 ## v1.2.2 - 2021-10-07
