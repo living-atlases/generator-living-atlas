@@ -1,4 +1,7 @@
 <a name="unreleased"></a>
+
+<a name="v1.2.3"></a>
+## v1.2.3 - 2021-10-19
 - Support to multiple deploy host per service. This changed the generator quite deeply so verify your changes in your inventories to review that all is ok.
 - Pipelines support. 
 - Fix bug that prevent to generate .yo-rc.json correctly (so to store previous prompt answers with yeoman > 4 in the same way that versions < 4.0). 
