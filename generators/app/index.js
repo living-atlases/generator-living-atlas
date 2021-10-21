@@ -1044,6 +1044,10 @@ module.exports = class extends Generator {
       this.answers['LA_use_species_lists'] = false;
     if (typeof this.answers['LA_use_species'] === 'undefined')
       this.answers['LA_use_species'] = true;
+    if (typeof this.answers['LA_use_pipelines'] === 'undefined')
+      this.answers['LA_use_pipelines'] = false;
+    if (typeof this.answers['LA_use_biocache_store'] === 'undefined')
+      this.answers['LA_use_biocache_store'] = true;
     if (typeof this.answers['LA_use_pipelines_jenkins'] === 'undefined')
       this.answers['LA_use_pipelines_jenkins'] = false;
 
@@ -1082,12 +1086,11 @@ module.exports = class extends Generator {
         this.answers['LA_branding_url'] = this.answers['LA_domain'];
 
       if (typeof this.answers['LA_use_pipelines'] === 'undefined') {
-        this.answers['LA_use_pipelines'] = true;
-        this.answers['LA_pipelines_hostname'] = this.answers['LA_main_hostname'];
+        this.answers['LA_use_pipelines'] = false;
       }
-
-      if (typeof this.answers['LA_use_biocache_store'] === 'undefined')
+      if (typeof this.answers['LA_use_biocache_store'] === 'undefined') {
         this.answers['LA_use_biocache_store'] = true;
+      }
 
       // noinspection HttpUrlsUsage
       this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
@@ -1130,7 +1133,7 @@ module.exports = class extends Generator {
       if (debug) logger(servicesInUse);
     }
 
-    if (this.answers['LA_use_pipelines']) {
+    if (this.answers['LA_use_pipelines'] && groupsChildren['spark'] != null ) {
       if (this.answers["LA_pipelines_master"] == null) {
         // Set master to first one if not defined by the toolkit
         this.answers["LA_pipelines_master"] = groupsChildren['spark']['cluster_nodes'][0];

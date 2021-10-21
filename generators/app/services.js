@@ -235,6 +235,11 @@ function confExistOrFalse(conf, varName) {
   return value != null ? value: false;
 }
 
+function confExistOrTrue(conf, varName) {
+  let value = conf[varName];
+  return value != null ? value: true;
+}
+
 function serviceUseVar(name, conf) {
   switch (name) {
     case 'collectory':
@@ -253,7 +258,7 @@ function serviceUseVar(name, conf) {
     case "cas":
       return  confExistOrFalse(conf,"LA_use_CAS");
     case "biocache_backend":
-      return confExistOrFalse(conf,"LA_use_biocache_store");
+      return confExistOrTrue(conf,"LA_use_biocache_store");
     default:
       return confExistOrFalse(conf,`LA_use_${name}`);
   }
