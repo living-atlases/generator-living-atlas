@@ -522,6 +522,7 @@ module.exports = class extends Generator {
     }
 
     if (replay) {
+      useJenkins = serviceUseVar('pipelines_jenkins', previousConfig);
       Object.keys(servicesDesc).forEach((service) => {
         const hostVar = `LA_${service}_hostname`;
         const groupServers = previousConfig[hostVar] == null ? null : previousConfig[hostVar].split(hostSepRegexp);
@@ -533,15 +534,11 @@ module.exports = class extends Generator {
             }
           }
         }
-        // delete previousConfig[hostVar];
       });
       serversSorted = [...servers];
       if (debug) logger(groupsAndServers);
       if (debug) logger(servers);
       if (debug) logger(serversSorted)
-      // This doesn't work
-      // this.config.set("promptValues", previousConfig);
-      // this.config.set("LA_groups_and_servers", groupsAndServers);
     }
   }
 
@@ -1053,8 +1050,6 @@ module.exports = class extends Generator {
 
     vhostsSet.add(this.answers['LA_domain']);
 
-    useJenkins = serviceUseVar(this.answers, 'pipelines_jenkins');
-
     if (dontAsk) {
       // Compatible with old generated inventories and don-ask
       if (typeof this.answers['LA_use_webapi'] === 'undefined')
@@ -1134,8 +1129,12 @@ module.exports = class extends Generator {
     }
 
     if (this.answers['LA_use_pipelines'] && groupsChildren['spark'] != null ) {
+      if (isDefined(this.answers['LA_variable_pipelines_master'])) {
+        // configured from the toolkit
+        this.answers["LA_pipelines_master"] = this.answers['LA_variable_pipelines_master'];
+      }
       if (this.answers["LA_pipelines_master"] == null) {
-        // Set master to first one if not defined by the toolkit
+        // Set master to first one as last attempt to set this
         this.answers["LA_pipelines_master"] = groupsChildren['spark']['cluster_nodes'][0];
       }
       const pipelinesMaster = this.answers["LA_pipelines_master"];
