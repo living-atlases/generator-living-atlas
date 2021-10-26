@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.4"></a>
+## v1.2.4 - 2021-10-26
+- Better pipelines support
+- Added jenkins pipelines support
+
 <a name="v1.2.3"></a>
 ## v1.2.3 - 2021-10-19
 - Support to multiple deploy host per service. This changed the generator quite deeply so verify your changes in your inventories to review that all is ok.
