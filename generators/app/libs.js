@@ -101,6 +101,9 @@ const additionalToolkitVariables = [
   "LA_variable_sds_faq_url",
   "LA_is_hub",
   "LA_software_versions",
+  "LA_variable_pipelines_master",
+  "LA_variable_pipelines_ssh_key",
+  "LA_use_pipelines_jenkins"
 ];
 
 function additionalToolkitPrompts() {
