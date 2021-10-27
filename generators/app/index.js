@@ -118,9 +118,9 @@ const validateAndStoreServer = (name, serversOrServersList) =>
     if (serversOrServersList == null || serversOrServersList === '') {
       reject(new Error(`Please select some server for deploy '${name}'`));
     }
-    if (debug) logger(`store: ${serversOrServersList} typeof ${typeof serversOrServersList}`);
+    // if (debug) logger(`store: ${serversOrServersList} typeof ${typeof serversOrServersList}`);
     let groupServers = typeof serversOrServersList === 'string' ? serversOrServersList.split(hostSepRegexp) : serversOrServersList;
-    if (debug) logger(`store: ${groupServers} (${groupServers.length}) typeof ${typeof groupServers}`);
+    // if (debug) logger(`store: ${groupServers} (${groupServers.length}) typeof ${typeof groupServers}`);
     if (name === 'pipelines' && groupServers.length < 3) {
       reject(`You'll need at least 3 servers to use pipelines with a spark cluster`);
     }
@@ -552,7 +552,7 @@ module.exports = class extends Generator {
 
     this.answers = dontAsk
       ? previousConfig
-      : await this.prompt([
+      : await this.prompt([...[
         {
           store: true,
           type: 'input',
@@ -1017,7 +1017,7 @@ module.exports = class extends Generator {
           )} in your generated inventories to track their changes? (Very recommended)`,
           default: true,
         },
-      ] + additionalToolkitPrompts() );
+      ], ...additionalToolkitPrompts()] );
 
     // For back-compatibility
     if (typeof this.answers['LA_main_hostname'] === 'undefined') {
