@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.5"></a>
+## v1.2.5 - 2021-10-27
+- Fixed issue that prevent correct creation of new LA projects
+- Added new SDS variables
+
 <a name="v1.2.4"></a>
 ## v1.2.4 - 2021-10-26
 - Better pipelines support
