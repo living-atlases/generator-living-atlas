@@ -182,14 +182,6 @@ const servicesDesc = {
       'Spark cluster for Pipelines',
     allowMultipleDeploys: true,
   },
-  spark: {
-    name: 'spark',
-    group: 'spark',
-    playbook: 'spark',
-    desc:
-      'Spark cluster for Pipelines',
-    allowMultipleDeploys: true,
-  },
   hadoop: {
     name: 'hadoop',
     group: 'hadoop',
