@@ -95,18 +95,9 @@ function storeGroupServer(name, server) {
     storeGroupServer('nameindexer', server);
   }
   if (name === 'pipelines') {
+    // Add child services
     storeGroupServer('spark', server);
     storeGroupServer('hadoop', server);
-    if (groupsAndServers['jenkins'] == null) {
-      // we only use as master the first server
-      if (useJenkins) storeGroupServer('jenkins', server);
-      groupsChildren['spark'] = { cluster_nodes: []};
-      // To avoid dup children:
-      if (useJenkins) groupsChildren['pipelines_jenkins'] = { jenkins_slaves: []};
-    }
-    addOnce(groupsChildren['spark']['cluster_nodes'], server);
-    // To avoid dup children:
-    if (useJenkins) addOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], server);
     if (useJenkins) storeGroupServer('pipelines_jenkins', server);
   }
 }
@@ -724,6 +715,11 @@ module.exports = class extends Generator {
           )} with pipelines?`,
           when: (a) => a['LA_use_pipelines'],
           default: false,
+          validate: (input) =>
+            new Promise((resolve) => {
+              useJenkins = input;
+              resolve(input);
+            }),
         },
         {
           store: true,
@@ -928,57 +924,20 @@ module.exports = class extends Generator {
 
         new PromptHostnameFor('pipelines', 'pipelines', (a) => a['LA_use_pipelines']),
 
-    {
-      store: true,
-        type: 'list',
-      name: 'LA_pipelines_master',
-      when: (a) => a['LA_use_pipelines'],
-      message: `${em('pipelines')} cluster master:`,
-      choices: () => {
-        let choices = [];
-        for (let host of groupsAndServers['pipelines']) {
-          choices.push({name: host, checked: false});
-        }
-        return choices;
-      },
-    },
-        /* {
-          store: true,
-          type: 'input',
-          name: 'LA_biocache_backend_hostname',
-          when: (a) => a['LA_use_biocache_store'],
-          message: `LA ${em('biocache-store')} hostname`,
-          validate: (input) => isCorrectHostname(input),
-          filter: (input) =>
-            new Promise((resolve) => {
-              validateAndStoreServer('biocache_backend', input).then((input) =>
-                validateAndStoreServer('biocache_cli', input).then((input) =>
-                  validateAndStoreServer('nameindexer', input).then((input) =>
-                    resolve(input)
-                  )
-                )
-              );
-            }),
-          default: (a) => `${a['LA_domain']}`,
-        },
-
         {
           store: true,
-          type: 'input',
-          name: 'LA_pipelines_hostname',
+          type: 'list',
+          name: 'LA_pipelines_master',
           when: (a) => a['LA_use_pipelines'],
-          message: `LA ${em('pipelines')} hostname`,
-          validate: (input) => isCorrectHostname(input),
-          filter: (input) =>
-            new Promise((resolve) => {
-              validateAndStoreServer('pipelines', input).then((input) =>
-
-
-
-              );
-            }),
-          default: (a) => `${a['LA_domain']}`,
-        },*/
+          message: `${em('pipelines')} cluster master:`,
+          choices: () => {
+            let choices = [];
+            for (let host of groupsAndServers['pipelines']) {
+              choices.push({name: host, checked: false});
+            }
+            return choices;
+          },
+        },
 
         new PromptSubdomainFor(
           'spatial',
@@ -1017,7 +976,7 @@ module.exports = class extends Generator {
           )} in your generated inventories to track their changes? (Very recommended)`,
           default: true,
         },
-      ], ...additionalToolkitPrompts()] );
+      ], ...additionalToolkitPrompts()]);
 
     // For back-compatibility
     if (typeof this.answers['LA_main_hostname'] === 'undefined') {
@@ -1049,6 +1008,8 @@ module.exports = class extends Generator {
       this.answers['LA_use_pipelines_jenkins'] = false;
 
     vhostsSet.add(this.answers['LA_domain']);
+
+    useJenkins = serviceUseVar('pipelines_jenkins', this.answers)
 
     if (dontAsk) {
       // Compatible with old generated inventories and don-ask
@@ -1128,29 +1089,33 @@ module.exports = class extends Generator {
       if (debug) logger(servicesInUse);
     }
 
-    if (this.answers['LA_use_pipelines'] && groupsChildren['spark'] != null ) {
+    if (this.answers['LA_use_pipelines']) {
       if (isDefined(this.answers['LA_variable_pipelines_master'])) {
         // configured from the toolkit
         this.answers["LA_pipelines_master"] = this.answers['LA_variable_pipelines_master'];
       }
       if (this.answers["LA_pipelines_master"] == null) {
         // Set master to first one as last attempt to set this
-        this.answers["LA_pipelines_master"] = groupsChildren['spark']['cluster_nodes'][0];
+        this.answers["LA_pipelines_master"] = groupsAndServers['pipelines'][0];
       }
       const pipelinesMaster = this.answers["LA_pipelines_master"];
-      groupsChildren['spark']['cluster_master'] = [ pipelinesMaster ];
-      // To avoid dup children:
-      // groupsChildren['hadoop']['cluster_master'] = [ pipelinesMaster ];
-      if (useJenkins) groupsChildren['pipelines_jenkins']['jenkins_master'] = [ pipelinesMaster ];
+      if (useJenkins) {
+        // we only store the jenkins master when we know it
+        storeGroupServer('jenkins', pipelinesMaster);
+      }
+
+      groupsChildren['spark'] = {cluster_master: [pipelinesMaster], cluster_nodes: [...groupsAndServers['pipelines']]};
+      if (useJenkins) groupsChildren['pipelines_jenkins'] = {jenkins_master: [pipelinesMaster], jenkins_slaves: [...groupsAndServers['pipelines']]};
+
+      // remove master from slaves
       removeOnce(groupsChildren['spark']['cluster_nodes'], pipelinesMaster);
-      // To avoid dup children:
-      // removeOnce(groupsChildren['hadoop']['cluster_nodes'], pipelinesMaster);
+      // remove master from slaves
       if (useJenkins) removeOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], pipelinesMaster);
     }
 
     this.answers["LA_groups_and_servers"] = groupsAndServers;
     this.answers["LA_groups_children"] = groupsChildren;
-    if (debug) logger(groupsChildren);
+    if (debug) logger(JSON.stringify(groupsChildren));
   }
 
   writing() {
