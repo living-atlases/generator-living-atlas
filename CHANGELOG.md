@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.6"></a>
+## v1.2.6 - 2021-10-28
+- Fix bug when pipelines jenkins is selected in new portals (thanks @therobyouknow)
+
 <a name="v1.2.5"></a>
 ## v1.2.5 - 2021-10-27
 - Fixed issue that prevent correct creation of new LA projects
