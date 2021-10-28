@@ -50,7 +50,7 @@ let serversSorted = [];
 
  */
 const serversAndPaths = {};
-const servicesInUse = [];
+let servicesInUse = [];
 let groupsAndServers = {};
 let groupsChildren = {};
 /* To create this hierarchy:
@@ -1102,6 +1102,9 @@ module.exports = class extends Generator {
       if (useJenkins) {
         // we only store the jenkins master when we know it
         storeGroupServer('jenkins', pipelinesMaster);
+        for (let s of groupsAndServers['pipelines']) {
+          storeGroupServer('pipelines_jenkins', s);
+        }
       }
 
       groupsChildren['spark'] = {cluster_master: [pipelinesMaster], cluster_nodes: [...groupsAndServers['pipelines']]};
@@ -1115,6 +1118,10 @@ module.exports = class extends Generator {
 
     this.answers["LA_groups_and_servers"] = groupsAndServers;
     this.answers["LA_groups_children"] = groupsChildren;
+
+    // remove these services included in others playbooks (like spark, etc in pipelines)
+    servicesInUse = servicesInUse.filter(x => ['spark', 'pipelines_jenkins', 'jenkins', 'hadoop'].indexOf(x.service) === -1);
+
     if (debug) logger(JSON.stringify(groupsChildren));
   }
 
