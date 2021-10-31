@@ -113,7 +113,17 @@ const validateAndStoreServer = (name, serversOrServersList) =>
     let groupServers = typeof serversOrServersList === 'string' ? serversOrServersList.split(hostSepRegexp) : serversOrServersList;
     // if (debug) logger(`store: ${groupServers} (${groupServers.length}) typeof ${typeof groupServers}`);
     if (name === 'pipelines' && groupServers.length < 3) {
-      reject(`You'll need at least 3 servers to use pipelines with a spark cluster`);
+      logger.error(`You'll need at least 3 servers to use pipelines with a spark cluster`);
+    }
+    if (name === 'pipelines' && groupServers.length < 3) {
+      logger.error(`You'll need at least 3 servers to use pipelines with a spark cluster`);
+    }
+    // solrcloud hosts > 1 and odd, so >= 3
+    if (name === 'solrcloud' && groupServers.length < 3) {
+      logger.error(`You'll need at least 3 servers to use a redundant solr cluster`);
+    }
+    if (name === 'zookeeper' && groupServers.length < 3) {
+      logger.error(`You'll need at least 3 servers to use a redundant zookeeper cluster`);
     }
     for (let server of groupServers) {
       if (debug) logger(`Store: ${name} -> ${server}`);
@@ -714,11 +724,28 @@ module.exports = class extends Generator {
             'jenkins'
           )} with pipelines?`,
           when: (a) => a['LA_use_pipelines'],
-          default: false,
+          default: true,
           validate: (input) =>
             new Promise((resolve) => {
               useJenkins = input;
               resolve(input);
+            }),
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_solrcloud',
+          message: `Use ${em(
+            'solrcloud'
+          )} cluster instead of a single solr server standalone`,
+          default: (a) => a['LA_use_pipelines'],
+          validate: (input, a) =>
+            new Promise((resolve, reject) => {
+              if (input && a['LA_use_pipelines']) {
+                reject('You need to use solrcloud with pipelines');
+              } else {
+                resolve(input);
+              }
             }),
         },
         {
@@ -910,10 +937,14 @@ module.exports = class extends Generator {
        (a) => a['LA_use_biocollect']
        ), */
 
+        // In the future, try to use solrcloud (ALA uses solr-standalone for bie, (a) => !a['LA_use_solrcloud']),
         new PromptSubdomainFor('solr', 'solr'),
         new PromptHostnameFor('solr', 'index'),
         new PromptUrlFor('solr', 'index'),
         new PromptPathFor('solr', 'solr'),
+
+        new PromptHostnameFor('solrcloud', 'solr', (a) => a['LA_use_solrcloud']),
+        new PromptHostnameFor('zookeeper', 'zoo', (a) => a['LA_use_solrcloud']),
 
         new PromptSubdomainFor('cas', 'auth', true, true),
         new PromptHostnameFor('cas', 'auth'),
@@ -1120,7 +1151,7 @@ module.exports = class extends Generator {
     this.answers["LA_groups_children"] = groupsChildren;
 
     // remove these services included in others playbooks (like spark, etc in pipelines)
-    servicesInUse = servicesInUse.filter(x => ['spark', 'pipelines_jenkins', 'jenkins', 'hadoop'].indexOf(x.service) === -1);
+    servicesInUse = servicesInUse.filter(x => ['spark', 'pipelines_jenkins', 'jenkins', 'hadoop', 'zookeeper'].indexOf(x.service) === -1);
 
     if (debug) logger(JSON.stringify(groupsChildren));
   }

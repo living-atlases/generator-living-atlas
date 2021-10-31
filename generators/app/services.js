@@ -92,7 +92,21 @@ const servicesDesc = {
     name: 'solr',
     group: 'solr7-server',
     playbook: 'solr7-standalone',
-    desc: 'indexing',
+    desc: 'species and/or biocache-store indexing',
+    allowMultipleDeploys: false,
+  },
+  solrcloud: {
+    name: 'solrcloud',
+    group: 'solrcloud',
+    playbook: 'solrcloud-monit',
+    desc: 'pipelines indexing',
+    allowMultipleDeploys: true,
+  },
+  zookeeper: {
+    name: 'zookeeper',
+    group: 'zookeeper',
+    playbook: 'solrcloud-monit',
+    desc: 'zookeeper, for solrcloud coordination',
     allowMultipleDeploys: true,
   },
   cas: {
@@ -251,6 +265,8 @@ function serviceUseVar(name, conf) {
       return  confExistOrFalse(conf,"LA_use_CAS");
     case "biocache_backend":
       return confExistOrTrue(conf,"LA_use_biocache_store");
+    case "zookeeper":
+      return confExistOrFalse(conf,`LA_use_solrcloud`);
     default:
       return confExistOrFalse(conf,`LA_use_${name}`);
   }
