@@ -21,7 +21,7 @@
   become: yes
 
 - name: Pre-deploy solr tasks
-  hosts: solr7-server
+  hosts: solr7-server, solrcloud
   roles:
     - solr_pre_deploy
   become: yes
