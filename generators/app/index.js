@@ -1153,6 +1153,12 @@ module.exports = class extends Generator {
     // remove these services included in others playbooks (like spark, etc in pipelines)
     servicesInUse = servicesInUse.filter(x => ['spark', 'pipelines_jenkins', 'jenkins', 'hadoop', 'zookeeper'].indexOf(x.service) === -1);
 
+    // Sort services to avoid other orders caused by the use of sets and unnecessary differences in inventories
+    let sorted = Object.keys(servicesDesc);
+    servicesInUse.sort(function (a, b)  {
+      return (sorted.indexOf(a) < sorted.indexOf(b));
+    });
+
     if (debug) logger(JSON.stringify(groupsChildren));
   }
 
