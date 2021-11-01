@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.8"></a>
+## v1.2.8 - 2021-11-01
+- Solrcloud support
+- Sort services to avoid other orders caused by the use of sets and unnecessary differences in inventories
+- Better support of 20.04 in pre-deploy tasks
+
 <a name="v1.2.7"></a>
 ## v1.2.7 - 2021-10-28
 - Fix for #19 (thanks @therobyouknow)
