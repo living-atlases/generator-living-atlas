@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.9"></a>
+## v1.2.9 - 2021-11-05
+- Restore solr standalone vars to all servers as is used in several roles
+
 <a name="v1.2.8"></a>
 ## v1.2.8 - 2021-11-01
 - Solrcloud support
