@@ -23,7 +23,7 @@ rsync -a --delete --rsync-path="sudo rsync" --info=progress2 public/ <%= LA_bran
 # Renabling stop on error as maybe some of this urls are not up
 set +e
 echo ">>>>> Clearing the LA modules header/footer caches:"
-for url in $(grep url app/js/settings.js  | sed "s/.*url: '//g" | awk -F "'" '{print $1}' | egrep -Ev "^$|twitter|your-area|datasets")
+for url in $(grep "url:" app/js/settings.js  | sed "s/.*url: '//g" | awk -F "'" '{print $1}' | egrep -Ev "^$|twitter|your-area|datasets")
 do
     echo "--- Clearing $url/headerFooter/clearCache"
     curl -s --output /dev/null  $url/headerFooter/clearCache 2>&1
