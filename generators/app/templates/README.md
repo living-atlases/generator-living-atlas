@@ -82,7 +82,7 @@ export AI=<location-of-your-cloned-ala-install-repo>
 
 #  For this demo to run well, we recommend a server of 16GB RAM, 4 CPUs.
 <% let baseInv=`-i ${LA_pkg_name}-inventory.ini -i ${LA_pkg_name}-local-extras.ini`; let passInv = `-i ${LA_pkg_name}-local-passwords.ini`; %>
-ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%= passInv %> $AI/ansible/ala-demo.yml --limit <%= LA_domain %>
+ansible-playbook --private-key ~/.ssh/MyKey.pem -u ubuntu <%= baseInv %> <%= passInv %> $AI/ansible/branding.yml --limit <%= LA_domain %>
 <% for(var j=0; j < LA_services_in_use.length; j++) {
 let isSpatialInv = LA_services_in_use[j].map.name === 'spatial';
 let isCasInv = LA_services_in_use[j].map.name === 'cas';
