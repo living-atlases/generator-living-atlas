@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.11"></a>
+## v1.2.11 - 2021-11-18
+- Use master as slave/worker too in pipelines
+
 <a name="v1.2.10"></a>
 ## v1.2.10 - 2021-11-18
 - Fix README documentation
