@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.10"></a>
+## v1.2.10 - 2021-11-18
+- Fix README documentation
+- Improve branding deployment cache clearing (fix wrong url parsing)
+- Correct hadoop slaves creation
+
 <a name="v1.2.9"></a>
 ## v1.2.9 - 2021-11-05
 - Restore solr standalone vars to all servers as is used in several roles
