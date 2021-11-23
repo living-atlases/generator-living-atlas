@@ -533,6 +533,9 @@ module.exports = class extends Generator {
             for (let server of groupServers) {
               storeGroupServer(service, server);
             }
+          } else if (service === 'branding') {
+            // We fallback to the domain host if replay without defining correctly the branding hostname
+            storeGroupServer(service, previousConfig['LA_domain']);
           }
         }
       });
