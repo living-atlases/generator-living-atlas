@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.13"></a>
+## v1.2.13 - 2021-11-23
+- LA_use_solrcloud defaults to false (for old inventories compatibility)
+
 <a name="v1.2.12"></a>
 ## v1.2.12 - 2021-11-23
 - Removed master as worker (following Dave Martin recomendation)
