@@ -1141,8 +1141,8 @@ module.exports = class extends Generator {
       groupsChildren['spark'] = {cluster_master: [pipelinesMaster], cluster_nodes: [...groupsAndServers['pipelines']]};
       if (useJenkins) groupsChildren['pipelines_jenkins'] = {jenkins_master: [pipelinesMaster], jenkins_slaves: [...groupsAndServers['pipelines']]};
 
-      // remove master from slaves (disabled as we are thinking in small portals with few resources)
-      // removeOnce(groupsChildren['spark']['cluster_nodes'], pipelinesMaster);
+      // remove master from slaves
+      removeOnce(groupsChildren['spark']['cluster_nodes'], pipelinesMaster);
       // remove master from slaves
       if (useJenkins) removeOnce(groupsChildren['pipelines_jenkins']['jenkins_slaves'], pipelinesMaster);
     }
