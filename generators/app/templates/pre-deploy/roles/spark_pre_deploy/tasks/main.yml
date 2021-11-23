@@ -1,0 +1,19 @@
+# Additional LA pre deploy tasks
+# https://www.ibm.com/docs/sk/spectrum-scale/4.2.3?topic=fpo-configuration-tuning-hadoop-workloads
+
+- name: Add limits for spark domain
+  pam_limits:
+    domain: 'spark'
+    limit_type: "{{item.limit_type}}"
+    limit_item: "{{item.limit_item}}"
+    value: "{{item.value}}"
+  with_items:
+    - { limit_type: 'hard', limit_item: 'nofile', value: 65535 }
+    - { limit_type: 'soft', limit_item: 'nofile', value: 65535 }
+    - { limit_type: 'hard', limit_item: 'nproc', value: 65535 }
+    - { limit_type: 'soft', limit_item: 'nproc', value: 65535 }
+  tags: pre-task-spark-limits
+
+- name: reload settings from all system configuration files
+  shell: sysctl --system
+  tags: pre-task-spark-limits

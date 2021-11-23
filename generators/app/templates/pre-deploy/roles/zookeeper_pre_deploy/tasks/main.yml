@@ -1,0 +1,18 @@
+# Additional LA pre deploy tasks
+
+- name: Add limits for zookeeper domain
+  pam_limits:
+    domain: 'zookeeper'
+    limit_type: "{{item.limit_type}}"
+    limit_item: "{{item.limit_item}}"
+    value: "{{item.value}}"
+  with_items:
+    - { limit_type: 'hard', limit_item: 'nofile', value: 65535 }
+    - { limit_type: 'soft', limit_item: 'nofile', value: 65535 }
+    - { limit_type: 'hard', limit_item: 'nproc', value: 65535 }
+    - { limit_type: 'soft', limit_item: 'nproc', value: 65535 }
+  tags: pre-task-zookeeper-limits
+
+- name: reload settings from all system configuration files
+  shell: sysctl --system
+  tags: pre-task-zookeeper-limits

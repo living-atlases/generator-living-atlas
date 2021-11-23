@@ -25,3 +25,19 @@
   roles:
     - solr_pre_deploy
   become: yes
+
+<%_ if (LA_use_pipelines) { _%>
+- name: Pre-deploy spark tasks
+  hosts: spark
+  roles:
+    - spark_pre_deploy
+  become: yes
+<%_ } _%>
+
+<%_ if (LA_use_solrcloud) { _%>
+- name: Pre-deploy zookeeper tasks
+  hosts: zookeeper
+  roles:
+    - zookeeper_pre_deploy
+  become: yes
+<%_ } _%>
