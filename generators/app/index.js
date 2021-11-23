@@ -1046,39 +1046,33 @@ module.exports = class extends Generator {
       // Compatible with old generated inventories and don-ask
       if (typeof this.answers['LA_use_webapi'] === 'undefined')
         this.answers['LA_use_webapi'] = false;
-
       if (typeof this.answers['LA_use_alerts'] === 'undefined')
         this.answers['LA_use_alerts'] = false;
-
       if (typeof this.answers['LA_use_doi'] === 'undefined')
         this.answers['LA_use_doi'] = false;
-
       if (typeof this.answers['LA_use_dashboard'] === 'undefined')
         this.answers['LA_use_dashboard'] = false;
-
       if (typeof this.answers['LA_use_sds'] === 'undefined')
         this.answers['LA_use_sds'] = false;
-
       if (typeof this.answers['LA_use_biocollect'] === 'undefined')
         this.answers['LA_use_biocollect'] = false;
-
       if (typeof this.answers['LA_generate_branding'] === 'undefined')
         this.answers['LA_generate_branding'] = false;
-
       if (typeof this.answers['LA_branding_hostname'] === 'undefined')
         this.answers['LA_branding_hostname'] = this.answers['LA_domain'];
       if (typeof this.answers['LA_branding_path'] === 'undefined')
         this.answers['LA_branding_path'] = '/';
       if (typeof this.answers['LA_branding_url'] === 'undefined')
         this.answers['LA_branding_url'] = this.answers['LA_domain'];
-
       if (typeof this.answers['LA_use_pipelines'] === 'undefined') {
         this.answers['LA_use_pipelines'] = false;
       }
       if (typeof this.answers['LA_use_biocache_store'] === 'undefined') {
         this.answers['LA_use_biocache_store'] = true;
       }
-
+      if (typeof this.answers['LA_use_solrcloud'] === 'undefined') {
+        this.answers['LA_use_solrcloud'] = false;
+      }
       // noinspection HttpUrlsUsage
       this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
         ? 'https://'
