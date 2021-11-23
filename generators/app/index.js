@@ -535,7 +535,8 @@ module.exports = class extends Generator {
             }
           } else if (service === 'branding') {
             // We fallback to the domain host if replay without defining correctly the branding hostname
-            storeGroupServer(service, previousConfig['LA_domain']);
+            if (previousConfig['LA_main_hostname'] != null)
+            storeGroupServer(service, previousConfig['LA_main_hostname']);
           }
         }
       });
