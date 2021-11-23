@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.14"></a>
+## v1.2.14 - 2021-11-23
+- Set default hostname for branding if replay and is not defined (for old inventories compatibility)
+
 <a name="v1.2.13"></a>
 ## v1.2.13 - 2021-11-23
 - LA_use_solrcloud defaults to false (for old inventories compatibility)
