@@ -1,5 +1,12 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.12"></a>
+## v1.2.12 - 2021-11-23
+- Removed master as worker (following Dave Martin recomendation)
+- Added namematching gbif taxonomy to pipelines services. 
+- Zookeeper with openjdk 11
+- Added pre-deploy limit tasks. Cleanup solr pre-deploy tasks
+
 <a name="v1.2.11"></a>
 ## v1.2.11 - 2021-11-18
 - Use master as slave/worker too in pipelines
