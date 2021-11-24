@@ -1,5 +1,13 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.16"></a>
+## v1.2.16 - 2021-11-24
+- Move biocache_base_url variable to all:vars so when lists are not used is defined
+
+<a name="v1.2.15"></a>
+## v1.2.15 - 2021-11-23
+- Correct hostname selection for branding if replay and is not defined (for old inventories compatibility)
+
 <a name="v1.2.14"></a>
 ## v1.2.14 - 2021-11-23
 - Set default hostname for branding if replay and is not defined (for old inventories compatibility)
