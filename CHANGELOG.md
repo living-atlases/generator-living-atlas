@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.17"></a>
+## v1.2.17 - 2021-11-29
+- Updated GBIF Backbone Taxonomy compatible with pipelines
+
 <a name="v1.2.16"></a>
 ## v1.2.16 - 2021-11-24
 - Move biocache_base_url variable to all:vars so when lists are not used is defined
