@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.19"></a>
+## v1.2.19 - 2021-12-01
+- Use timestamps for each namedata items
+
 <a name="v1.2.18"></a>
 ## v1.2.18 - 2021-12-01
 - Update namedata and nameindex for latest GBIF Backbone Taxonomy
