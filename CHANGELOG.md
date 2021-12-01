@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.18"></a>
+## v1.2.18 - 2021-12-01
+- Update namedata and nameindex for latest GBIF Backbone Taxonomy
+
 <a name="v1.2.17"></a>
 ## v1.2.17 - 2021-11-29
 - Updated GBIF Backbone Taxonomy compatible with pipelines
