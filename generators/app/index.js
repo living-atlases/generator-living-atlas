@@ -1455,6 +1455,14 @@ module.exports = class extends Generator {
         `pipelines_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
 
+    if (isPasswordNotDefined.call(this, localPassDest, 'data_quality_api_key'))
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `data_quality_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+
     generate.call(this, conf, dest, filePrefix);
     generateAnsiblew.call(this, conf, dest);
 
