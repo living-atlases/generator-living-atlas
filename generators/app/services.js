@@ -21,6 +21,8 @@ const services = [
   'branding',
   'spatial',
   'pipelines',
+  'data_quality',
+  'namematching_service'
   /* 'biocollect', */
 ];
 
@@ -219,6 +221,22 @@ const servicesDesc = {
     desc:
       'Jenkins slaves for Pipelines',
     allowMultipleDeploys: true,
+  },
+  data_quality: {
+    name: 'data_quality',
+    group: 'data_quality_filter_service',
+    playbook: 'data_quality_filter_service',
+    desc:
+      'Data Quality Filter Service',
+    allowMultipleDeploys: false,
+  },
+  namematching_service: {
+    name: 'namematching_service',
+    group: 'namematching-service',
+    playbook: 'namematching-service',
+    desc:
+      'namematching service',
+    allowMultipleDeploys: false,
   },
   branding: {
     name: 'branding',

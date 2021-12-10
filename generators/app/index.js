@@ -686,6 +686,24 @@ module.exports = class extends Generator {
           )} sensitive data service (similar to sds.ala.org.au)?`,
           default: false,
         },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_data_quality',
+          message: `Use ${em(
+            'data-quality service'
+          )} (similar to data-quality-service.ala.org.au)?`,
+          default: false,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_namematching_service',
+          message: `Use ${em(
+            'namematching service'
+          )} (similar to namematching-ws.ala.org.au)?`,
+          default: false,
+        },
         /* {
         store: true,
         type: 'confirm',
@@ -918,6 +936,13 @@ module.exports = class extends Generator {
         new PromptHostnameFor('sds', 'sds', (a) => a['LA_use_sds']), new PromptUrlFor('sds', 'sds', (a) => a['LA_use_sds']),
         new PromptPathFor('sds', 'sds', (a) => a['LA_use_sds']),
 
+        new PromptSubdomainFor('namematching_service', 'namematching_service', (a) => a['LA_use_namematching_service']),
+        new PromptHostnameFor('namematching_service', 'namematching_service', (a) => a['LA_use_namematching_service']), new PromptUrlFor('namematching_service', 'namematching_service', (a) => a['LA_use_namematching_service']),
+        new PromptPathFor('namematching_service', 'namematching_service', (a) => a['LA_use_namematching_service']),
+
+        new PromptSubdomainFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
+        new PromptHostnameFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']), new PromptUrlFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
+        new PromptPathFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
         /* Disabled for now
        new PromptSubdomainFor(
        'biocollect',
@@ -1077,6 +1102,12 @@ module.exports = class extends Generator {
       if (typeof this.answers['LA_use_solrcloud'] === 'undefined') {
         this.answers['LA_use_solrcloud'] = false;
       }
+      if (typeof this.answers['LA_use_data_quality'] === 'undefined') {
+        this.answers['LA_use_data_quality'] = false;
+      }
+      if (typeof this.answers['LA_use_namematching_service'] === 'undefined') {
+        this.answers['LA_use_namematching_service'] = false;
+      }
       // noinspection HttpUrlsUsage
       this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
         ? 'https://'
@@ -1105,7 +1136,8 @@ module.exports = class extends Generator {
           return;
         if (service === 'pipelines' && !this.answers['LA_use_pipelines'])
           return;
-
+        if (service === 'data_quality' && !this.answers['LA_use_data_quality']) return;
+        if (service === 'namematching_service' && !this.answers['LA_use_namematching_service']) return;
         const hostVar = `LA_${service}_hostname`;
         const serviceUrl = this.answers[`LA_${service}_url`];
         const hostname = this.answers[hostVar];
@@ -1455,12 +1487,30 @@ module.exports = class extends Generator {
         `pipelines_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
 
+    let dq_api = uuidv4();
     if (isPasswordNotDefined.call(this, localPassDest, 'data_quality_api_key'))
       replaceLine.call(
         this,
         localPassDest,
         '# External old',
-        `data_quality_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+        `data_quality_api_key = ${dq_api}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+
+    if (isPasswordNotDefined.call(this, localPassDest, 'dataquality.apiKey'))
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `dataquality.apiKey = ${dq_api}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+
+
+    if (isPasswordNotDefined.call(this, localPassDest, 'dq_db_password'))
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `dq_db_password = ${niceware.generatePassphrase(6).join('')}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
 
     generate.call(this, conf, dest, filePrefix);
