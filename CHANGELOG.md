@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.21"></a>
+## v1.2.21 - 2021-12-10
+- Correct data-quality variable names
+
 <a name="v1.2.20"></a>
 ## v1.2.20 - 2021-12-10
 - Added namematching webservice and data-quality support
