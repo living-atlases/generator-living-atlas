@@ -1,5 +1,12 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.20"></a>
+## v1.2.20 - 2021-12-10
+- Added namematching webservice and data-quality support
+- Enable my annotations
+- Added default biocache-hub skin layout
+- Added api urls and spark params
+
 <a name="v1.2.19"></a>
 ## v1.2.19 - 2021-12-01
 - Use timestamps for each namedata items
