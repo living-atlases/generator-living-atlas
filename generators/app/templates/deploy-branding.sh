@@ -26,5 +26,5 @@ echo ">>>>> Clearing the LA modules header/footer caches:"
 for url in $(grep "url:" app/js/settings.js  | sed "s/.*url: '//g" | awk -F "'" '{print $1}' | egrep -Ev "^$|twitter|your-area|datasets")
 do
     echo "--- Clearing $url/headerFooter/clearCache"
-    curl -s --output /dev/null  $url/headerFooter/clearCache 2>&1
+    curl -s --output /dev/null  $url/headerFooter/clearCache 2>&1 || true
 done
