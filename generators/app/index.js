@@ -342,7 +342,13 @@ function generateBranding(conf, brandDest) {
     conf
   );
   if (this.fs.exists(brandSettings)) {
-    if (conf['LA_theme'] != null && conf['LA_theme'] !== 'custom') {
+    // noinspection JSUnresolvedFunction
+    this.fs.copyTpl(
+      this.templatePath('base-branding-settings.ejs'),
+      this.destinationPath(`${brandSettings}`),
+      conf
+    );
+    if (conf['LA_theme'] != null) {
       // try to change the theme in the settings
       logger('INFO: trying to setup the theme of current branding settings');
       replaceLine.call(
@@ -350,15 +356,6 @@ function generateBranding(conf, brandDest) {
         brandSettings,
         'theme:',
         `  theme: '${conf['LA_theme']}',`
-      );
-    } else {
-      // just copy a sample
-      logger('INFO: copying a branding settings sample');
-      // noinspection JSUnresolvedFunction
-      this.fs.copyTpl(
-        this.templatePath('base-branding-settings.ejs'),
-        this.destinationPath(`${brandSettings}.sample`),
-        conf
       );
     }
   } else {
