@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.22"></a>
+## v1.2.22 - 2021-12-28
+- Added namematching current datestamp
+- Don't fail on wrong or undeployed branding urls
+- Overwrite branding settings always
+
 <a name="v1.2.21"></a>
 ## v1.2.21 - 2021-12-10
 - Correct data-quality variable names
