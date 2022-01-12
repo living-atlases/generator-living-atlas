@@ -26,7 +26,7 @@ In others words, with the `ansible` inventories produced by this `yeoman` genera
 
 Also, thanks to `yeoman`, you can rerun this generator, for instance, to enable new modules in the future, or to enable eg. SSL, etc. and reuse your previous settings and compare the differences (see the [screenshots](#screens)).
 
-You can also use this generator via web: [https://generator.l-a.site/](https://generator.l-a.site/).
+You can also use this generator via the [LA Toolkit](https://github.com/living-atlases/la-toolkit).
 
 ## Prerequisites
 
