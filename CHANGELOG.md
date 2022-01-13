@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.23"></a>
+## v1.2.23 - 2021-01-13
+- Use of gbif-backbone of 2021-11-26
+
 <a name="v1.2.22"></a>
 ## v1.2.22 - 2021-12-28
 - Added namematching current datestamp
