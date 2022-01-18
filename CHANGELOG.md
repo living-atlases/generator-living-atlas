@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.25"></a>
+## v1.2.25 - 2021-01-18
+- Partial fix for #10. Use of different collectory variables depending on the version
+
 <a name="v1.2.24"></a>
 ## v1.2.24 - 2021-01-15
 - Use of gbif-backbone of 2021-11-26 (correct, as the previously was the backbone from Sep-2021 incorrectly zip/tar) 
