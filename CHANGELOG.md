@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.26"></a>
+## v1.2.26 - 2021-01-19
+- Move BIE and Spatial lat/lon to inventory from local-extras so can be configured correctly from the toolkit. Please comment default spatial and bie lat/lon from your inventories local-extra.
+
 <a name="v1.2.25"></a>
 ## v1.2.25 - 2021-01-18
 - Partial fix for #10. Use of different collectory variables depending on the version
