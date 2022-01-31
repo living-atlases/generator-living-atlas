@@ -747,7 +747,7 @@ module.exports = class extends Generator {
           validate: (input) =>
             new Promise((resolve) => {
               useJenkins = input;
-              resolve(input);
+              resolve(true);
             }),
         },
         {
@@ -760,10 +760,11 @@ module.exports = class extends Generator {
           default: (a) => a['LA_use_pipelines'],
           validate: (input, a) =>
             new Promise((resolve, reject) => {
-              if (input && a['LA_use_pipelines']) {
-                reject('You need to use solrcloud with pipelines');
+              // logger(`input ${input} ${a['LA_use_pipelines']}`);
+              if (!input && a['LA_use_pipelines']) {
+                resolve('You need to use solrcloud with pipelines');
               } else {
-                resolve(input);
+                resolve(true);
               }
             }),
         },
