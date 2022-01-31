@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.27"></a>
+## v1.2.27 - 2021-01-31
+- Added correct gbif API url and testing one, following: https://github.com/AtlasOfLivingAustralia/ala-install/commit/d7f0ad48529a34d522f5a205d1d2d70cbac49dba
+- Fix for https://github.com/living-atlases/generator-living-atlas/issues/19 pipelines is selected for testing without solrcloud. Comment that pipelines needs a solrcloud/zookeeper cluster in inventories.
+
 <a name="v1.2.26"></a>
 ## v1.2.26 - 2021-01-19
 - Move BIE and Spatial lat/lon to inventory from local-extras so can be configured correctly from the toolkit. Please comment default spatial and bie lat/lon from your inventories local-extra.
