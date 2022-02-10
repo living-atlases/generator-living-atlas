@@ -1,4 +1,6 @@
 <a name="unreleased"></a>
+- Pin pipelines version
+- set new vars different that default ALA ones
 
 <a name="v1.2.27"></a>
 ## v1.2.27 - 2021-01-31
