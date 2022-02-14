@@ -1,6 +1,12 @@
 <a name="unreleased"></a>
-- Pin pipelines version
+
+<a name="v1.2.28"></a>
+## v1.2.28 - 2021-02-14
+- Pin pipelines version. Set new variables different that default ALA ones
 - set new vars different that default ALA ones
+- Added extra dashboard variables
+- Extra alerts switchs
+- Added branding cors variable to setup cors in l-a branding only
 
 <a name="v1.2.27"></a>
 ## v1.2.27 - 2021-01-31
