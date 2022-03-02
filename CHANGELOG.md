@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.29"></a>
+## v1.2.29 - 2021-03-02
+- Alerts my annotations configuration
+- Set def species list when not in use
+
 <a name="v1.2.28"></a>
 ## v1.2.28 - 2021-02-14
 - Pin pipelines version. Set new variables different that default ALA ones
