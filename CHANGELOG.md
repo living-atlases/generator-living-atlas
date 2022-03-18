@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.30"></a>
+## v1.2.30 - 2021-03-18
+- Pipelines jenkins jobs new variables
+
 <a name="v1.2.29"></a>
 ## v1.2.29 - 2021-03-02
 - Alerts my annotations configuration
