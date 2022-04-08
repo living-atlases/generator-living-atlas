@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.31"></a>
+## v1.2.31 - 2021-04-08
+- More work to use collectory >= 3
+
 <a name="v1.2.30"></a>
 ## v1.2.30 - 2021-03-18
 - Pipelines jenkins jobs new variables
