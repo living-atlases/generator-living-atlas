@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.32"></a>
+## v1.2.32 - 2021-04-18
+- Added biocollect and ecodata support
+
 <a name="v1.2.31"></a>
 ## v1.2.31 - 2021-04-08
 - More work to use collectory >= 3
