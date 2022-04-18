@@ -22,8 +22,11 @@ const services = [
   'spatial',
   'pipelines',
   'data_quality',
-  'namematching_service'
-  /* 'biocollect', */
+  'namematching_service',
+  'biocollect',
+  'pdfgen',
+  'ecodata',
+  'ecodata_reporting'
 ];
 
 const servicesDesc = {
@@ -245,13 +248,34 @@ const servicesDesc = {
     desc: 'LA branding (header and footer theme)',
     allowMultipleDeploys: true,
   },
-  /* Disabled for now us depends in many ALA service
-     biocollect: {
+  biocollect: {
      name: 'biocollect',
      group: 'biocollect',
      playbook: 'biocollect-standalone',
+     allowMultipleDeploys: false,
      desc: 'advanced data collection tool for biodiversity science',
-     }, */
+  },
+  pdfgen: {
+     name: 'pdfgen',
+     group: 'pdfgen',
+     playbook: 'pdf-service',
+     allowMultipleDeploys: false,
+     desc: 'Service for turning .docs into .pdfs',
+  },
+  ecodata: {
+    name: 'ecodata',
+    group: 'ecodata',
+    playbook: 'ecodata',
+    allowMultipleDeploys: false,
+    desc: 'provides primarily data services for BioCollect applications'
+  },
+  ecodata_reporting: {
+    name: 'ecodata_reporting',
+    group: 'ecodata-reporting',
+    playbook: 'ecodata',
+    allowMultipleDeploys: false,
+    desc: 'provides reporting service for ecodata'
+  }
 };
 
 function confExistOrFalse(conf, varName) {
@@ -285,6 +309,12 @@ function serviceUseVar(name, conf) {
       return confExistOrTrue(conf,"LA_use_biocache_store");
     case "zookeeper":
       return confExistOrFalse(conf,`LA_use_solrcloud`);
+    case "pdfgen":
+      return confExistOrFalse(conf,`LA_use_biocollect`);
+    case "ecodata":
+      return confExistOrFalse(conf,`LA_use_biocollect`);
+    case "ecodata_reporting":
+      return confExistOrFalse(conf,`LA_use_biocollect`);
     default:
       return confExistOrFalse(conf,`LA_use_${name}`);
   }

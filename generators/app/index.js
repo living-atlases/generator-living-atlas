@@ -209,6 +209,7 @@ function hostChoices(a, varUsesSubdomain, subdomain, multi, name) {
 
 function PromptHostnameFor(name, subdomain, when) {
   this.store = defaultStore;
+  // if (debug) logger(`prompt hostname for ${name}: ${subdomain}`);
   const multi = servicesDesc[name].allowMultipleDeploys;
   this.type = multi ? 'checkbox' : 'list'; // checkbox
   const varName = `LA_${name}_hostname`;
@@ -701,15 +702,15 @@ module.exports = class extends Generator {
           )} (similar to namematching-ws.ala.org.au)?`,
           default: false,
         },
-        /* {
+        {
         store: true,
         type: 'confirm',
         name: 'LA_use_biocollect',
         message: `Use ${em(
           'biocollect'
         )}  data collection tool (similar to biocollect.ala.org.au/acsa)?`,
-        default: false,
-      }, */
+          default: false,
+        },
         {
           store: true,
           type: 'confirm',
@@ -941,28 +942,26 @@ module.exports = class extends Generator {
         new PromptSubdomainFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
         new PromptHostnameFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']), new PromptUrlFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
         new PromptPathFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
-        /* Disabled for now
-       new PromptSubdomainFor(
-       'biocollect',
-       'biocollect',
-       (a) => a['LA_use_biocollect']
-       ),
-       new PromptHostnameFor(
-       'biocollect',
-       'biocollect',
-       (a) => a['LA_use_biocollect']
-       ),
 
-       new PromptUrlFor(
-       'biocollect',
-       'biocollect',
-       (a) => a['LA_use_biocollect']
-       ),
-       new PromptPathFor(
-       'biocollect',
-       'biocollect',
-       (a) => a['LA_use_biocollect']
-       ), */
+        new PromptSubdomainFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect']),
+        new PromptHostnameFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect'] ),
+        new PromptUrlFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect']),
+        new PromptPathFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect']),
+
+        new PromptSubdomainFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect']),
+        new PromptHostnameFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect'] ),
+        new PromptUrlFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect']),
+        new PromptPathFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect']),
+
+        new PromptSubdomainFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect']),
+        new PromptHostnameFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect'] ),
+        new PromptUrlFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect']),
+        new PromptPathFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect']),
+
+        new PromptSubdomainFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect']),
+        new PromptHostnameFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect'] ),
+        new PromptUrlFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect']),
+        new PromptPathFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect']),
 
         // In the future, try to use solrcloud (ALA uses solr-standalone for bie, (a) => !a['LA_use_solrcloud']),
         new PromptSubdomainFor('solr', 'solr'),
@@ -976,7 +975,6 @@ module.exports = class extends Generator {
         new PromptSubdomainFor('cas', 'auth', true, true),
         new PromptHostnameFor('cas', 'auth'),
         new PromptUrlFor('cas', 'auth'),
-
 
         new PromptHostnameFor('biocache_backend', 'biocache_backend', (a) => a['LA_use_biocache_store']),
 
@@ -1457,8 +1455,24 @@ module.exports = class extends Generator {
       replaceLine.call(
         this,
         localPassDest,
+        'google_apiKey[ ]*=',
+        `google_apiKey = ${conf['LA_variable_google_api_key']}`
+      );
+
+    if (isDefined(conf['LA_variable_google_api_key']))
+      replaceLine.call(
+        this,
+        localPassDest,
         'google_api_key[ ]*=',
         `google_api_key = ${conf['LA_variable_google_api_key']}`
+      );
+
+    if (isDefined(conf['LA_variable_google_api_key']))
+      replaceLine.call(
+        this,
+        localPassDest,
+        'google_maps_api_key[ ]*=',
+        `google_maps_api_key = ${conf['LA_variable_google_api_key']}`
       );
 
     if (isDefined(conf['LA_variable_maxmind_account_id']))
@@ -1502,7 +1516,6 @@ module.exports = class extends Generator {
         `dataquality.apiKey = ${dq_api}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
 
-
     if (isPasswordNotDefined.call(this, localPassDest, 'dq_db_password'))
       replaceLine.call(
         this,
@@ -1510,6 +1523,40 @@ module.exports = class extends Generator {
         '# External old',
         `dq_db_password = ${niceware.generatePassphrase(6).join('')}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
+
+    if (isPasswordNotDefined.call(this, localPassDest, 'ecodata_password')) {
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `mongodb_root_password = ${niceware.generatePassphrase(6).join('')}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `ecodata_password = ${niceware.generatePassphrase(6).join('')}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+      if (isPasswordNotDefined.call(this, localPassDest, 'ecodata_api_key'))
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `ecodata_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `google_maps_api_key = ${conf['LA_variable_google_api_key']}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `scistarter_api_key= get-a-scistarter-api-key\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+    }
 
     generate.call(this, conf, dest, filePrefix);
     generateAnsiblew.call(this, conf, dest);
