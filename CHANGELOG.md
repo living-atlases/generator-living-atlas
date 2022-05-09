@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.33"></a>
+## v1.2.33 - 2021-05-09
+- Added `ala-bie-hub` support
+
 <a name="v1.2.32"></a>
 ## v1.2.32 - 2021-04-18
 - Added biocollect and ecodata support
