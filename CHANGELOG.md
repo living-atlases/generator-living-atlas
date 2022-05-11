@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.34"></a>
+## v1.2.34 - 2021-05-11
+- Fix for living-atlases/la-toolkit#9
+
 <a name="v1.2.33"></a>
 ## v1.2.33 - 2021-05-09
 - Added `ala-bie-hub` support
