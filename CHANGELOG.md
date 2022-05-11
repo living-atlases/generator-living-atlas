@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.35"></a>
+## v1.2.35 - 2021-05-11
+- Fix too many redirections bug in spatial
+
 <a name="v1.2.34"></a>
 ## v1.2.34 - 2021-05-11
 - Fix for living-atlases/la-toolkit#9
