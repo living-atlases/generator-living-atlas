@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.36"></a>
+## v1.2.36 - 2021-05-19
+- Fix zookeeper config generation in clusters
+ 
 <a name="v1.2.35"></a>
 ## v1.2.35 - 2021-05-11
 - Fix too many redirections bug in spatial
