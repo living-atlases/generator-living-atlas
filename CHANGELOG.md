@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.37"></a>
+## v1.2.37 - 2021-05-24
+- Revert fix for too many redirections bug in spatial (trying to fix in ala-install instead)
+
 <a name="v1.2.36"></a>
 ## v1.2.36 - 2021-05-19
 - Fix zookeeper config generation in clusters
