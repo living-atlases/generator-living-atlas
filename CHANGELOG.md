@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.38"></a>
+## v1.2.38 - 2021-06-02
+- Fix ecodata_apikey generation (thx Naama Arkin for the feedback)
+
 <a name="v1.2.37"></a>
 ## v1.2.37 - 2021-05-24
 - Revert fix for too many redirections bug in spatial (trying to fix in ala-install instead)
