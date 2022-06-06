@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+
+<a name="v1.2.40"></a>
+## v1.2.40 - 2021-06-06
+- Pin ala-sensitive-data-service version til some issues are fixed
+
 <a name="v1.2.39"></a>
 ## v1.2.39 - 2021-06-06
 - Correct sds_url (for ala-sensitive-data-service)
