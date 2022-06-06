@@ -2,7 +2,7 @@
 
 <a name="v1.2.39"></a>
 ## v1.2.39 - 2021-06-06
-- Correct sds_url 
+- Correct sds_url (for ala-sensitive-data-service)
 - Correct solr_url when solrcloud is used
 
 <a name="v1.2.38"></a>
