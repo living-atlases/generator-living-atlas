@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.39"></a>
+## v1.2.39 - 2021-06-06
+- Correct sds_url 
+- Correct solr_url when solrcloud is used
+
 <a name="v1.2.38"></a>
 ## v1.2.38 - 2021-06-02
 - Fix ecodata_apikey generation (thx Naama Arkin for the feedback)
