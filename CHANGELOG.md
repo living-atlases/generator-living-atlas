@@ -1,5 +1,8 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.41"></a>
+## v1.2.41 - 2021-06-07
+- Pin a previous version of ala-sensitive-data-service til some issues are fixed
 
 <a name="v1.2.40"></a>
 ## v1.2.40 - 2021-06-06
