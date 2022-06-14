@@ -1273,6 +1273,19 @@ module.exports = class extends Generator {
       );
     }
 
+    try {
+      this.fs.copyTpl(
+        this.templatePath('dot-upptimerc.yml'),
+        this.destinationPath(`${dest}/dot-upptimerc.yml`),
+        conf
+      );
+    } catch (e) {
+      logger(
+          'Error: something goes wrong generating the dot-upptimerc.yml config'
+      );
+      logger(e);
+    }
+
     // Migrate old quick-start generated inventory files to pkg_name named
     const templateFiles = [
       'inventory.yml',

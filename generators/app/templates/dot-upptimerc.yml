@@ -1,0 +1,132 @@
+# UPPTIME configuration
+#
+# Follow these instructions to create a status page like https://github.com/GBIFes/status for your LA Portal:
+#
+#
+# 1) Follow the https://upptime.js.org/docs/get-started/ instructions
+# 2) copy the dot-upptimerc.yml as .upptimerc.yml in your uptime status created repository
+# 3) Update the github owner/repo and for instance the icons in this configuration
+# 4) That is
+
+# Change these first
+owner: <%= LA_project_shortname %> # Your GitHub organization or username, where this repository lives (for instance, biodiversiydata-se in the case of https://github.com/biodiversitydata-se)
+repo: status # The name of this repository (for instance, like: https://github.com/GBIFes/status)
+
+
+sites:
+  - name: <%= LA_project_name %>
+    url: <%= LA_urls_prefix %><%= LA_domain %>
+<%_ if (LA_use_alerts) { _%>
+  - name: Alerts service
+    url: <%= LA_urls_prefix %><%= LA_alerts_url %><%= LA_alerts_path %>
+    maxRedirects: 10
+<%_ } _%>
+<%_ if (LA_use_CAS) { _%>
+  - name: Apikey service
+    url: <%= LA_urls_prefix %><%= LA_cas_url %>/apikey
+  - name: CAS service
+    url: <%= LA_urls_prefix %><%= LA_cas_url %>/cas
+    maxRedirects: 10
+  - name: CAS management service
+    url: <%= LA_urls_prefix %><%= LA_cas_url %>/cas-management/
+    maxRedirects: 10
+  - name: Userdetails service
+    url: <%= LA_urls_prefix %><%= LA_cas_url %>/userdetails
+<%_ } _%>
+<%_ if (LA_use_species) { _%>
+  - name: Species service (bie)
+    url: <%= LA_urls_prefix %><%= LA_ala_bie_url %><%= LA_ala_bie_path %>
+  - name: Species web services (bie-index)
+    url: <%= LA_urls_prefix %><%= LA_bie_index_url %><%= LA_bie_index_path %>
+<%_ } _%>
+  - name: Records service (biocache)
+    url: <%= LA_urls_prefix %><%= LA_ala_hub_url %><%= LA_ala_hub_path %>
+  - name: Records web services (biocache-service)
+    url: <%= LA_urls_prefix %><%= LA_biocache_service_url %><%= LA_biocache_service_path %>
+  - name: Collections service
+    url: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>
+  - name: Collections web services
+    url: <%= LA_urls_prefix %><%= LA_collectory_url %><%= LA_collectory_path %>/ws
+<%_ if (LA_use_dashboard) { _%>
+  - name: Dashboard service
+    url: <%= LA_urls_prefix %><%= LA_dashboard_url %><%= LA_dashboard_path %>
+<%_ } _%>
+<%_ if (LA_use_data_quality) { _%>
+  - name: Data quality service
+    url: <%= LA_urls_prefix %><%= LA_data_quality_url %><%= LA_data_quality_path %>
+<%_ } _%>
+<%_ if (LA_use_doi) { _%>
+  - name: DOI web services
+    url: <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>/api/
+  - name: DOI service
+    url: <%= LA_urls_prefix %><%= LA_doi_url %><%= LA_doi_path %>
+<%_ } _%>
+  - name: Branding website
+    url: <%= LA_urls_prefix %><% if (typeof LA_branding_url != 'undefined') { %><%- LA_branding_url %><% } else { %><%- LA_domain %><%_ } %><% if (typeof LA_branding_path != 'undefined') { %><%- LA_branding_path.replace(/\/$/, "") %><% } else { %><%_ } %>
+<%_ if (LA_use_images) { _%>
+  - name: Image service
+    url: <%= LA_urls_prefix %><%= LA_images_url %><%= LA_images_path %>
+<%_ } _%>
+  - name: Logger service
+    url: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>
+  - name: Logger reasons url
+    url: <%= LA_urls_prefix %><%= LA_logger_url %><%= LA_logger_path %>/service/logger/reasons
+<%_ if (LA_use_namematching_service) { _%>
+  - name: Namematching service
+    url: <%= LA_urls_prefix %><%= LA_namematching_service_url %><%= LA_namematching_service_path %>
+<%_ } _%>
+<%_ if (LA_use_regions) { _%>
+  - name: Regions service
+    url: <%= LA_urls_prefix %><%= LA_regions_url %>
+<%_ } _%>
+<%_ if (LA_use_sds) { _%>
+  - name: Sensitive service
+    url: <%= LA_urls_prefix %><%= LA_sds_url %><%= LA_sds_path %>
+<%_ } _%>
+<%_ if (LA_use_spatial) { _%>
+  - name: Spatial hub service
+    url: <%= LA_urls_prefix %><%= LA_spatial_url %>
+  - name: Spatial web service
+    url: <%= LA_urls_prefix %><%= LA_spatial_url %>/ws
+  - name: Spatial fields
+    url: <%= LA_urls_prefix %><%= LA_spatial_url %>/ws/fields
+  - name: Geonetwork service
+    url: <%= LA_urls_prefix %><%= LA_spatial_url %>/geonetwork
+  - name: Geoserver service
+    url: <%= LA_urls_prefix %><%= LA_spatial_url %>/geoserver
+<%_ } _%>
+<%_ if (LA_use_species_lists) { _%>
+  - name: Species Lists service
+    url: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
+<%_ } _%>
+<%_ if (typeof LA_use_biocollect != 'undefined' && LA_use_biocollect) { _%>
+  - name: Biocollect service
+    url: <%= LA_urls_prefix %><%= LA_biocollect_url %><%= LA_biocollect_path %>/ala
+  - name: Ecodata reporting service
+    url: <%= LA_urls_prefix %><%= LA_ecodata_reporting_url %>
+  - name: Ecodata service
+    url: <%= LA_urls_prefix %><%= LA_ecodata_url %>
+  - name: pdfgen_base_url
+    url: <%= LA_urls_prefix %><%= LA_pdfgen_url %>
+<%_ } _%>
+
+status-website:
+  #cname: demo.upptime.js.org
+  baseUrl: /status
+  logoUrl: https://raw.githubusercontent.com/living-atlases/artwork/master/favicon.ico
+  name: <%= LA_project_shortname %> status
+  introTitle: "<%= LA_project_name %> (<%= LA_project_shortname %>)"
+  introMessage: Live status page of <%= LA_project_shortname %> services
+  navbar:
+    - title: Status
+      href: /
+      icon: https://raw.githubusercontent.com/living-atlases/artwork/master/favicon.ico
+    - title: GitHub
+      href: https://github.com/$OWNER/$REPO
+
+# Upptime also supports notifications, assigning issues, and more
+# For instance, you can send notifications to a telegram group
+#
+# See https://upptime.js.org/docs/configuration
+
+
