@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.42"></a>
+## v1.2.42 - 2021-06-14
+- Added upptime support, see: https://upptime.js.org/
+
 <a name="v1.2.41"></a>
 ## v1.2.41 - 2021-06-07
 - Pin a previous version of ala-sensitive-data-service til some issues are fixed
