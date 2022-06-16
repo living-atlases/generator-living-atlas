@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.43"></a>
+## v1.2.43 - 2021-06-16
+- Added ssl-certs to add snake-oil self certs in SSL testing portals
+
 <a name="v1.2.42"></a>
 ## v1.2.42 - 2021-06-14
 - Added upptime support, see: https://upptime.js.org/
