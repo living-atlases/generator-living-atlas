@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.44"></a>
+## v1.2.44 - 2021-06-30
+- Added biocache-service >=3 variables
+
 <a name="v1.2.43"></a>
 ## v1.2.43 - 2021-06-16
 - Added ssl-certs to add snake-oil self certs in SSL testing portals
