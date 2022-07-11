@@ -326,6 +326,13 @@ function replaceLine(filePath, oldContent, newContent) {
   this.fs.write(this.destinationPath(filePath), content);
 }
 
+function commentLine(filePath, line) {
+  let content = this.fs.read(this.destinationPath(filePath));
+  const regexp = new RegExp(`^${line}`, 'm');
+  content = content.replace(regexp, `# ${line}`);
+  this.fs.write(this.destinationPath(filePath), content);
+}
+
 function isPasswordNotDefined(filePath, pass_variable) {
   let content = this.fs.read(this.destinationPath(filePath));
   const regexp = new RegExp(`^[ \\t]*${pass_variable}.+$`, 'm');
@@ -1587,6 +1594,14 @@ module.exports = class extends Generator {
         `scistarter_api_key= get-a-scistarter-api-key\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
     }
+
+    // Comment geoserver password because of:
+    // https://github.com/AtlasOfLivingAustralia/ala-install/issues/556
+    commentLine.call(
+      this,
+      localPassDest,
+      'geoserver_password'
+    );
 
     generate.call(this, conf, dest, filePrefix);
     generateAnsiblew.call(this, conf, dest);
