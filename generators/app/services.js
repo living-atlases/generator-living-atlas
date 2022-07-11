@@ -23,6 +23,7 @@ const services = [
   'pipelines',
   'data_quality',
   'namematching_service',
+  'sensitive_data_service',
   'biocollect',
   'pdfgen',
   'ecodata',
@@ -239,7 +240,15 @@ const servicesDesc = {
     playbook: 'namematching-service',
     desc:
       'namematching service',
-    allowMultipleDeploys: false,
+    allowMultipleDeploys: true,
+  },
+  sensitive_data_service: {
+    name: 'sensitive_data_service',
+    group: 'sensitive-data-service',
+    playbook: 'sensitive-data-service',
+    desc:
+      'web services for sensitive data evaluation',
+    allowMultipleDeploys: true,
   },
   branding: {
     name: 'branding',

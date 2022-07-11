@@ -703,6 +703,15 @@ module.exports = class extends Generator {
           default: false,
         },
         {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_sensitive_data_service',
+          message: `Use ${em(
+            'sensitive_data service'
+          )} (similar to sensitive-ws-test.ala.org.au)?`,
+          default: false,
+        },
+        {
         store: true,
         type: 'confirm',
         name: 'LA_use_biocollect',
@@ -939,6 +948,10 @@ module.exports = class extends Generator {
         new PromptHostnameFor('namematching_service', 'namematching_service', (a) => a['LA_use_namematching_service']), new PromptUrlFor('namematching_service', 'namematching_service', (a) => a['LA_use_namematching_service']),
         new PromptPathFor('namematching_service', 'namematching_service', (a) => a['LA_use_namematching_service']),
 
+        new PromptSubdomainFor('sensitive_data_service', 'sensitive_data_service', (a) => a['LA_use_sensitive_data_service']),
+        new PromptHostnameFor('sensitive_data_service', 'sensitive_data_service', (a) => a['LA_use_sensitive_data_service']), new PromptUrlFor('sensitive_data_service', 'sensitive_data_service', (a) => a['LA_use_sensitive_data_service']),
+        new PromptPathFor('sensitive_data_service', 'sensitive_data_service', (a) => a['LA_use_sensitive_data_service']),
+
         new PromptSubdomainFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
         new PromptHostnameFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']), new PromptUrlFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
         new PromptPathFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
@@ -1104,6 +1117,9 @@ module.exports = class extends Generator {
       if (typeof this.answers['LA_use_namematching_service'] === 'undefined') {
         this.answers['LA_use_namematching_service'] = false;
       }
+      if (typeof this.answers['LA_use_sensitive_data_service'] === 'undefined') {
+        this.answers['LA_use_sensitive_data_service'] = false;
+      }
       // noinspection HttpUrlsUsage
       this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
         ? 'https://'
@@ -1134,6 +1150,7 @@ module.exports = class extends Generator {
           return;
         if (service === 'data_quality' && !this.answers['LA_use_data_quality']) return;
         if (service === 'namematching_service' && !this.answers['LA_use_namematching_service']) return;
+        if (service === 'sensitive_data_service' && !this.answers['LA_use_sensitive_data_service']) return;
         const hostVar = `LA_${service}_hostname`;
         const serviceUrl = this.answers[`LA_${service}_url`];
         const hostname = this.answers[hostVar];
