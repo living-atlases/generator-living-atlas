@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.45"></a>
+## v1.2.45 - 2021-07-11
+- Added sensitive-data-service support
+- Don't change geoserver password via ansible (ala-install#556)
+
 <a name="v1.2.44"></a>
 ## v1.2.44 - 2021-06-30
 - Added biocache-service >=3 variables
