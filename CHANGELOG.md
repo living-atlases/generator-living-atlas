@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.46"></a>
+## v1.2.46 - 2021-07-12
+- Set geoserver_password to the default one (ala-install#556)
+
 <a name="v1.2.45"></a>
 ## v1.2.45 - 2021-07-11
 - Added sensitive-data-service support
