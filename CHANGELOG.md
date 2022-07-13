@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.47"></a>
+## v1.2.47 - 2021-07-13
+Remove duplicated and hardcode software versions
+
 <a name="v1.2.46"></a>
 ## v1.2.46 - 2021-07-12
 - Set geoserver_password to the default one (ala-install#556)
