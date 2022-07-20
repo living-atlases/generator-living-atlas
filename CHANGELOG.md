@@ -1,8 +1,12 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.48"></a>
+## v1.2.48 - 2021-07-20
+- server_tz to general section (used now by collectory and logger)
+
 <a name="v1.2.47"></a>
 ## v1.2.47 - 2021-07-13
-Remove duplicated and hardcode software versions
+- Remove duplicated and hardcode software versions
 
 <a name="v1.2.46"></a>
 ## v1.2.46 - 2021-07-12
