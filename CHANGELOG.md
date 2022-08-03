@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.49"></a>
+## v1.2.49 - 2021-08-03
+- Added new CAS oauth keys variables
+- Changed postgresql username for spatial different than postgres
+
 <a name="v1.2.48"></a>
 ## v1.2.48 - 2021-07-20
 - server_tz to general section (used now by collectory and logger)
