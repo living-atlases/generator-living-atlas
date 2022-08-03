@@ -1,95 +1,95 @@
 <a name="unreleased"></a>
 
 <a name="v1.2.49"></a>
-## v1.2.49 - 2021-08-03
+## v1.2.49 - 2022-08-03
 - Added new CAS oauth keys variables
 - Changed postgresql username for spatial different than postgres
 
 <a name="v1.2.48"></a>
-## v1.2.48 - 2021-07-20
+## v1.2.48 - 2022-07-20
 - server_tz to general section (used now by collectory and logger)
 
 <a name="v1.2.47"></a>
-## v1.2.47 - 2021-07-13
+## v1.2.47 - 2022-07-13
 - Remove duplicated and hardcode software versions
 
 <a name="v1.2.46"></a>
-## v1.2.46 - 2021-07-12
+## v1.2.46 - 2022-07-12
 - Set geoserver_password to the default one (ala-install#556)
 
 <a name="v1.2.45"></a>
-## v1.2.45 - 2021-07-11
+## v1.2.45 - 2022-07-11
 - Added sensitive-data-service support
 - Don't change geoserver password via ansible (ala-install#556)
 
 <a name="v1.2.44"></a>
-## v1.2.44 - 2021-06-30
+## v1.2.44 - 2022-06-30
 - Added biocache-service >=3 variables
 
 <a name="v1.2.43"></a>
-## v1.2.43 - 2021-06-16
+## v1.2.43 - 2022-06-16
 - Added ssl-certs to add snake-oil self certs in SSL testing portals
 
 <a name="v1.2.42"></a>
-## v1.2.42 - 2021-06-14
+## v1.2.42 - 2022-06-14
 - Added upptime support, see: https://upptime.js.org/
 
 <a name="v1.2.41"></a>
-## v1.2.41 - 2021-06-07
+## v1.2.41 - 2022-06-07
 - Pin a previous version of ala-sensitive-data-service til some issues are fixed
 
 <a name="v1.2.40"></a>
-## v1.2.40 - 2021-06-06
+## v1.2.40 - 2022-06-06
 - Pin ala-sensitive-data-service version til some issues are fixed
 
 <a name="v1.2.39"></a>
-## v1.2.39 - 2021-06-06
+## v1.2.39 - 2022-06-06
 - Correct sds_url (for ala-sensitive-data-service)
 - Correct solr_url when solrcloud is used
 
 <a name="v1.2.38"></a>
-## v1.2.38 - 2021-06-02
+## v1.2.38 - 2022-06-02
 - Fix ecodata_apikey generation (thx Naama Arkin for the feedback)
 
 <a name="v1.2.37"></a>
-## v1.2.37 - 2021-05-24
+## v1.2.37 - 2022-05-24
 - Revert fix for too many redirections bug in spatial (trying to fix in ala-install instead)
 
 <a name="v1.2.36"></a>
-## v1.2.36 - 2021-05-19
+## v1.2.36 - 2022-05-19
 - Fix zookeeper config generation in clusters
  
 <a name="v1.2.35"></a>
-## v1.2.35 - 2021-05-11
+## v1.2.35 - 2022-05-11
 - Fix too many redirections bug in spatial
 
 <a name="v1.2.34"></a>
-## v1.2.34 - 2021-05-11
+## v1.2.34 - 2022-05-11
 - Fix for living-atlases/la-toolkit#9
 
 <a name="v1.2.33"></a>
-## v1.2.33 - 2021-05-09
+## v1.2.33 - 2022-05-09
 - Added `ala-bie-hub` support
 
 <a name="v1.2.32"></a>
-## v1.2.32 - 2021-04-18
+## v1.2.32 - 2022-04-18
 - Added biocollect and ecodata support
 
 <a name="v1.2.31"></a>
-## v1.2.31 - 2021-04-08
+## v1.2.31 - 2022-04-08
 - More work to use collectory >= 3
 
 <a name="v1.2.30"></a>
-## v1.2.30 - 2021-03-18
+## v1.2.30 - 2022-03-18
 - Pipelines jenkins jobs new variables
 
 <a name="v1.2.29"></a>
-## v1.2.29 - 2021-03-02
+## v1.2.29 - 2022-03-02
 - Alerts my annotations configuration
 - Set def species list when not in use
 
 <a name="v1.2.28"></a>
-## v1.2.28 - 2021-02-14
+## v1.2.28 - 2022-02-14
 - Pin pipelines version. Set new variables different that default ALA ones
 - set new vars different that default ALA ones
 - Added extra dashboard variables
@@ -97,24 +97,24 @@
 - Added branding cors variable to setup cors in l-a branding only
 
 <a name="v1.2.27"></a>
-## v1.2.27 - 2021-01-31
+## v1.2.27 - 2022-01-31
 - Added correct gbif API url and testing one, following: https://github.com/AtlasOfLivingAustralia/ala-install/commit/d7f0ad48529a34d522f5a205d1d2d70cbac49dba
 - Fix for https://github.com/living-atlases/generator-living-atlas/issues/19 pipelines is selected for testing without solrcloud. Comment that pipelines needs a solrcloud/zookeeper cluster in inventories.
 
 <a name="v1.2.26"></a>
-## v1.2.26 - 2021-01-19
+## v1.2.26 - 2022-01-19
 - Move BIE and Spatial lat/lon to inventory from local-extras so can be configured correctly from the toolkit. Please comment default spatial and bie lat/lon from your inventories local-extra.
 
 <a name="v1.2.25"></a>
-## v1.2.25 - 2021-01-18
+## v1.2.25 - 2022-01-18
 - Partial fix for #10. Use of different collectory variables depending on the version
 
 <a name="v1.2.24"></a>
-## v1.2.24 - 2021-01-15
+## v1.2.24 - 2022-01-15
 - Use of gbif-backbone of 2021-11-26 (correct, as the previously was the backbone from Sep-2021 incorrectly zip/tar) 
 
 <a name="v1.2.23"></a>
-## v1.2.23 - 2021-01-13
+## v1.2.23 - 2022-01-13
 - Use of gbif-backbone of 2021-11-26
 
 <a name="v1.2.22"></a>
