@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.50"></a>
+## v1.2.50 - 2022-08-04
+- Configure geonetwork_db_username with a different username than spatial-ws one
+
 <a name="v1.2.49"></a>
 ## v1.2.49 - 2022-08-03
 - Added new CAS oauth keys variables
