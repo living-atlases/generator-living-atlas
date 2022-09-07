@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.51"></a>
+## v1.2.51 - 2022-09-07
+- Added OICD url for auth/cas >= 6
+
 <a name="v1.2.50"></a>
 ## v1.2.50 - 2022-08-04
 - Configure geonetwork_db_username with a different username than spatial-ws one
