@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.52"></a>
+## v1.2.52 - 2022-09-12
+- CAS db uris configuration 
+- CAS spring session db support
+
 <a name="v1.2.51"></a>
 ## v1.2.51 - 2022-09-07
 - Added OICD url for auth/cas >= 6
