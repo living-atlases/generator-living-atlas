@@ -1595,6 +1595,14 @@ module.exports = class extends Generator {
       );
     }
 
+    if (isPasswordNotDefined.call(this, localPassDest, 'cas_spring_session_password'))
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `cas_spring_session_password = ${niceware.generatePassphrase(6).join('')}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+
     // Comment geoserver password because of:
     // https://github.com/AtlasOfLivingAustralia/ala-install/issues/556
     commentLine.call(
