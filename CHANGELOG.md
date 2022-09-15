@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.53"></a>
+## v1.2.53 - 2022-09-15
+- Disable spring mongo sessions in cas < 6
+- Disable Flickr in userdetails by default
+
 <a name="v1.2.52"></a>
 ## v1.2.52 - 2022-09-12
 - CAS db uris configuration 
