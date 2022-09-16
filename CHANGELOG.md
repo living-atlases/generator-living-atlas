@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.54"></a>
+## v1.2.54 - 2022-09-16
+- Disable some userdetails profile tools (digivol, sandbox and optionally biocollect). 
+- CAS logo variable `loginLogo`. 
+- Userdetails creation account support articles
+
 <a name="v1.2.53"></a>
 ## v1.2.53 - 2022-09-15
 - Disable spring mongo sessions in cas < 6
