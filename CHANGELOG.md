@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.2.55"></a>
+## v1.2.55 - 2022-09-26
+- postgres/postgis versions now selected by ala-install via https://github.com/AtlasOfLivingAustralia/ala-install/pull/614
+
 <a name="v1.2.54"></a>
 ## v1.2.54 - 2022-09-16
 - Disable some userdetails profile tools (digivol, sandbox and optionally biocollect). 
