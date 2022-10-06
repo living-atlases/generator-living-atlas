@@ -103,7 +103,7 @@ You can rerun the generator with the option `yo living-atlas --replay` to reuse 
 
 With `--replay-dont-ask` you can regenerate the playbooks with previous answers without being asked again. This is useful for new versions of this generator, or if you manually edit `.yo-rc.json` where your answers are stored, or for automated processes (like CI integrations).
 
-We recommend to override and set variables adding then to `quick-start-local-extras.yml` and `quick-start-spatial-local-extras.yml` without modification of the generated `quick-start-inventory.yml` and `quick-start-spatial-inventory.yml`, so you can rerun the generator in the future without losing local changes.  The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.yml` files to add new vars, etc.
+We recommend to override and set variables adding then to `quick-start-local-extras.ini` and `quick-start-spatial-local-extras.ini` without modification of the generated `quick-start-inventory.ini` and `quick-start-spatial-inventory.ini`, so you can rerun the generator in the future without losing local changes.  The `*-local-extras.sample` files will be updated with future versions of this generator, so you can compare from time to time these samples with your `*-local-extras.ini` files to add new vars, etc.
 
 See the [changelog](https://github.com/living-atlases/generator-living-atlas/blob/master/CHANGELOG.md) for more upgrade details, new variables to take into account, etc.
 
