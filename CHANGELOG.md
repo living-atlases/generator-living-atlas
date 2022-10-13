@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.1"></a>
+## v1.3.1 - 2022-10-13
+- Fix typo in species_list_version
+
 <a name="v1.3.0"></a>
 ## v1.3.0 - 2022-10-13
 - Added java 8 and 11 dependencies to each module
