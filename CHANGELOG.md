@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.0"></a>
+## v1.3.0 - 2022-10-13
+- Added java 8 and 11 dependencies to each module
+- Terms of service configuration
+- CAS/OIDC enable/disable
+
 <a name="v1.2.55"></a>
 ## v1.2.55 - 2022-09-26
 - postgres/postgis versions now selected by ala-install via https://github.com/AtlasOfLivingAustralia/ala-install/pull/614
