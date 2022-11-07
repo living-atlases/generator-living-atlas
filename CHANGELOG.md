@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.2"></a>
+## v1.3.2 - 2022-11-7
+- Add data-quality check profiles
+- Added java 8/11 for newers versions of ala-hub/biocache-service (same with tomcat)
+
 <a name="v1.3.1"></a>
 ## v1.3.1 - 2022-10-13
 - Fix typo in species_list_version
