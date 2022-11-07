@@ -54,6 +54,8 @@ sites:
 <%_ if (LA_use_data_quality) { _%>
   - name: Data quality service
     url: <%= LA_urls_prefix %><%= LA_data_quality_url %><%= LA_data_quality_path %>
+  - name: Data quality profiles
+    url: <%= LA_urls_prefix %><%= LA_data_quality_url %><%= LA_data_quality_path %>/api/v1/data-profiles?enabled=true
 <%_ } _%>
 <%_ if (LA_use_doi) { _%>
   - name: DOI web services
