@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.4"></a>
+## v1.3.4 - 2022-11-8
+- Added oidc_discovery_url and other oidc related variables
+
 <a name="v1.3.3"></a>
 ## v1.3.3 - 2022-11-7
 - Added tomcat_user for biocache-service > 3
