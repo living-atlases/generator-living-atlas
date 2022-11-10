@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.5"></a>
+## v1.3.5 - 2022-11-10
+- Move tomcat selection to the la-toolkit
+
 <a name="v1.3.4"></a>
 ## v1.3.4 - 2022-11-8
 - Added oidc_discovery_url and other oidc related variables
