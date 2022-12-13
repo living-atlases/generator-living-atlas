@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.6"></a>
+## v1.3.6 - 2022-12-13
+- Added sensitive-data-service to upptime configuration
+- Update to new GBIF Backbone Taxonomy (23-11-2022)
+
 <a name="v1.3.5"></a>
 ## v1.3.5 - 2022-11-10
 - Move tomcat selection to the la-toolkit
