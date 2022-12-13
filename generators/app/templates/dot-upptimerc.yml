@@ -101,6 +101,10 @@ sites:
   - name: Species Lists service
     url: <%= LA_urls_prefix %><%= LA_lists_url %><%= LA_lists_path %>
 <%_ } _%>
+<%_ if (LA_use_sensitive_data_service) { _%>
+  - name: Sensitive data service
+    url: <%= LA_urls_prefix %><%= LA_sensitive_data_service_url %><%= LA_sensitive_data_service_path %>
+<%_ } _%>
 <%_ if (typeof LA_use_biocollect != 'undefined' && LA_use_biocollect) { _%>
   - name: Biocollect service
     url: <%= LA_urls_prefix %><%= LA_biocollect_url %><%= LA_biocollect_path %>/ala
