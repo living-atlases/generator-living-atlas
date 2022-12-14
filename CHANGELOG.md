@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+
+<a name="v1.3.7"></a>
+## v1.3.7 - 2022-12-14
+- Extra variables used by BIE service
+
 <a name="v1.3.6"></a>
 ## v1.3.6 - 2022-12-13
 - Added sensitive-data-service to upptime configuration
