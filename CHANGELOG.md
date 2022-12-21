@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.9"></a>
+## v1.3.9 - 2022-12-21
+- Removed hardcoded data-quality version
+
 <a name="v1.3.8"></a>
 ## v1.3.8 - 2022-12-21
 - Updated backbone with last changes in living-atlases/gbif-taxonomy-for-la
