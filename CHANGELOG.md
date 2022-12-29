@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.10"></a>
+## v1.3.10 - 2022-12-29
+- Correct layout in data-quality service for each version
+- New biocache variables
+
 <a name="v1.3.9"></a>
 ## v1.3.9 - 2022-12-21
 - Removed hardcoded data-quality version
