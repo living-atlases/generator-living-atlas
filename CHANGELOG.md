@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.11"></a>
+## v1.3.11 - 2022-12-29
+- Disable oidc and enable cas by default while we develop something to configure keys and enable/disable
+- Security dep fixes
+
 <a name="v1.3.10"></a>
 ## v1.3.10 - 2022-12-29
 - Correct layout in data-quality service for each version
