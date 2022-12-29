@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.12"></a>
+## v1.3.12 - 2022-12-29
+- Use tomcat9 in recent biocache-service or collectory
+
 <a name="v1.3.11"></a>
 ## v1.3.11 - 2022-12-29
 - Disable oidc and enable cas by default while we develop something to configure keys and enable/disable
