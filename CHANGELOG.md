@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.13"></a>
+## v1.3.13 - 2023-02-02
+- Added `bie_ws_base_url` but for biocollect
+
 <a name="v1.3.12"></a>
 ## v1.3.12 - 2022-12-29
 - Use tomcat9 in recent biocache-service or collectory
