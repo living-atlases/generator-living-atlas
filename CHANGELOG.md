@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.14"></a>
+## v1.3.14 - 2023-02-20
+- Use pg10 for image-service to avoid https://github.com/AtlasOfLivingAustralia/ala-install/issues/610
+
 <a name="v1.3.13"></a>
 ## v1.3.13 - 2023-02-02
 - Added `bie_ws_base_url` but for biocollect
