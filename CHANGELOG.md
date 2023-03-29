@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.15"></a>
+## v1.3.15 - 2023-03-29
+- Improvements in biocache-service config
+- Add etckeeper as pre-deploy dep
+
 <a name="v1.3.14"></a>
 ## v1.3.14 - 2023-02-20
 - Use pg10 for image-service to avoid https://github.com/AtlasOfLivingAustralia/ala-install/issues/610
