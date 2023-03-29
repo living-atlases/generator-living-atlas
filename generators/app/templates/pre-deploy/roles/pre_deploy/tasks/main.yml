@@ -43,6 +43,7 @@
       - byobu
       - fail2ban
       - ssl-cert
+      - etckeeper
     state: present
     autoclean: yes
     update_cache: yes
@@ -61,6 +62,7 @@
       - byobu
       - fail2ban
       - ssl-cert
+      - etckeeper
     state: present
     autoclean: yes
     update_cache: yes
