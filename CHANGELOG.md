@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.3.16"></a>
+## v1.3.16 - 2023-04-10
+- Fix x_request_id missing variable
+
 <a name="v1.3.15"></a>
 ## v1.3.15 - 2023-03-29
 - Improvements in biocache-service config
