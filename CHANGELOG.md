@@ -1,8 +1,5 @@
 <a name="unreleased"></a>
-
-<a name="v1.3.17"></a>
-## v1.3.17 - 2023-05-10
-- Fix for #27 (thanks @naamaarkin for the feedback)
+- Correct skin in new regions versions
 
 <a name="v1.3.16"></a>
 ## v1.3.16 - 2023-04-10
