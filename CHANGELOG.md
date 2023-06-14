@@ -1,4 +1,8 @@
 <a name="unreleased"></a>
+
+<a name="v1.4.0"></a>
+## v1.4.0 - 2023-06-14
+- Events extended data model support
 - Correct skin in new regions versions
 
 <a name="v1.3.16"></a>
