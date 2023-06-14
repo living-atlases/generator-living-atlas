@@ -27,7 +27,9 @@ const services = [
   'biocollect',
   'pdfgen',
   'ecodata',
-  'ecodata_reporting'
+  'ecodata_reporting',
+  'events',
+  'events_elasticsearch'
 ];
 
 const servicesDesc = {
@@ -284,6 +286,20 @@ const servicesDesc = {
     playbook: 'ecodata',
     allowMultipleDeploys: false,
     desc: 'provides reporting service for ecodata'
+  },
+  events: {
+    name: 'events',
+    group: 'events',
+    playbook: 'events',
+    allowMultipleDeploys: false,
+    desc: 'events extended-data-model'
+  },
+  events_elasticsearch: {
+    name: 'events_elasticsearch',
+    group: 'events_elasticsearch',
+    playbook: 'events',
+    allowMultipleDeploys: true,
+    desc: 'events elasticsearch'
   }
 };
 

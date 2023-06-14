@@ -788,6 +788,15 @@ module.exports = class extends Generator {
         {
           store: true,
           type: 'confirm',
+          name: 'LA_use_events',
+          message: `Use ${em(
+            'events'
+          )} extended data model?`,
+          default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
           name: 'LA_enable_ssl',
           message: `Enable ${em('SSL')}?`,
           default: true,
@@ -1000,6 +1009,14 @@ module.exports = class extends Generator {
 
         new PromptHostnameFor('pipelines', 'pipelines', (a) => a['LA_use_pipelines']),
 
+        new PromptHostnameFor('events', 'events', (a) => a['LA_use_events']),
+        new PromptSubdomainFor('events', 'events', (a) => a['LA_use_events']),
+        new PromptHostnameFor('events', 'events', (a) => a['LA_use_events'] ),
+        new PromptUrlFor('events', 'events', (a) => a['LA_use_events']),
+        new PromptPathFor('events', 'events', (a) => a['LA_use_events']),
+
+        new PromptHostnameFor('events_elasticsearch', 'events_elasticsearch', (a) => a['LA_use_events']),
+
         {
           store: true,
           type: 'list',
@@ -1127,6 +1144,9 @@ module.exports = class extends Generator {
       if (typeof this.answers['LA_use_sensitive_data_service'] === 'undefined') {
         this.answers['LA_use_sensitive_data_service'] = false;
       }
+      if (typeof this.answers['LA_use_events'] === 'undefined') {
+        this.answers['LA_use_events'] = false;
+      }
       // noinspection HttpUrlsUsage
       this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
         ? 'https://'
@@ -1150,6 +1170,10 @@ module.exports = class extends Generator {
           return;
         if (service === 'sds' && !this.answers['LA_use_sds']) return;
         if (service === 'biocollect' && !this.answers['LA_use_biocollect'])
+          return;
+        if (service === 'events' && !this.answers['LA_use_events'])
+          return;
+        if (service === 'events_elasticsearch' && !this.answers['LA_use_events'])
           return;
         if (service === 'biocache_backend' && !this.answers['LA_use_biocache_store'])
           return;
@@ -1603,6 +1627,13 @@ module.exports = class extends Generator {
         `cas_spring_session_password = ${niceware.generatePassphrase(6).join('')}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
 
+    if (isPasswordNotDefined.call(this, localPassDest, 'es_api_key'))
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `es_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
     // Comment geoserver password because of:
     // https://github.com/AtlasOfLivingAustralia/ala-install/issues/556
     commentLine.call(
