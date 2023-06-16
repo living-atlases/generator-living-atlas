@@ -1,6 +1,6 @@
 {
   "name": "generator-living-atlas",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A Yeoman Generator for Living Atlas Ansible Inventories",
   "homepage": "https://living-atlases.gbif.org",
   "author": {
@@ -38,14 +38,15 @@
     "bcrypt": "^5.0.1",
     "chalk": "^2.1.0",
     "child_process": "^1.0.2",
+    "crypto": "^1.0.1",
     "js-base64": "^3.6.1",
+    "minimatch": ">=3.0.5",
     "niceware": "^1.0.7",
     "onionsay": "github:theonion/onionsay",
     "parse-domain": "^3.0.3",
     "uuid": "^8.3.2",
     "yeoman-generator": "^5.4.2",
-    "yosay": "^2.0.1",
-    "minimatch": ">=3.0.5"
+    "yosay": "^2.0.1"
   },
   "jest": {
     "testEnvironment": "node"
