@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.4.1"></a>
+## v1.4.1 - 2023-06-16
+- Generation of OIDC clientId and clientSecret
+
 <a name="v1.4.0"></a>
 ## v1.4.0 - 2023-06-14
 - Events extended data model support
