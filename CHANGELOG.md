@@ -1,5 +1,12 @@
 <a name="unreleased"></a>
 
+<a name="v1.4.2"></a>
+## v1.4.2 - 2023-07-12
+- Use quotes in extra-args for multi args
+- Add data quality url for OIDC keys generation
+- Fix for regions layout in modern versions
+- Mapbox variable. OIDC variable
+
 <a name="v1.4.1"></a>
 ## v1.4.1 - 2023-06-16
 - Generation of OIDC clientId and clientSecret
