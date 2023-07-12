@@ -89,7 +89,7 @@ if __name__ == '__main__':
             hubLimit=<% if (typeof LA_hub_pkg_name != 'undefined') { %>"hub-<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
             extras = "%s --limit %s" % (extras, hubLimit)
     if extra_vars:
-        extras = "%s --extra-vars %s" % (extras, extra_vars)
+        extras = "%s --extra-vars '%s'" % (extras, extra_vars)
     if nodryrun:
         cmdPrefix = ""
 
