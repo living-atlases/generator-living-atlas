@@ -17,6 +17,7 @@ Options:
   -l --limit=<hosts>     Limit to some inventories hosts
   -s --skip=<tags>       Skip tags
   -t --tags=<tags>       Limit to tags
+  -i --inventory=<vars>  Extra inventory
   -e --extra=<vars>      Extra variables to pass to ansible-playbook
   -h --help              Show help options.
   -u --user=<user>       Ansible become user [default: ubuntu]
@@ -64,6 +65,7 @@ if __name__ == '__main__':
     hub_pkg = <% if (typeof LA_hub_pkg_name != 'undefined') { %>"<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
     inv_path = <% if (typeof LA_hub_pkg_name != 'undefined') { %>"../<%= LA_pkg_name %>-inventories/<%= LA_pkg_name %>"<% } else { %>"<%= LA_pkg_name %>"<% } %>
     extra_vars = args['--extra']
+    extra_inv = args['--inventory']
     fail_on_error = not args['--continue']
 
     # Add here some additional param for ansible like your ssh key, like:
@@ -105,6 +107,10 @@ if __name__ == '__main__':
     if os.path.isfile("%s-toolkit.ini" % pkg):
         extraInvs = "-i %s-toolkit.ini" % pkg
     <%_ } _%>
+
+    # Add the --inventory extraInv if present
+    if extra_inv:
+        extraInvs = "%s -i %s" % (extraInvs, extra_inv)
 
     <%_ if (typeof LA_is_hub != 'undefined' && LA_is_hub) { _%>
     baseInventories = "-i %s-inventory.ini -i ./%s-inventory.ini -i %s-local-extras.ini " % (inv_path, hub_pkg, inv_path)
