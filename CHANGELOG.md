@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.4.3"></a>
+## v1.4.3 - 2023-09-05
+- Extra inventory argument for data generation
+- Use service variables
+
 <a name="v1.4.2"></a>
 ## v1.4.2 - 2023-07-12
 - Use quotes in extra-args for multi args
