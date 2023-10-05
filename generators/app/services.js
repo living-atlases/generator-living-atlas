@@ -29,70 +29,71 @@ const services = [
   'ecodata',
   'ecodata_reporting',
   'events',
-  'events_elasticsearch'
+  'events_elasticsearch',
+  'docker_swarm'
 ];
 
 const servicesDesc = {
   collectory: {
     name: 'collectory',
     group: 'collectory',
-    playbook: 'collectory-standalone',
+    playbook: 'collectory-by-type',
     desc: 'biodiversity collections',
     allowMultipleDeploys: false,
   },
   ala_hub: {
     name: 'ala_hub',
     group: 'biocache-hub',
-    playbook: 'biocache-hub-standalone',
+    playbook: 'biocache-hub-by-type',
     desc: 'occurrences search frontend',
     allowMultipleDeploys: true,
   },
   biocache_service: {
     name: 'biocache_service',
     group: 'biocache-service-clusterdb',
-    playbook: 'biocache-service-clusterdb',
+    playbook: 'biocache-service-by-type',
     desc: 'occurrences web service',
     allowMultipleDeploys: true,
   },
   ala_bie: {
     name: 'ala_bie',
     group: 'bie-hub',
-    playbook: 'bie-hub',
+    playbook: 'bie-hub-by-type',
     desc: 'species search frontend',
     allowMultipleDeploys: true,
   },
   bie_index: {
     name: 'bie_index',
     group: 'bie-index',
-    playbook: 'bie-index',
+    playbook: 'bie-index-by-type',
     desc: 'species web service',
     allowMultipleDeploys: false,
   },
   images: {
     name: 'images',
     group: 'image-service',
-    playbook: 'image-service',
+    playbook: 'image-service-by-type',
     desc: '',
     allowMultipleDeploys: false,
   },
   lists: {
     name: 'lists',
     group: 'species-list',
-    playbook: 'species-list-standalone',
+    playbook: 'species-list-by-type',
     desc: '',
     allowMultipleDeploys: false,
   },
   regions: {
     name: 'regions',
     group: 'regions',
-    playbook: 'regions-standalone',
+    playbook: 'regions-by-type',
     desc: 'regional data frontend',
     allowMultipleDeploys: true, // ALA does not uses redundant regions
   },
   logger: {
     name: 'logger',
     group: 'logger-service',
-    playbook: 'logger-standalone',
+    playbook: 'logger-service-by-type',
     desc: 'event logging',
     allowMultipleDeploys: false,
   },
@@ -106,21 +107,21 @@ const servicesDesc = {
   solrcloud: {
     name: 'solrcloud',
     group: 'solrcloud',
-    playbook: 'solrcloud-monit',
+    playbook: 'solrcloud-by-type',
     desc: 'pipelines indexing',
     allowMultipleDeploys: true,
   },
   zookeeper: {
     name: 'zookeeper',
     group: 'zookeeper',
-    playbook: 'solrcloud-monit',
+    playbook: 'solrcloud-by-type',
     desc: 'zookeeper, for solrcloud coordination',
     allowMultipleDeploys: true,
   },
   cas: {
     name: 'cas',
     group: 'cas-servers',
-    playbook: 'cas5-standalone',
+    playbook: 'auth-by-type',
     desc: 'authentication system',
     allowMultipleDeploys: false,
   },
@@ -142,7 +143,7 @@ const servicesDesc = {
   spatial: {
     name: 'spatial',
     group: 'spatial',
-    playbook: 'spatial',
+    playbook: 'spatial-by-type',
     desc: 'spatial front-end',
     allowMultipleDeploys: false,
   },
@@ -239,7 +240,7 @@ const servicesDesc = {
   namematching_service: {
     name: 'namematching_service',
     group: 'namematching-service',
-    playbook: 'namematching-service',
+    playbook: 'namematching-service-by-type',
     desc:
       'namematching service',
     allowMultipleDeploys: true,
@@ -247,7 +248,7 @@ const servicesDesc = {
   sensitive_data_service: {
     name: 'sensitive_data_service',
     group: 'sensitive-data-service',
-    playbook: 'sensitive-data-service',
+    playbook: 'sensitive-data-service-by-type',
     desc:
       'web services for sensitive data evaluation',
     allowMultipleDeploys: true,
@@ -300,6 +301,27 @@ const servicesDesc = {
     playbook: 'events',
     allowMultipleDeploys: true,
     desc: 'events elasticsearch'
+  },
+  docker_swarm: {
+    name: 'docker_swarm',
+    group: 'docker_swarm',
+    playbook: 'docker-swarm',
+    allowMultipleDeploys: true,
+    desc: 'docker swarm'
+  },
+  gatus: {
+    name: 'gatus',
+    group: 'gatus',
+    playbook: 'gatus',
+    allowMultipleDeploys: true,
+    desc: 'gatus status service'
+  },
+  portainer: {
+    name: 'portainer',
+    group: 'portainer',
+    playbook: 'portainer',
+    allowMultipleDeploys: true,
+    desc: 'portainer docker management service'
   }
 };
 

@@ -794,7 +794,34 @@ module.exports = class extends Generator {
           message: `Use ${em(
             'events'
           )} extended data model?`,
+          default: false,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_docker_swarm',
+          message: `Use ${em(
+            'docker swarm'
+          )}?`,
           default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_gatus',
+          message: `Use ${em(
+            'gatus'
+          )} as status service?`,
+          default: (a) => a['LA_use_docker_swarm'],
+        },
+        {
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_portainer',
+          message: `Use ${em(
+            'portainer'
+          )} as docker management platform?`,
+          default: (a) => a['LA_use_docker_swarm'],
         },
         {
           store: true,
@@ -1011,7 +1038,6 @@ module.exports = class extends Generator {
 
         new PromptHostnameFor('pipelines', 'pipelines', (a) => a['LA_use_pipelines']),
 
-        new PromptHostnameFor('events', 'events', (a) => a['LA_use_events']),
         new PromptSubdomainFor('events', 'events', (a) => a['LA_use_events']),
         new PromptHostnameFor('events', 'events', (a) => a['LA_use_events'] ),
         new PromptUrlFor('events', 'events', (a) => a['LA_use_events']),
@@ -1019,6 +1045,17 @@ module.exports = class extends Generator {
 
         new PromptHostnameFor('events_elasticsearch', 'events_elasticsearch', (a) => a['LA_use_events']),
 
+        new PromptHostnameFor('docker_swarm', 'docker_swarm', (a) => a['LA_use_docker_swarm']),
+
+        new PromptSubdomainFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
+        new PromptHostnameFor('gatus', 'gatus', (a) => a['LA_use_gatus'] ),
+        new PromptUrlFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
+        new PromptPathFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
+
+        new PromptSubdomainFor('portainer', 'portainer', (a) => a['LA_use_portainer']),
+        new PromptHostnameFor('portainer', 'portainer', (a) => a['LA_use_portainer'] ),
+        new PromptUrlFor('portainer', 'portainer', (a) => a['LA_use_portainer']),
+        new PromptPathFor('portainer', 'portainer', (a) => a['LA_use_portainer']),
         {
           store: true,
           type: 'list',
@@ -1149,6 +1186,15 @@ module.exports = class extends Generator {
       if (typeof this.answers['LA_use_events'] === 'undefined') {
         this.answers['LA_use_events'] = false;
       }
+      if (typeof this.answers['LA_use_docker_swarm'] === 'undefined') {
+        this.answers['LA_use_docker_swarm'] = false;
+      }
+      if (typeof this.answers['LA_use_gatus'] === 'undefined') {
+        this.answers['LA_use_gatus'] = false;
+      }
+      if (typeof this.answers['LA_use_portainer'] === 'undefined') {
+        this.answers['LA_use_portainer'] = false;
+      }
       // noinspection HttpUrlsUsage
       this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
         ? 'https://'
@@ -1176,6 +1222,12 @@ module.exports = class extends Generator {
         if (service === 'events' && !this.answers['LA_use_events'])
           return;
         if (service === 'events_elasticsearch' && !this.answers['LA_use_events'])
+          return;
+        if (service === 'docker_swarm' && !this.answers['LA_use_docker_swarm'])
+          return;
+        if (service === 'gatus' && !this.answers['LA_use_gatus'])
+          return;
+        if (service === 'portainer' && !this.answers['LA_use_portainer'])
           return;
         if (service === 'biocache_backend' && !this.answers['LA_use_biocache_store'])
           return;
@@ -1657,7 +1709,10 @@ module.exports = class extends Generator {
         'pdfgen',
         'ecodata_reporting',
         'events',
-        'events_elasticsearch'
+        'events_elasticsearch',
+        'docker_swarm',
+        'gatus',
+        'portainer'
       ]);
       Object.keys(servicesDesc).forEach((service) => {
         if(skipOidcServices.has(service)) {
