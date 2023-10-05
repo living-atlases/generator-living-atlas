@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.5.0"></a>
+## v1.5.0 - 2023-10-05
+- Added docker support
+
 <a name="v1.4.3"></a>
 ## v1.4.3 - 2023-09-05
 - Extra inventory argument for data generation
