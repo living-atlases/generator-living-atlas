@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.5.2"></a>
+## v1.5.2 - 2023-10-11
+- Added logout_action used for cognito
+
 <a name="v1.5.1"></a>
 ## v1.5.1 - 2023-10-11
 - Improved docker support
