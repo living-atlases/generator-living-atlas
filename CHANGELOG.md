@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.5.1"></a>
+## v1.5.1 - 2023-10-11
+- Improved docker support
+- Fix undefined new auth variable
+
 <a name="v1.5.0"></a>
 ## v1.5.0 - 2023-10-05
 - Added docker support
