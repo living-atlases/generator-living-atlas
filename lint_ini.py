@@ -3,7 +3,9 @@ import sys
 from configparser import SectionProxy, MissingSectionHeaderError
 import argparse
 
+
 class CustomConfigParser(configparser.ConfigParser):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.errors = []
@@ -15,7 +17,7 @@ class CustomConfigParser(configparser.ConfigParser):
         cursect = None
         sectname = None
         optname = None
-        lineno = 0
+        # lineno = 0
         indent_level = 0
         e = None
 
@@ -92,7 +94,7 @@ class CustomConfigParser(configparser.ConfigParser):
                             self.option_lines[(sectname, optname)] = lineno
                         if self._strict and (sectname, optname) in elements_added:
                             duplicated_value = cursect[optname]
-                            # Si el valor es una lista, tomamos el primer elemento.
+                            # If is a list, we get the first
                             if isinstance(duplicated_value, list):
                                 duplicated_value = duplicated_value[0]
                             error_msg = (f"Warning: Duplicated option '{optname}' with value '{duplicated_value}' "
@@ -103,7 +105,7 @@ class CustomConfigParser(configparser.ConfigParser):
                         if optval is not None:
                             optval = optval.strip()
 
-                            # Verificación de duplicados
+                            # Dup verification
                             if optname in cursect:
                                 error_msg = (f"Warning: Duplicated option '{optname}' with value '{optval}' "
                                              f"in section '{sectname}' in {fpname} at line {lineno}.")
@@ -115,6 +117,8 @@ class CustomConfigParser(configparser.ConfigParser):
                         e = self._handle_error(e, fpname, lineno, line)
 
         self._join_multiline_values()
+
+
 def detect_duplicate_variables(files):
     all_options = {}  # {option: (value, section, file, line)}
     all_errors = []
@@ -123,7 +127,7 @@ def detect_duplicate_variables(files):
         config = CustomConfigParser()
         config.read(file_path)
 
-        # Añadir errores encontrados en un solo archivo al resultado
+        # Add errors to a single file
         all_errors.extend(config.errors)
 
         for section, options in config._sections.items():
@@ -142,6 +146,7 @@ def detect_duplicate_variables(files):
 
     return all_errors
 
+
 def main():
     # Parse arguments
     parser = argparse.ArgumentParser(description='Detect duplicated options in INI files.')
@@ -154,6 +159,7 @@ def main():
     warnings = detect_duplicate_variables(args.files)
     for warning in warnings:
         print(warning)
+
 
 if __name__ == "__main__":
     main()
