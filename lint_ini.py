@@ -1,3 +1,28 @@
+"""
+Detect Duplicate Options in INI Files in ansible inventories
+
+This script detects duplicate options in INI files.
+It accepts a list of file paths as arguments and outputs warnings for each duplicate option detected.
+
+It uses a custom version of ConfigParser to report about duplicate variables.
+
+Usage:
+    $ python lint_ini.py file1.ini file2.ini ...
+
+Attributes:
+    files (str): A list of INI inventories files to be processed.
+
+Example:
+    $ python lint_int.py config1.ini config2.ini
+
+Author:
+    vjrj@gbif.es
+
+Date:
+    Oct-2023
+
+"""
+
 import configparser
 import sys
 from configparser import SectionProxy, MissingSectionHeaderError
@@ -5,7 +30,6 @@ import argparse
 
 
 class CustomConfigParser(configparser.ConfigParser):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.errors = []
