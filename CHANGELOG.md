@@ -2,6 +2,10 @@
 - Removing duplicate values. More work for #10
 - lint_ini.py utitlity to detect duplicate values in inventories
 
+<a name="v1.5.3"></a>
+## v1.5.3 - 2023-11-07
+- Fix for missing docker group
+
 <a name="v1.5.2"></a>
 ## v1.5.2 - 2023-10-11
 - Added logout_action used for cognito
