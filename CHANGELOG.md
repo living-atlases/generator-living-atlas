@@ -1,4 +1,6 @@
 <a name="unreleased"></a>
+- Removing duplicate values. More work for #10
+- lint_ini.py utitlity to detect duplicate values in inventories
 
 <a name="v1.5.2"></a>
 ## v1.5.2 - 2023-10-11
