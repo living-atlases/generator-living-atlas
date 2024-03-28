@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.5.5"></a>
+## v1.5.5 - 2024-03-28
+- added cas_extra_scopes
+
 <a name="v1.5.4"></a>
 ## v1.5.4 - 2024-03-28
 - Removing duplicate values. More work for #10
