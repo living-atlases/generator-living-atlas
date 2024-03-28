@@ -1,6 +1,14 @@
 <a name="unreleased"></a>
+
+<a name="v1.5.4"></a>
+## v1.5.4 - 2024-03-28
 - Removing duplicate values. More work for #10
 - lint_ini.py utitlity to detect duplicate values in inventories
+- Review of generated inventory and review with ALA ones
+- spatial new variables
+- regions new variables
+- docker swarm groups added
+- new nameindex using GBIF new taxonomy
 
 <a name="v1.5.3"></a>
 ## v1.5.3 - 2023-11-07
