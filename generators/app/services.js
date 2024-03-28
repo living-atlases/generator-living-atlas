@@ -322,7 +322,14 @@ const servicesDesc = {
     playbook: 'portainer',
     allowMultipleDeploys: true,
     desc: 'portainer docker management service'
-  }
+  },
+  cassandra: {
+    name: 'cassandra',
+    group: 'cassandra3',
+    playbook: 'cassandra-docker',
+    desc: 'Biocache cassandra DB for annotations, persistent queries',
+    allowMultipleDeploys: true,
+  },
 };
 
 function confExistOrFalse(conf, varName) {

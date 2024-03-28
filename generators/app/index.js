@@ -1195,10 +1195,14 @@ module.exports = class extends Generator {
       if (typeof this.answers['LA_use_portainer'] === 'undefined') {
         this.answers['LA_use_portainer'] = false;
       }
+      if (typeof this.answers['LA_use_cassandra'] === 'undefined') {
+        this.answers['LA_use_cassandra'] = this.answers['LA_use_pipelines'];
+      }
+
       // noinspection HttpUrlsUsage
       this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
-        ? 'https://'
-        : 'http://';
+                                     ? 'https://'
+                                     : 'http://';
 
       if (debug) logger(this.answers);
 
