@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.5.7"></a>
+## v1.5.7 - 2024-04-02
+- Correct lucene 6 sha1sum
+
 <a name="v1.5.6"></a>
 ## v1.5.6 - 2024-04-02
 - Added new species_list_ws_url
