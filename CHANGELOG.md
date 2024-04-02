@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.5.6"></a>
+## v1.5.6 - 2024-04-02
+- Added new species_list_ws_url
+
 <a name="v1.5.5"></a>
 ## v1.5.5 - 2024-03-28
 - added cas_extra_scopes
