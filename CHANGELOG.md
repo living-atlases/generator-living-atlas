@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.5.9"></a>
+## v1.5.9 - 2024-04-29
+- Let the pick the default pg version in images using common/set-facts
+
 <a name="v1.5.8"></a>
 ## v1.5.8 - 2024-04-04
 - Workaround for sds-layers untar issues
