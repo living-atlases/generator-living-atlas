@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.0"></a>
+## v1.6.0 - 2024-05-14
+- JWT new variable 
+- nginx for docker filter for cas 
+- Correct host names for cas/spatial that caused docker to not get their variables
+
 <a name="v1.5.9"></a>
 ## v1.5.9 - 2024-04-29
 - Let the pick the default pg version in images using common/set-facts
