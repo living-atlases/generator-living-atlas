@@ -417,6 +417,38 @@ function generateBranding(conf, brandDest) {
   }
 }
 
+function handleClientKeysGeneration(localPassDest, clientType, servicesDesc) {
+  if (isPasswordNotDefined.call(this, localPassDest, clientType)) {
+    const skipOidcServices = new Set([
+      'biocache_backend', 'biocache_cli', 'nameindexer', 'webapi', 'branding', 'pipelines',
+      'solr', 'solrcloud', 'zookeeper', 'cas', 'spark', 'hadoop', 'jenkins', 'pipelines_jenkins',
+      'namematching_service', 'sensitive_data_service', 'pdfgen', 'ecodata_reporting', 'events',
+      'events_elasticsearch', 'docker_swarm', 'gatus', 'portainer'
+    ]);
+    Object.keys(servicesDesc).forEach(service => {
+      if (skipOidcServices.has(service)) {
+        return;
+      }
+      const clientIdName = `${service}_client_id`;
+      const clientSecretName = `${service}_client_secret`;
+      const clientId = crypto.randomBytes(18).toString('hex');
+      const clientSecret = crypto.randomBytes(18).toString('hex');
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `${clientIdName} = ${clientId}\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+      replaceLine.call(
+        this,
+        localPassDest,
+        '# External old',
+        `${clientSecretName} = ${clientSecret}\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+    });
+  }
+}
+
 function generateAnsiblew(conf, dest) {
   // noinspection JSUnresolvedFunction
   this.fs.copyTpl(
@@ -1692,54 +1724,11 @@ module.exports = class extends Generator {
         '# External old',
         `es_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
-    if (isPasswordNotDefined.call(this, localPassDest, 'collectory_client_id')) {
-      const skipOidcServices = new Set([
-        'biocache_backend',
-        'biocache_cli',
-        'nameindexer',
-        'webapi',
-        'branding',
-        'pipelines',
-        'solr',
-        'solrcloud',
-        'zookeeper',
-        'cas',
-        'spark',
-        'hadoop',
-        'jenkins',
-        'pipelines_jenkins',
-        'namematching_service',
-        'sensitive_data_service',
-        'pdfgen',
-        'ecodata_reporting',
-        'events',
-        'events_elasticsearch',
-        'docker_swarm',
-        'gatus',
-        'portainer'
-      ]);
-      Object.keys(servicesDesc).forEach((service) => {
-        if(skipOidcServices.has(service)) {
-          return;
-        }
-        const clientIdName  = `${service}_client_id`;
-        const clientSecretName  = `${service}_client_secret`;
-        const clientId = crypto.randomBytes(18).toString('hex');
-        const clientSecret = crypto.randomBytes(18).toString('hex');
-        replaceLine.call(
-          this,
-          localPassDest,
-          '# External old',
-          `${clientIdName} = ${clientId}\n# External old API access to collectory to lookup collections/institutions, etc`
-        );
-        replaceLine.call(
-          this,
-          localPassDest,
-          '# External old',
-          `${clientSecretName} = ${clientSecret}\n# External old API access to collectory to lookup collections/institutions, etc`
-        );
-      });
-    }
+
+    handleClientKeysGeneration.call(this, localPassDest, 'collectory_client_id', servicesDesc);
+
+    handleClientKeysGeneration.call(this, localPassDest, 'userdetails_oidc_client_id', { userdetails_oidc: {} });
+
 
     // Comment geoserver password because of:
     // https://github.com/AtlasOfLivingAustralia/ala-install/issues/556
