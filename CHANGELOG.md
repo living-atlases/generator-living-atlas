@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.1"></a>
+## v1.6.1 - 2024-05-21
+- Improvements in ala security variables
+- Enable/disable events in the la-toolkit
+- Generate oidc/jwt keys for userdetails and generalize key generation
+
 <a name="v1.6.0"></a>
 ## v1.6.0 - 2024-05-14
 - JWT new variable 
