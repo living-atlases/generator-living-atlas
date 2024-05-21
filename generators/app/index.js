@@ -1727,7 +1727,7 @@ module.exports = class extends Generator {
 
     handleClientKeysGeneration.call(this, localPassDest, 'collectory_client_id', servicesDesc);
 
-    handleClientKeysGeneration.call(this, localPassDest, 'userdetails_oidc_client_id', { userdetails_oidc: {} });
+    handleClientKeysGeneration.call(this, localPassDest, 'userdetails_client_id', { userdetails: {} });
 
 
     // Comment geoserver password because of:
