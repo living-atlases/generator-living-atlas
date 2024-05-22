@@ -76,7 +76,7 @@ if __name__ == '__main__':
         print(args)
 
     if properties:
-        extras = "%s --tags properties" % (extras)
+        extras = "%s --tags common,properties" % (extras)
     if skip:
         extras = "%s --skip-tags %s" % (extras, skip)
     if tags:
