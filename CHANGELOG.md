@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.2"></a>
+## v1.6.2 - 2024-07-07
+- Allow to run docker-common playbook by ansiblew for installing common services (nginx, postfix)
+
 <a name="v1.6.1"></a>
 ## v1.6.1 - 2024-05-21
 - Improvements in ala security variables
