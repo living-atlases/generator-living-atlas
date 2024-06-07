@@ -30,7 +30,8 @@ const services = [
   'ecodata_reporting',
   'events',
   'events_elasticsearch',
-  'docker_swarm'
+  'docker_swarm',
+  'docker_common'
 ];
 
 const servicesDesc = {
@@ -309,6 +310,13 @@ const servicesDesc = {
     allowMultipleDeploys: true,
     desc: 'docker swarm'
   },
+  docker_common: {
+    name: 'docker_common',
+    group: 'docker-common',
+    playbook: 'docker-common',
+    allowMultipleDeploys: true,
+    desc: 'docker common'
+  },
   gatus: {
     name: 'gatus',
     group: 'gatus',
@@ -369,6 +377,8 @@ function serviceUseVar(name, conf) {
       return confExistOrFalse(conf,`LA_use_biocollect`);
     case "ecodata_reporting":
       return confExistOrFalse(conf,`LA_use_biocollect`);
+    case "docker_common":
+      return confExistOrFalse(conf,`LA_use_docker_swarm`);
     default:
       return confExistOrFalse(conf,`LA_use_${name}`);
   }

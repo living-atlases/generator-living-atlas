@@ -102,6 +102,10 @@ function storeGroupServer(name, server) {
     storeGroupServer('hadoop', server);
     if (useJenkins) storeGroupServer('pipelines_jenkins', server);
   }
+  if (name === 'docker_swarm') {
+    // Add child services
+    storeGroupServer('docker_common', server);
+  }
 }
 
 const hostSepRegexp = /[,\s]+/;
@@ -423,7 +427,7 @@ function handleClientKeysGeneration(localPassDest, clientType, servicesDesc) {
       'biocache_backend', 'biocache_cli', 'nameindexer', 'webapi', 'branding', 'pipelines',
       'solr', 'solrcloud', 'zookeeper', 'cas', 'spark', 'hadoop', 'jenkins', 'pipelines_jenkins',
       'namematching_service', 'sensitive_data_service', 'pdfgen', 'ecodata_reporting', 'events',
-      'events_elasticsearch', 'docker_swarm', 'gatus', 'portainer'
+      'events_elasticsearch', 'docker_swarm', 'docker_common', 'gatus', 'portainer'
     ]);
     Object.keys(servicesDesc).forEach(service => {
       if (skipOidcServices.has(service)) {
@@ -1260,6 +1264,8 @@ module.exports = class extends Generator {
         if (service === 'events_elasticsearch' && !this.answers['LA_use_events'])
           return;
         if (service === 'docker_swarm' && !this.answers['LA_use_docker_swarm'])
+          return;
+        if (service === 'docker_common' && !this.answers['LA_use_docker_swarm'])
           return;
         if (service === 'gatus' && !this.answers['LA_use_gatus'])
           return;
