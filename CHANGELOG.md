@@ -1,4 +1,5 @@
 <a name="unreleased"></a>
+- image_service_logfile variable for image-service >= 3
 
 <a name="v1.6.2"></a>
 ## v1.6.2 - 2024-07-07
