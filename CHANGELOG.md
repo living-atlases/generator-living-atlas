@@ -1,8 +1,12 @@
 <a name="unreleased"></a>
+
+<a name="v1.6.3"></a>
+## v1.6.3 - 2024-07-02
+- Correct download directory
 - image_service_logfile variable for image-service >= 3
 
 <a name="v1.6.2"></a>
-## v1.6.2 - 2024-07-07
+## v1.6.2 - 2024-06-07
 - Allow to run docker-common playbook by ansiblew for installing common services (nginx, postfix)
 
 <a name="v1.6.1"></a>
