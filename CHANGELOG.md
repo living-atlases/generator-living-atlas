@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.4"></a>
+## v1.6.4 - 2024-07-22
+- Correct biocache.queryContext depending on the biocache version
+
 <a name="v1.6.3"></a>
 ## v1.6.3 - 2024-07-02
 - Correct download directory
