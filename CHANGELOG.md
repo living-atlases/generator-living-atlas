@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.5"></a>
+## v1.6.5 - 2024-09-06
+- Add setfacts tags to -p properties option
+- Added tomcat10 to ubuntu 24.04
+
 <a name="v1.6.4"></a>
 ## v1.6.4 - 2024-07-22
 - Correct biocache.queryContext depending on the biocache version
