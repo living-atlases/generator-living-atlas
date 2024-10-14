@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.7"></a>
+## v1.6.7 - 2024-10-14
+- New GBIF backbone with lucene 6 index fixed
+- Fix urls in alerts service
+- More work with Ubuntu 24.04 
+
 <a name="v1.6.6"></a>
 ## v1.6.6 - 2024-09-06
 - Trying to fix the use of tomcat10 with ubuntu 24.04
