@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.8"></a>
+## v1.6.8 - 2024-10-16
+- java 17 support
+
 <a name="v1.6.7"></a>
 ## v1.6.7 - 2024-10-14
 - New GBIF backbone with lucene 6 index fixed
