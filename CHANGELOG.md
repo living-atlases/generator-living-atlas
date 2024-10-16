@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.10"></a>
+## v1.6.10 - 2024-10-16
+- Fix typo.
+- New variables for alerts, doi and dashboard services
+
 <a name="v1.6.9"></a>
 ## v1.6.9 - 2024-10-16
 - New alerts variables
