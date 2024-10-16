@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.9"></a>
+## v1.6.9 - 2024-10-16
+- New alerts variables
+
 <a name="v1.6.8"></a>
 ## v1.6.8 - 2024-10-16
 - java 17 support
