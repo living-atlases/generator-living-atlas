@@ -1486,6 +1486,8 @@ module.exports = class extends Generator {
     }
 
     const localPassDest = `${dest}/${filePrefix}-local-passwords.ini`;
+    const localExtras = `${dest}/${filePrefix}-local-extras.ini`;
+
     if (firstRun || !this.fs.exists(localPassDest)) {
       // We'll generate some easy but strong passwords for our new database, etc
 
@@ -1514,7 +1516,7 @@ module.exports = class extends Generator {
       conf['LA_apikeys'].push(uuidv4());
     }
 
-    if (!this.fs.exists(`${dest}/${filePrefix}-local-extras.ini`)) {
+    if (!this.fs.exists(localExtras)) {
       // When only create the extras inventory in the first run
       // noinspection JSUnresolvedFunction
       // noinspection JSUnresolvedFunction
@@ -1729,6 +1731,14 @@ module.exports = class extends Generator {
         localPassDest,
         '# External old',
         `es_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+      );
+
+    if (isPasswordNotDefined.call(this, localExtras, 'blacklist'))
+      replaceLine.call(
+        this,
+        localExtras,
+        '# BIE local',
+        `# BIE local vars\n# A list sources that should not have articles fetched from an external site. This is usually because the article is subject to controversy or is not correct (separator: |)\n# blacklist_source="https?://www\\\\.example\\\\.com/.*|https?://example\\\\.com/.*"\nblacklist_source =\n#blacklist_file = blacklist-prod.json`
       );
 
     handleClientKeysGeneration.call(this, localPassDest, 'collectory_client_id', servicesDesc);
