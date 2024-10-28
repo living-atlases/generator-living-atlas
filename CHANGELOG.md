@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.11"></a>
+## v1.6.11 - 2024-10-28
+- Added blacklist sample
+- bie_hub_collectory_service_url new variable
+- Allow to setup bie blacklist file. Configure bie_hub_tabs
+
 <a name="v1.6.10"></a>
 ## v1.6.10 - 2024-10-16
 - Fix typo.
