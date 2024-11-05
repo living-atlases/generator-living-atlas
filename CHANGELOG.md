@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.12"></a>
+## v1.6.12 - 2024-11-05
+- Don't use ALA's profile service by default to prevent UI errors
+- Setup extra var in logger
+- Update apikey_check_enabled to use LA_use_CAS value
+
 <a name="v1.6.11"></a>
 ## v1.6.11 - 2024-10-28
 - Added blacklist sample
