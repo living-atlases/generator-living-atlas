@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 
 <a name="v1.6.12"></a>
+## v1.6.13 - 2025-01-27
+- Update dependencies with vulnerabilities
+
+<a name="v1.6.12"></a>
 ## v1.6.12 - 2024-11-05
 - Don't use ALA's profile service by default to prevent UI errors
 - Setup extra var in logger
