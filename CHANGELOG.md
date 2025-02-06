@@ -1,6 +1,10 @@
 <a name="unreleased"></a>
 
-<a name="v1.6.12"></a>
+<a name="v1.6.14"></a>
+## v1.6.14 - 2025-02-06
+- Update postgis_scripts_version to 3.5 in quick-start-inventory.ini
+
+<a name="v1.6.13"></a>
 ## v1.6.13 - 2025-01-27
 - Update dependencies with vulnerabilities
 
