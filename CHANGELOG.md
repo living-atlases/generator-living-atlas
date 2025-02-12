@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.15"></a>
+## v1.6.15 - 2025-02-12
+- Set a default lists url to prevent deployment issues
+- Update mongodb_version to support Ubuntu 24.04 with 8.0
+
 <a name="v1.6.14"></a>
 ## v1.6.14 - 2025-02-06
 - Update postgis_scripts_version to 3.5 in quick-start-inventory.ini
