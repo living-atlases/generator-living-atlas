@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.16"></a>
+## v1.6.16 - 2025-02-14
+- Fix typo in mongo version selection
+
 <a name="v1.6.15"></a>
 ## v1.6.15 - 2025-02-12
 - Set a default lists url to prevent deployment issues
