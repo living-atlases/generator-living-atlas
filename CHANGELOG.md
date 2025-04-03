@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.18"></a>
+## v1.6.18 - 2025-04-03
+- Added index_admin_url (thanks @StarBrand)
+- Update ausTraits_definitions_url to new URL
+- New bie variables comparing to ALA ones
+
 <a name="v1.6.17"></a>
 ## v1.6.17 - 2025-02-14
 - Let pick the mongodb_version in ala-install
