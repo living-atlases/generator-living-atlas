@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.19"></a>
+## v1.6.19 - 2025-04-03
+- Update profile service URL in quick-start inventory
+- Update JDK version conditions in inventory file for SDS
+
 <a name="v1.6.18"></a>
 ## v1.6.18 - 2025-04-03
 - Added index_admin_url (thanks @StarBrand)
