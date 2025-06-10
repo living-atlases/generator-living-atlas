@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.20"></a>
+## v1.6.20 - 2025-06-10
+- Hot fix: Use netcat-openbsd in ubuntu 24.04 for monitoring
+
 <a name="v1.6.19"></a>
 ## v1.6.19 - 2025-04-03
 - Update profile service URL in quick-start inventory
