@@ -3,14 +3,14 @@
 # Stop on any failure
 set -e
 
-echo ">>>>> yarn install"
-yarn install
+echo ">>>>> npm install"
+npm install
 
 echo ">>>>> Updating git submodules"
 git submodule update --init --recursive
 
-echo ">>>>> Building the branding with brunch for production"
-brunch build --production
+echo ">>>>> Building the branding with vite for production"
+npm run build
 
 echo ">>>>> Creating remote directory if needed"
 
@@ -18,7 +18,7 @@ ssh <%= LA_branding_hostname %> sudo mkdir -p /srv/<%= LA_branding_url %>/www/<%
 
 echo ">>>>> Rsync the builded branding"
 
-rsync -a --delete --rsync-path="sudo rsync" --info=progress2 public/ <%= LA_branding_hostname %>:/srv/<%= LA_branding_url %>/www/<%= LA_branding_path %>
+rsync -a --delete --rsync-path="sudo rsync" --info=progress2 dist/ <%= LA_branding_hostname %>:/srv/<%= LA_branding_url %>/www/<%= LA_branding_path %>
 
 # Renabling stop on error as maybe some of this urls are not up
 set +e
