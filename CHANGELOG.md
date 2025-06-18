@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.21"></a>
+## v1.6.21 - 2025-06-18
+- Migrate deploy script to use vite instead of brunch
+
 <a name="v1.6.20"></a>
 ## v1.6.20 - 2025-06-10
 - Hot fix: Use netcat-openbsd in ubuntu 24.04 for monitoring
