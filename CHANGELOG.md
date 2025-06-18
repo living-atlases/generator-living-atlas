@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.6.22"></a>
+## v1.6.22 - 2025-06-18
+- Update deploy script for different build systems for backward compatibility
+
 <a name="v1.6.21"></a>
 ## v1.6.21 - 2025-06-18
 - Migrate deploy script to use vite instead of brunch
