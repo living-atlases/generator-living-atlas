@@ -1,8 +1,8 @@
 /* eslint camelcase: ["error", {properties: "never"}], no-warning-comments: 0 */
 
-const { parseDomain } = require('parse-domain');
-const chalk = require('chalk');
-const { servicesDesc } = require('./services.js');
+import { parseDomain } from 'parse-domain';
+import chalk from 'chalk';
+import { servicesDesc } from './services.js';
 
 const defUseSubdomain = (a) => {
   return a['LA_collectory_uses_subdomain'];
@@ -26,7 +26,7 @@ const isDefined = (someString) => {
   );
 };
 
-const em = (text) => chalk.keyword('orange')(text);
+const em = (text) => chalk.hex('#FFA500')(text);
 
 const defUseSubdomainPrompt = (a, service) => {
   let desc =
@@ -119,7 +119,7 @@ function additionalToolkitPrompts() {
   return addPrompt;
 }
 
-module.exports = {
+export {
   defUseSubdomain,
   defUseSubdomainPrompt,
   isCorrectDomain,

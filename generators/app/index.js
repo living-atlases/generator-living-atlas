@@ -4,17 +4,16 @@
 // https://github.com/SBoudrias/Inquirer.js
 
 'use strict';
-const Generator = require('yeoman-generator');
+import Generator from 'yeoman-generator';
+import yosay from 'onionsay';
+import niceware from 'niceware';
+import fsN from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
+import { Base64 } from 'js-base64';
+import crypto from 'crypto';
 
-const yosay = require('onionsay');
-const niceware = require('niceware');
-const fsN = require('fs');
-const {v4: uuidv4} = require('uuid');
-const bcrypt = require('bcrypt');
-const Base64 = require('js-base64');
-const crypto = require('crypto');
-
-const {
+import {
   defUseSubdomain,
   defUseSubdomainPrompt,
   isCorrectHostname,
@@ -22,10 +21,15 @@ const {
   em,
   validateDomain,
   addOnce,
-  removeOnce, additionalToolkitPrompts
+  removeOnce,
+  additionalToolkitPrompts
+} from './libs.js';
 
-} = require('./libs.js');
-const {services, servicesDesc, serviceUseVar} = require('./services.js');
+import {
+  services,
+  servicesDesc,
+  serviceUseVar
+} from './services.js';
 
 let defaultStore = false;
 let logger;
@@ -508,7 +512,7 @@ function generate(conf, dest, filePrefix) {
 }
 
 // noinspection JSUnusedGlobalSymbols
-module.exports = class extends Generator {
+export default class extends Generator {
   // noinspection JSUnresolvedVariable
   constructor(args, opts) {
     super(args, opts);

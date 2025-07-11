@@ -384,7 +384,7 @@ function serviceUseVar(name, conf) {
   }
 }
 
-module.exports = {
+export {
   services,
   servicesDesc,
   serviceUseVar
