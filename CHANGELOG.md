@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.7.0"></a>
+## v1.7.0 - 2025-07-11
+- Update deps and generator as a ESM module to use with latest yeoman-generator
+- Set default values for some variables defined by the LA Toolkit but not defined in the command line
+
 <a name="v1.6.22"></a>
 ## v1.6.22 - 2025-06-18
 - Update deploy script for different build systems for backward compatibility
