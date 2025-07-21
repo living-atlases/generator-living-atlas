@@ -100,8 +100,8 @@ const servicesDesc = {
   },
   solr: {
     name: 'solr',
-    group: 'solr7-server',
-    playbook: 'solr7-standalone',
+    group: 'solr-server',
+    playbook: 'solr-standalone',
     desc: 'species and/or biocache-store indexing',
     allowMultipleDeploys: false,
   },
