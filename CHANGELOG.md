@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.7.1"></a>
+## v1.7.1 - 2025-07-21
+- Use new generic solr playbook
+
 <a name="v1.7.0"></a>
 ## v1.7.0 - 2025-07-11
 - Update deps and generator as a ESM module to use with latest yeoman-generator
