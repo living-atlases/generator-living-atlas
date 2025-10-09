@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.7.2"></a>
+## v1.7.2 - 2025-10-09
+- If biocache store is not in use, don't use nameindexer
+
 <a name="v1.7.1"></a>
 ## v1.7.1 - 2025-07-21
 - Use new generic solr playbook
