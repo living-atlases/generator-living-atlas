@@ -1,8 +1,13 @@
 <a name="unreleased"></a>
 
+<a name="v1.7.4"></a>
+## v1.7.4 - 2025-10-10
+- Refactor execCmd function allowing to Crtl-C the command again
+- Several fixes for ansible 12
+
 <a name="v1.7.3"></a>
 ## v1.7.3 - 2025-10-09
-- If biocache store is not in use, don't use biocache_cli
+- If biocache store is not in use, don't use biocache-cli
 
 <a name="v1.7.2"></a>
 ## v1.7.2 - 2025-10-09
