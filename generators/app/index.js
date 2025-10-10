@@ -1671,13 +1671,14 @@ export default class extends Generator {
         `data_quality_api_key = ${dq_api}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
 
+    /* This does not work for ansible 12
     if (isPasswordNotDefined.call(this, localPassDest, 'dataquality.apiKey'))
       replaceLine.call(
         this,
         localPassDest,
         '# External old',
         `dataquality.apiKey = ${dq_api}\n\n# External old API access to collectory to lookup collections/institutions, etc`
-      );
+      ); */
 
     if (isPasswordNotDefined.call(this, localPassDest, 'dq_db_password'))
       replaceLine.call(
