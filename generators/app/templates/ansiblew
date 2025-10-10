@@ -36,13 +36,22 @@ import subprocess
 import os.path
 
 def execCmd(cmd, fail_on_error, nodryrun):
-    if nodryrun:
-        # Show the resulting command
-        subprocess.call("echo %s\n" % cmd, shell=True)
-    # exec the command
-    code = subprocess.call(cmd, shell=True)
-    if (code != 0 and fail_on_error):
-        sys.exit(code);
+    import os, sys, pty
+
+    # Run under a real PTY; 'exec' replaces the shell so SIGINT hits ansible directly
+    try:
+        status = pty.spawn(['/bin/sh', '-c', 'exec ' + cmd])
+    except KeyboardInterrupt:
+        sys.exit(130)
+
+    # Map wait status to exit code (Py3.9+), fallback otherwise
+    try:
+        rc = os.waitstatus_to_exitcode(status)
+    except AttributeError:
+        rc = status >> 8
+
+    if rc != 0 and fail_on_error:
+        sys.exit(rc)
 
 if __name__ == '__main__':
     args = docopt(__doc__)
