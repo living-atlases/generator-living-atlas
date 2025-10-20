@@ -8,10 +8,10 @@ HAS_BRUNCH=$(grep -q '"brunch"' package.json && echo true || echo false)
 
 if $HAS_BRUNCH; then
   echo ">>>>> yarn install"
-  yarn install
+  NODE_ENV="" yarn install
 else
   echo ">>>>> npm install"
-  npm install
+  NODE_ENV="" npm install
 fi
 
 echo ">>>>> Updating git submodules"
