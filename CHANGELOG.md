@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.7.5"></a>
+## v1.7.5 - 2025-10-30
+- Correct postgis version
+- Update nameindex dict for ansible 12
+
 <a name="v1.7.4"></a>
 ## v1.7.4 - 2025-10-10
 - Refactor execCmd function allowing to Crtl-C the command again
