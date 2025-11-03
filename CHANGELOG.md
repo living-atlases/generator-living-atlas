@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.7.6"></a>
+## v1.7.6 - 2025-11-03
+- Adapt java 8/11/17 versions depending of ALA new releases
+
 <a name="v1.7.5"></a>
 ## v1.7.5 - 2025-10-30
 - Correct postgis version
