@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.7.8"></a>
+## v1.7.8 - 2025-11-04
+- Set db_create=update in species list
+
 <a name="v1.7.7"></a>
 ## v1.7.7 - 2025-11-04
 - Fix for missing zookeeper_version variable
