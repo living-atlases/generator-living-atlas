@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.7.7"></a>
+## v1.7.7 - 2025-11-04
+- Fix for missing zookeeper_version variable
+
 <a name="v1.7.6"></a>
 ## v1.7.6 - 2025-11-03
 - Adapt java 8/11/17 versions depending of ALA new releases
