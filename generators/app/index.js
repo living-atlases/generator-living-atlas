@@ -76,16 +76,33 @@ childgroup2
 
 const vhostsSet = new Set(); // use for nginx_vhost_fragments_to_clear
 
+// Track physical servers and their service aliases to avoid variable conflicts
+const physicalServers = new Map(); // Map<physicalServer, Set<alias>>
+const serverAliases = new Map(); // Map<alias, physicalServer>
+
 function storeGroupServer(name, server) {
   let desc = servicesDesc[name];
   let group = desc.group;
-  if (server != null) {
-    if (groupsAndServers[group] == null) {
-      groupsAndServers[group] = [server];
-    } else {
-      if (!groupsAndServers[group].includes(server)) {
-        groupsAndServers[group] = [...groupsAndServers[group], server];
-      }
+
+  // Ensure the group exists in our mapping even if no server is assigned yet
+  if (groupsAndServers[group] == null) {
+    groupsAndServers[group] = [];
+  }
+
+  if (server != null && server !== '') {
+    // Determine if we need an alias (we'll use aliases if a host has more than one service later in templates)
+    const aliasKey = `${server}.${name}`;
+
+    // Register the physical server and its alias only for non-empty servers
+    if (!physicalServers.has(server)) {
+      physicalServers.set(server, new Set());
+    }
+    physicalServers.get(server).add(aliasKey);
+    serverAliases.set(aliasKey, server);
+
+    // Track which servers belong to which group. We store the physical server name here.
+    if (!groupsAndServers[group].includes(server)) {
+      groupsAndServers[group].push(server);
     }
     let serviceInUse = {
       service: name,
@@ -210,7 +227,7 @@ function hostChoices(a, varUsesSubdomain, subdomain, multi, name) {
     // multi select
     for (let host of serverList) {
       let checked = groupsAndServers[group] != null && groupsAndServers[group].length > 0 && groupsAndServers[group].includes(host);
-      choices.push({name: host, checked: checked});
+      choices.push({ name: host, checked: checked });
     }
   }
   if (debug) logger(choices);
@@ -282,9 +299,8 @@ function PromptPathFor(name, path, when) {
     const samplePath = a[varUsesSubdomain]
       ? '/'
       : `/${typeof path === 'undefined' ? '' : path}`;
-    return `Which context ${em('/path')} you wanna use for this service (like ${
-      a[varUrl]
-    }${em(samplePath)}) ?`;
+    return `Which context ${em('/path')} you wanna use for this service (like ${a[varUrl]
+      }${em(samplePath)}) ?`;
   };
   this.default = (a) => {
     if (a[varUsesSubdomain]) {
@@ -517,9 +533,9 @@ export default class extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.argument('debug', {type: Boolean, required: false});
-    this.argument('replay', {type: Boolean, required: false});
-    this.argument('replay-dont-ask', {type: Boolean, required: false});
+    this.argument('debug', { type: Boolean, required: false });
+    this.argument('replay', { type: Boolean, required: false });
+    this.argument('replay-dont-ask', { type: Boolean, required: false });
 
     debug = this.options.debug;
     replay = this.options['replay'] || this.options['replay-dont-ask'];
@@ -583,7 +599,7 @@ export default class extends Generator {
           } else if (service === 'branding') {
             // We fallback to the domain host if replay without defining correctly the branding hostname
             if (previousConfig['LA_main_hostname'] != null)
-            storeGroupServer(service, previousConfig['LA_main_hostname']);
+              storeGroupServer(service, previousConfig['LA_main_hostname']);
           }
         }
       });
@@ -761,12 +777,12 @@ export default class extends Generator {
           default: false,
         },
         {
-        store: true,
-        type: 'confirm',
-        name: 'LA_use_biocollect',
-        message: `Use ${em(
-          'biocollect'
-        )}  data collection tool (similar to biocollect.ala.org.au/acsa)?`,
+          store: true,
+          type: 'confirm',
+          name: 'LA_use_biocollect',
+          message: `Use ${em(
+            'biocollect'
+          )}  data collection tool (similar to biocollect.ala.org.au/acsa)?`,
           default: false,
         },
         {
@@ -890,14 +906,12 @@ export default class extends Generator {
           type: 'list',
           name: 'LA_collectory_uses_subdomain',
           message: (a) =>
-            `Will the ${em('collectory')} service use a ${
-              a['LA_urls_prefix']
-            }${em('subdomain')}.${a['LA_domain']} or a ${
-              a['LA_urls_prefix']
+            `Will the ${em('collectory')} service use a ${a['LA_urls_prefix']
+            }${em('subdomain')}.${a['LA_domain']} or a ${a['LA_urls_prefix']
             }${a['LA_domain']}${em('/service-path')} ?`,
           choices: [
-            {name: 'subdomain', value: true},
-            {name: 'service-path', value: false},
+            { name: 'subdomain', value: true },
+            { name: 'service-path', value: false },
           ],
         },
         new PromptHostnameFor('collectory', 'collections'),
@@ -1042,22 +1056,22 @@ export default class extends Generator {
         new PromptPathFor('data_quality', 'data_quality', (a) => a['LA_use_data_quality']),
 
         new PromptSubdomainFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect']),
-        new PromptHostnameFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect'] ),
+        new PromptHostnameFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect']),
         new PromptUrlFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect']),
         new PromptPathFor('biocollect', 'biocollect', (a) => a['LA_use_biocollect']),
 
         new PromptSubdomainFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect']),
-        new PromptHostnameFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect'] ),
+        new PromptHostnameFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect']),
         new PromptUrlFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect']),
         new PromptPathFor('pdfgen', 'pdfgen', (a) => a['LA_use_biocollect']),
 
         new PromptSubdomainFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect']),
-        new PromptHostnameFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect'] ),
+        new PromptHostnameFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect']),
         new PromptUrlFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect']),
         new PromptPathFor('ecodata', 'ecodata', (a) => a['LA_use_biocollect']),
 
         new PromptSubdomainFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect']),
-        new PromptHostnameFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect'] ),
+        new PromptHostnameFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect']),
         new PromptUrlFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect']),
         new PromptPathFor('ecodata_reporting', 'ecodata-reporting', (a) => a['LA_use_biocollect']),
 
@@ -1079,7 +1093,7 @@ export default class extends Generator {
         new PromptHostnameFor('pipelines', 'pipelines', (a) => a['LA_use_pipelines']),
 
         new PromptSubdomainFor('events', 'events', (a) => a['LA_use_events']),
-        new PromptHostnameFor('events', 'events', (a) => a['LA_use_events'] ),
+        new PromptHostnameFor('events', 'events', (a) => a['LA_use_events']),
         new PromptUrlFor('events', 'events', (a) => a['LA_use_events']),
         new PromptPathFor('events', 'events', (a) => a['LA_use_events']),
 
@@ -1088,12 +1102,12 @@ export default class extends Generator {
         new PromptHostnameFor('docker_swarm', 'docker_swarm', (a) => a['LA_use_docker_swarm']),
 
         new PromptSubdomainFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
-        new PromptHostnameFor('gatus', 'gatus', (a) => a['LA_use_gatus'] ),
+        new PromptHostnameFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
         new PromptUrlFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
         new PromptPathFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
 
         new PromptSubdomainFor('portainer', 'portainer', (a) => a['LA_use_portainer']),
-        new PromptHostnameFor('portainer', 'portainer', (a) => a['LA_use_portainer'] ),
+        new PromptHostnameFor('portainer', 'portainer', (a) => a['LA_use_portainer']),
         new PromptUrlFor('portainer', 'portainer', (a) => a['LA_use_portainer']),
         new PromptPathFor('portainer', 'portainer', (a) => a['LA_use_portainer']),
         {
@@ -1105,7 +1119,7 @@ export default class extends Generator {
           choices: () => {
             let choices = [];
             for (let host of groupsAndServers['pipelines']) {
-              choices.push({name: host, checked: false});
+              choices.push({ name: host, checked: false });
             }
             return choices;
           },
@@ -1156,10 +1170,10 @@ export default class extends Generator {
     }
     this.answers['LA_biocache_cli_hostname'] = this.answers[
       'LA_biocache_backend_hostname'
-      ];
+    ];
     this.answers['LA_nameindexer_hostname'] = this.answers[
       'LA_biocache_backend_hostname'
-      ];
+    ];
 
     if (typeof this.answers['LA_spatial_uses_subdomain'] === 'undefined')
       this.answers['LA_spatial_uses_subdomain'] = true;
@@ -1241,8 +1255,8 @@ export default class extends Generator {
 
       // noinspection HttpUrlsUsage
       this.answers['LA_urls_prefix'] = this.answers['LA_enable_ssl']
-                                     ? 'https://'
-                                     : 'http://';
+        ? 'https://'
+        : 'http://';
 
       if (debug) logger(this.answers);
 
@@ -1312,8 +1326,8 @@ export default class extends Generator {
         }
       }
 
-      groupsChildren['spark'] = {cluster_master: [pipelinesMaster], cluster_nodes: [...groupsAndServers['pipelines']]};
-      if (useJenkins) groupsChildren['pipelines_jenkins'] = {jenkins_master: [pipelinesMaster], jenkins_slaves: [...groupsAndServers['pipelines']]};
+      groupsChildren['spark'] = { cluster_master: [pipelinesMaster], cluster_nodes: [...groupsAndServers['pipelines']] };
+      if (useJenkins) groupsChildren['pipelines_jenkins'] = { jenkins_master: [pipelinesMaster], jenkins_slaves: [...groupsAndServers['pipelines']] };
 
       // remove master from slaves
       removeOnce(groupsChildren['spark']['cluster_nodes'], pipelinesMaster);
@@ -1323,13 +1337,16 @@ export default class extends Generator {
 
     this.answers["LA_groups_and_servers"] = groupsAndServers;
     this.answers["LA_groups_children"] = groupsChildren;
+    this.answers["LA_physical_servers"] = Array.from(physicalServers.entries()).map(([k, v]) => [k, Array.from(v)]);
+    this.answers["LA_server_aliases"] = Array.from(serverAliases.entries());
+    this.answers["LA_services_desc"] = servicesDesc;
 
     // remove these services included in others playbooks (like spark, etc in pipelines)
     servicesInUse = servicesInUse.filter(x => ['spark', 'pipelines_jenkins', 'jenkins', 'hadoop', 'zookeeper'].indexOf(x.service) === -1);
 
     // Sort services to avoid other orders caused by the use of sets and unnecessary differences in inventories
     let sorted = Object.keys(servicesDesc);
-    servicesInUse.sort(function (a, b)  {
+    servicesInUse.sort(function (a, b) {
       return (sorted.indexOf(a) < sorted.indexOf(b));
     });
 
@@ -1429,7 +1446,7 @@ export default class extends Generator {
       );
     } catch (e) {
       logger(
-          'Error: something goes wrong generating the dot-upptimerc.yml config'
+        'Error: something goes wrong generating the dot-upptimerc.yml config'
       );
       logger(e);
     }
@@ -1702,12 +1719,12 @@ export default class extends Generator {
         `ecodata_password = ${niceware.generatePassphrase(6).join('')}\n\n# External old API access to collectory to lookup collections/institutions, etc`
       );
       if (isPasswordNotDefined.call(this, localPassDest, 'ecodata_api_key'))
-      replaceLine.call(
-        this,
-        localPassDest,
-        '# External old',
-        `ecodata_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
-      );
+        replaceLine.call(
+          this,
+          localPassDest,
+          '# External old',
+          `ecodata_api_key = ${uuidv4()}\n\n# External old API access to collectory to lookup collections/institutions, etc`
+        );
       replaceLine.call(
         this,
         localPassDest,
