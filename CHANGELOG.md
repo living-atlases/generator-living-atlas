@@ -1,7 +1,7 @@
 <a name="unreleased"></a>
 
-<a name="v1.7.9"></a>
-## v1.7.9 - 2026-01-27
+<a name="v1.8.0"></a>
+## v1.8.0 - 2026-01-27
 - Host-service aliases to avoid variable collisions. Fix for #10
 
 <a name="v1.7.8"></a>
