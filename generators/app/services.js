@@ -31,6 +31,7 @@ const services = [
   'events',
   'events_elasticsearch',
   'docker_swarm',
+  'docker_compose',
   'docker_common'
 ];
 
@@ -262,18 +263,18 @@ const servicesDesc = {
     allowMultipleDeploys: true,
   },
   biocollect: {
-     name: 'biocollect',
-     group: 'biocollect',
-     playbook: 'biocollect-standalone',
-     allowMultipleDeploys: false,
-     desc: 'advanced data collection tool for biodiversity science',
+    name: 'biocollect',
+    group: 'biocollect',
+    playbook: 'biocollect-standalone',
+    allowMultipleDeploys: false,
+    desc: 'advanced data collection tool for biodiversity science',
   },
   pdfgen: {
-     name: 'pdfgen',
-     group: 'pdfgen',
-     playbook: 'pdf-service',
-     allowMultipleDeploys: false,
-     desc: 'Service for turning .docs into .pdfs',
+    name: 'pdfgen',
+    group: 'pdfgen',
+    playbook: 'pdf-service',
+    allowMultipleDeploys: false,
+    desc: 'Service for turning .docs into .pdfs',
   },
   ecodata: {
     name: 'ecodata',
@@ -310,6 +311,13 @@ const servicesDesc = {
     allowMultipleDeploys: true,
     desc: 'docker swarm'
   },
+  docker_compose: {
+    name: 'docker_compose',
+    group: 'docker_compose',
+    playbook: 'docker-compose',
+    allowMultipleDeploys: true,
+    desc: 'docker compose'
+  },
   docker_common: {
     name: 'docker_common',
     group: 'docker-common',
@@ -342,12 +350,12 @@ const servicesDesc = {
 
 function confExistOrFalse(conf, varName) {
   let value = conf[varName];
-  return value != null ? value: false;
+  return value != null ? value : false;
 }
 
 function confExistOrTrue(conf, varName) {
   let value = conf[varName];
-  return value != null ? value: true;
+  return value != null ? value : true;
 }
 
 function serviceUseVar(name, conf) {
@@ -358,29 +366,29 @@ function serviceUseVar(name, conf) {
     case 'logger':
     case 'branding':
     case 'solr':
-        return true;
+      return true;
     case "ala_bie":
-      return  confExistOrFalse(conf, "LA_use_species");
+      return confExistOrFalse(conf, "LA_use_species");
     case "bie_index":
-      return  confExistOrFalse(conf,"LA_use_species");
+      return confExistOrFalse(conf, "LA_use_species");
     case "lists":
-      return  confExistOrFalse(conf,"LA_use_species_lists");
+      return confExistOrFalse(conf, "LA_use_species_lists");
     case "cas":
-      return  confExistOrFalse(conf,"LA_use_CAS");
+      return confExistOrFalse(conf, "LA_use_CAS");
     case "biocache_backend":
-      return confExistOrTrue(conf,"LA_use_biocache_store");
+      return confExistOrTrue(conf, "LA_use_biocache_store");
     case "zookeeper":
-      return confExistOrFalse(conf,`LA_use_solrcloud`);
+      return confExistOrFalse(conf, `LA_use_solrcloud`);
     case "pdfgen":
-      return confExistOrFalse(conf,`LA_use_biocollect`);
+      return confExistOrFalse(conf, `LA_use_biocollect`);
     case "ecodata":
-      return confExistOrFalse(conf,`LA_use_biocollect`);
+      return confExistOrFalse(conf, `LA_use_biocollect`);
     case "ecodata_reporting":
-      return confExistOrFalse(conf,`LA_use_biocollect`);
+      return confExistOrFalse(conf, `LA_use_biocollect`);
     case "docker_common":
-      return confExistOrFalse(conf,`LA_use_docker_swarm`);
+      return confExistOrFalse(conf, `LA_use_docker_swarm`) || confExistOrFalse(conf, `LA_use_docker_compose`);
     default:
-      return confExistOrFalse(conf,`LA_use_${name}`);
+      return confExistOrFalse(conf, `LA_use_${name}`);
   }
 }
 

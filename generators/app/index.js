@@ -1283,7 +1283,9 @@ export default class extends Generator {
           return;
         if (service === 'docker_swarm' && !this.answers['LA_use_docker_swarm'])
           return;
-        if (service === 'docker_common' && !this.answers['LA_use_docker_swarm'])
+        if (service === 'docker_compose' && !this.answers['LA_use_docker_compose'])
+          return;
+        if (service === 'docker_common' && !this.answers['LA_use_docker_swarm'] && !this.answers['LA_use_docker_compose'])
           return;
         if (service === 'gatus' && !this.answers['LA_use_gatus'])
           return;
