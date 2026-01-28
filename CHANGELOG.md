@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.1"></a>
+## v1.8.1 - 2026-01-28
+- Initial support for docker compose
+
 <a name="v1.8.0"></a>
 ## v1.8.0 - 2026-01-27
 - Host-service aliases to avoid variable collisions. Fix for #10
