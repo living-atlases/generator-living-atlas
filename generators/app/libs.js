@@ -33,9 +33,8 @@ const defUseSubdomainPrompt = (a, service) => {
     servicesDesc[service].desc.length > 0
       ? ` (${servicesDesc[service].desc})`
       : '';
-  return `Will the ${em(service)} module${desc} use a http${
-    a['LA_enable_ssl'] ? 's' : ''
-  }://${em('subdomain')}.${a['LA_domain']} or not?`;
+  return `Will the ${em(service)} module${desc} use a http${a['LA_enable_ssl'] ? 's' : ''
+    }://${em('subdomain')}.${a['LA_domain']} or not?`;
 };
 
 const validateDomain = (input, name, logger) =>
@@ -103,6 +102,10 @@ const additionalToolkitVariables = [
   "LA_variable_pac4j_cookie_signing_key",
   "LA_variable_support_email",
   "LA_variable_sds_faq_url",
+  "LA_variable_branding_source",
+  "LA_variable_use_la_site_certs",
+  "LA_variable_docker_mail_development_mode",
+  "LA_variable_docker_mail_development_url",
   "LA_is_hub",
   "LA_software_versions",
   "LA_variable_pipelines_master",
@@ -112,9 +115,9 @@ const additionalToolkitVariables = [
 
 function additionalToolkitPrompts() {
   let addPrompt = [];
-  for(let variable in additionalToolkitVariables) {
+  for (let variable in additionalToolkitVariables) {
     // we store it but we do not show it, so we don't lost these variables configured by the la-toolkit
-    addPrompt.push({store: true, when: (a)=> false, type: 'input', name: variable });
+    addPrompt.push({ store: true, when: (a) => false, type: 'input', name: variable });
   }
   return addPrompt;
 }
