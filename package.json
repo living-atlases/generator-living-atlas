@@ -1,7 +1,7 @@
 {
   "name": "generator-living-atlas",
   "type": "module",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "A Yeoman Generator for Living Atlas Ansible Inventories",
   "homepage": "https://living-atlases.gbif.org",
   "author": {
