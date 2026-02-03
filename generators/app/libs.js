@@ -110,7 +110,8 @@ const additionalToolkitVariables = [
   "LA_software_versions",
   "LA_variable_pipelines_master",
   "LA_variable_pipelines_ssh_key",
-  "LA_use_pipelines_jenkins"
+  "LA_use_pipelines_jenkins",
+  "LA_docker_extra_hosts_by_host"
 ];
 
 function additionalToolkitPrompts() {
