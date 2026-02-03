@@ -12,6 +12,7 @@
 * [Maintain your inventories over time](#maintain-your-inventories-over-time)
 * [Caveats](#caveats)
 * [Any problem with this generator?](#any-problem-with-this-generator)
+* [Development and Testing](#development-and-testing)
 * [About Yeoman](#about-yeoman)
 * [License](#license)
 
@@ -178,6 +179,19 @@ As we mentioned previously you can rerun the generator with the option `yo livin
 ## Any problem with this generator?
 
 Please [add an issue](https://github.com/living-atlases/generator-living-atlas/issues/new) give us details of your problem and we'll try to help you and to improve the generator. Thanks!
+
+## Development and Testing
+
+If you want to contribute to this generator or run the tests:
+
+1. Clone the repository and install dependencies:
+   ```bash
+   npm install
+   ```
+2. Run the tests using `npm test`. Since this project uses ES modules, you must provide the `--experimental-vm-modules` flag to Node (this is handled by the test script, but if you run jest directly use `NODE_OPTIONS="--experimental-vm-modules" npx jest`):
+   ```bash
+   npm test
+   ```
 
 ## About Yeoman
 
