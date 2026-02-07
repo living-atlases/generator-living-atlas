@@ -1,8 +1,12 @@
 <a name="unreleased"></a>
 
 <a name="v1.8.2"></a>
-## v1.8.2 - 2026-01-30
-- Improvements in docker-compose deployment
+## v1.8.2 - 2026-02-07
+- Improvements in docker-compose deployment: data directory config, extra hosts support, and optional configuration
+- Moved branding variables to `[all:vars]` section for better accessibility
+- Added `branding_build_source` variable (git/local) to quick-start inventory
+- Added `nginx_vhost_fast_mode` variable to inventory file
+- Updated README with new test options
 
 <a name="v1.8.1"></a>
 ## v1.8.1 - 2026-01-28
