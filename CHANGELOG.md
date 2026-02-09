@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.4"></a>
+## v1.8.4 - 2026-02-09
+- Use /data for docker too
+
 <a name="v1.8.3"></a>
 ## v1.8.3 - 2026-02-07
 - Improvements in docker-compose deployment: data directory config, extra hosts support, and optional configuration
