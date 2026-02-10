@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.5"></a>
+## v1.8.5 - 2026-02-10
+- Set docker_registry
+
 <a name="v1.8.4"></a>
 ## v1.8.4 - 2026-02-09
 - Use /data for docker too
