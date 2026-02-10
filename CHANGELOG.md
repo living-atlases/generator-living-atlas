@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.6"></a>
+## v1.8.6 - 2026-02-10
+- Correct deployment_type
+
 <a name="v1.8.5"></a>
 ## v1.8.5 - 2026-02-10
 - Set docker_registry
