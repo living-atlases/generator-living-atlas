@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.7"></a>
+## v1.8.7 - 2026-02-11
+- Use test l-a.site ssl certs if requested
+
 <a name="v1.8.6"></a>
 ## v1.8.6 - 2026-02-10
 - Correct deployment_type
