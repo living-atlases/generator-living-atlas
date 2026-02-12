@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.8"></a>
+## v1.8.8 - 2026-02-12
+- Update image service and pipelines versions
+
 <a name="v1.8.7"></a>
 ## v1.8.7 - 2026-02-11
 - Use test l-a.site ssl certs if requested
