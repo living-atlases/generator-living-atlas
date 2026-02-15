@@ -22,6 +22,7 @@ Options:
   -h --help              Show help options.
   -u --user=<user>       Ansible become user [default: ubuntu]
   -w --newserver         Prepare the server for the first time (install ansible deps like python)
+  -C --check             Run ansible-playbook in check mode (dry run)
   -c --continue          Continue even if some ansible cmd fails
   -d --debug             Show debug info.
   -v --version           Show ansiblew version.
@@ -63,6 +64,7 @@ if __name__ == '__main__':
     user = args['--user']
     tags = args['--tags']
     limit = args['--limit']
+    check = args['--check']
     doall = args['all']
     newserver = args['--newserver']
     alainstall = args['--alainstall']
@@ -101,6 +103,8 @@ if __name__ == '__main__':
             extras = "%s --limit %s" % (extras, hubLimit)
     if extra_vars:
         extras = "%s --extra-vars '%s'" % (extras, extra_vars)
+    if check:
+        extras = "%s --check" % (extras)
     if nodryrun:
         cmdPrefix = ""
 
