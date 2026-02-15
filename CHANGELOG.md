@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.10"></a>
+## v1.8.10 - 2026-02-15
+- docker_default_user unified
+
 <a name="v1.8.9"></a>
 ## v1.8.9 - 2026-02-15
 - Define deployment_type in all:vars
