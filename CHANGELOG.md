@@ -1,5 +1,9 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.9"></a>
+## v1.8.9 - 2026-02-15
+- Define deployment_type in all:vars
+
 <a name="v1.8.8"></a>
 ## v1.8.8 - 2026-02-12
 - Update image service and pipelines versions
