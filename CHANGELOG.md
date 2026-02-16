@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.11"></a>
+## v1.8.11 - 2026-02-17
+- Move gatus and portainer to their groups
+- Disable nginx optimization for spatial. i18n package to all:vars
+- Added ansible check mode
+
 <a name="v1.8.10"></a>
 ## v1.8.10 - 2026-02-15
 - docker_default_user unified
