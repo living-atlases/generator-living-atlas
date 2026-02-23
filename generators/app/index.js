@@ -864,6 +864,15 @@ export default class extends Generator {
         {
           store: true,
           type: 'confirm',
+          name: 'LA_use_docker_compose',
+          message: `Use ${em(
+            'docker compose'
+          )}?`,
+          default: true,
+        },
+        {
+          store: true,
+          type: 'confirm',
           name: 'LA_use_gatus',
           message: `Use ${em(
             'gatus'
@@ -1100,6 +1109,7 @@ export default class extends Generator {
         new PromptHostnameFor('events_elasticsearch', 'events_elasticsearch', (a) => a['LA_use_events']),
 
         new PromptHostnameFor('docker_swarm', 'docker_swarm', (a) => a['LA_use_docker_swarm']),
+        new PromptHostnameFor('docker_compose', 'docker_compose', (a) => a['LA_use_docker_compose']),
 
         new PromptSubdomainFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
         new PromptHostnameFor('gatus', 'gatus', (a) => a['LA_use_gatus']),
@@ -1242,6 +1252,9 @@ export default class extends Generator {
       }
       if (typeof this.answers['LA_use_docker_swarm'] === 'undefined') {
         this.answers['LA_use_docker_swarm'] = false;
+      }
+      if (typeof this.answers['LA_use_docker_compose'] === 'undefined') {
+        this.answers['LA_use_docker_compose'] = false;
       }
       if (typeof this.answers['LA_use_gatus'] === 'undefined') {
         this.answers['LA_use_gatus'] = false;
