@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.12"></a>
+## v1.8.12 - 2026-02-24
+- Better docker compose support
+- Redefine compose group vars
+
 <a name="v1.8.11"></a>
 ## v1.8.11 - 2026-02-17
 - Move gatus and portainer to their groups
