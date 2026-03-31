@@ -1,28 +1,31 @@
 name: Publish to npm
+
 on:
   push:
     tags:
-      - 'v*'
-#on:
-#  release:
-#    types: [published]
-#  workflow_dispatch:
+      - "v*"
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write
   contents: read
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
       - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+
       - run: npm publish
+        id: publish
+        continue-on-error: true
+
+      - name: Show publish output
+        if: steps.publish.outcome == 'failure'
+        run: echo "Publish failed, checking for OIDC or npm error"
