@@ -1,5 +1,10 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.13"></a>
+## v1.8.13 - 2026-03-31
+- Update dependencies
+- Add blacklist_file with relative path to portal in data-hub inventory template
+
 <a name="v1.8.12"></a>
 ## v1.8.12 - 2026-02-24
 - Better docker compose support
