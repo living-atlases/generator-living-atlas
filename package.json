@@ -85,6 +85,9 @@
     "pretest": "eslint .",
     "test": "jest"
   },
-  "repository": "living-atlases/generator-living-atlas",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/living-atlases/generator-living-atlas.git"
+  },
   "license": "Apache-2.0"
 }
