@@ -25,10 +25,4 @@ jobs:
 
       - run: npm ci
 
-      - run: npm publish
-        id: publish
-        continue-on-error: true
-
-      - name: Show publish output
-        if: steps.publish.outcome == 'failure'
-        run: echo "Publish failed, checking for OIDC or npm error"
+      - run: npm publish --provenance --access public
