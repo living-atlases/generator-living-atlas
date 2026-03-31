@@ -1,4 +1,0 @@
----
-roles:
-  - name: oefenweb.postfix
-    version: v3.4.0

@@ -3,3 +3,4 @@ coverage
 .yo-rc.*
 .idea
 *.iml
+__tests__/la-for-dev/
