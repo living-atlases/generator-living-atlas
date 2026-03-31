@@ -1802,6 +1802,7 @@ export default class extends Generator {
         let joinedConf = {
           ...conf, // the portal conf
           ...hub,
+          LA_portal_pkg_name: conf['LA_pkg_name'], // preserve portal name for relative paths
         };
 
         // noinspection JSUnresolvedFunction
