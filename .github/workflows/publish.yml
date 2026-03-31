@@ -27,4 +27,8 @@ jobs:
 
       - run: npm ci
 
-      - run: npm publish
+      - run: npm --version
+
+      - run: node --version
+
+      - run: npm publish --verbose
