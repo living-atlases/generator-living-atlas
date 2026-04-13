@@ -21,12 +21,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+          registry-url: "https://registry.npmjs.org"
 
       # Use specific npm version to avoid MODULE_NOT_FOUND bug in npm@latest (10.9.7)
       - run: npm install -g npm@10.8.3
 
       - run: npm ci
 
-      - run: |
-          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
-          npm publish
+      - run: npm publish --provenance --access public
