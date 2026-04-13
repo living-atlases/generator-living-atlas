@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.15"></a>
+
+## v1.8.15 - 2026-04-13
+
+- Fix: Add physical hosts to [all] group for --limit compatibility
+
 <a name="v1.8.14"></a>
 
 ## v1.8.14 - 2026-03-31
