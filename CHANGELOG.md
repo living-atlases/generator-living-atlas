@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.16"></a>
+
+## v1.8.16 - 2026-04-17
+
+- Fix: Move physical hosts from [all] to [physical_hosts] group to prevent apt lock collisions during parallel Ansible execution on VM deployments
+
 <a name="v1.8.15"></a>
 
 ## v1.8.15 - 2026-04-13
