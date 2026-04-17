@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.17"></a>
+
+## v1.8.17 - 2026-04-17
+
+- Fix: Revert to 1.8.11 inventory structure - remove physical hosts from all groups to prevent apt lock collisions. Physical hosts now only appear in service-specific groups, never in [all] or [server_group]. This reverts commits 897fb50 and f4631de. Note: docker-compose deployments may need variable inheritance adjustments.
+
 <a name="v1.8.16"></a>
 
 ## v1.8.16 - 2026-04-17
