@@ -164,6 +164,27 @@ or all the services with something like:
 
 Without `--nodryrun` you will get only the full `ansible-playbook` command to use these inventories .
 
+## Docker Compose local deployment
+
+For local container-based deployments using [la-docker-compose](https://github.com/living-atlases/la-docker-compose), `ansiblew` supports two additional flags:
+
+- `--docker-local` — use the generated `*-dev-docker-inventory.ini` (all hosts mapped to `127.0.0.1`) instead of the standard `*-inventory.ini`
+- `--ladocker=<dir>` — path to a local `la-docker-compose` repo; uses its playbooks (`config-gen.yml`, `site.yml`) instead of the per-service `ala-install` playbooks
+
+Example — generate config and deploy all services locally:
+
+```bash
+./ansiblew --alainstall=../ala-install --ladocker=../la-docker-compose --docker-local --nodryrun all
+```
+
+Dry-run (shows command without executing):
+
+```bash
+./ansiblew --alainstall=../ala-install --ladocker=../la-docker-compose --docker-local all
+```
+
+The `*-dev-docker-inventory.ini` and `*-local-extras.ini` files are generated alongside the standard inventory. They include Docker container hostname overrides (e.g. `solr_host = la_solr`, `cas_db_hostname = la_mysql`) required by the `la-docker-compose` roles.
+
 ## Sample `~/.ssh/config`
 
 A sample `dot-ssh-config.sample` is generated that you can edit and move to `~/.ssh/config` in orther to access to you VMs easily.
