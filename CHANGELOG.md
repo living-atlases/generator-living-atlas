@@ -1,5 +1,12 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.19"></a>
+
+## v1.8.19 - 2026-05-18
+
+- fix(branding): use ESM export default in settings.js template (module.exports breaks Vite with "type":"module")
+- fix(branding): add missing analytics.googleId field required by vite.config.js
+
 <a name="v1.8.18"></a>
 
 ## v1.8.18 - 2026-05-04
