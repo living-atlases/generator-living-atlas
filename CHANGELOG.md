@@ -1,5 +1,14 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.20"></a>
+
+## v1.8.20 - 2026-05-26
+
+- Update gitignore
+- Update dependencies
+- Simplify the ansiblew for docker compose
+- Use localhost instead of 127.0.0.1
+
 <a name="v1.8.19"></a>
 
 ## v1.8.19 - 2026-05-18
