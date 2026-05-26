@@ -149,7 +149,6 @@ if __name__ == '__main__':
 
     if ladocker:
         if doall:
-            plays.append("%s/playbooks/config-gen.yml" % ladocker)
             plays.append("%s/playbooks/site.yml" % ladocker)
     else:
         <% for(var j=0; j < LA_services_in_use.length; j++) {
