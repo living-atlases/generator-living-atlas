@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.21"></a>
+
+## v1.8.21 - 2026-05-30
+
+- feat(branding): add branding-as-home mode and bake correct BASE_BRANDING_URL
+
 <a name="v1.8.20"></a>
 
 ## v1.8.20 - 2026-05-26
