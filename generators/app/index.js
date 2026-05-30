@@ -439,6 +439,23 @@ function generateBranding(conf, brandDest) {
       );
     }
   }
+
+  // Bake the correct BASE_BRANDING_URL into package.json so the production
+  // build emits assets under the same origin+path the apps request
+  // (header_and_footer_baseurl). package.json is cloned verbatim (not
+  // templated), so this replaceLine is the replay-safe source of truth.
+  const brandPkg = `${brandDest}/package.json`;
+  if (this.fs.exists(this.destinationPath(brandPkg))) {
+    const bUrl = conf['LA_branding_url'] || conf['LA_domain'];
+    const bPath = (conf['LA_branding_path'] || '').replace(/\/$/, '');
+    const baked = `${conf['LA_urls_prefix']}${bUrl}${bPath}`;
+    replaceLine.call(
+      this,
+      brandPkg,
+      '"build":',
+      `    "build": "cross-env BASE_BRANDING_URL=${baked} vite build && cross-env BASE_BRANDING_URL=${baked} BUILD_INIT=1 vite build",`
+    );
+  }
 }
 
 function handleClientKeysGeneration(localPassDest, clientType, servicesDesc) {
@@ -1166,6 +1183,18 @@ export default class extends Generator {
         {
           store: true,
           type: 'confirm',
+          name: 'LA_branding_as_home',
+          message: `Should the ${em(
+            'branding'
+          )} also be served as the site home at the root domain (${em(
+            'l-a.site'
+          )})? (No = a WordPress or other app owns the root)`,
+          default: true,
+          when: (a) => a['LA_generate_branding'],
+        },
+        {
+          store: true,
+          type: 'confirm',
           name: 'LA_use_git',
           message: `Use ${em(
             'git'
@@ -1223,6 +1252,8 @@ export default class extends Generator {
         this.answers['LA_use_biocollect'] = false;
       if (typeof this.answers['LA_generate_branding'] === 'undefined')
         this.answers['LA_generate_branding'] = false;
+      if (typeof this.answers['LA_branding_as_home'] === 'undefined')
+        this.answers['LA_branding_as_home'] = true;
       if (typeof this.answers['LA_branding_hostname'] === 'undefined')
         this.answers['LA_branding_hostname'] = this.answers['LA_domain'];
       if (typeof this.answers['LA_branding_path'] === 'undefined')
@@ -1417,6 +1448,9 @@ export default class extends Generator {
     }
     if (typeof conf['LA_generate_branding'] === 'undefined') {
       conf['LA_generate_branding'] = false;
+    }
+    if (typeof conf['LA_branding_as_home'] === 'undefined') {
+      conf['LA_branding_as_home'] = true;
     }
     conf['LA_servers'] = servers;
     conf['LA_services_in_use'] = servicesInUse;
