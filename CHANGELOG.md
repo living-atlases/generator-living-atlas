@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.22"></a>
+
+## v1.8.22 - 2026-06-01
+
+- feat(ssl): auto-detect use_la_site_certs from LA_domain (l-a.site and subdomains -> demo wildcard certs), scoped to docker-compose; explicit override always wins. SSL block aligned to the effective value in quick-start and data-hub inventories.
+
 <a name="v1.8.21"></a>
 
 ## v1.8.21 - 2026-05-30
