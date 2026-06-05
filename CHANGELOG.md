@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.23"></a>
+
+## v1.8.23 - 2026-06-05
+
+- feat(docker-compose): derive container extra_hosts from LA_etc_hosts so cross-host cluster names resolve to literal IPs inside containers (fixes "invalid IP address in add-host").
+
 <a name="v1.8.22"></a>
 
 ## v1.8.22 - 2026-06-01
