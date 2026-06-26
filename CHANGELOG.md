@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.25"></a>
+
+## v1.8.25 - 2026-06-26
+
+- fix(quick-start): enable OIDC infrastructure unconditionally (`security_oidc_enabled` / `oidc_enabled` = true), decoupled from `LA_variable_oidc_use`. v1.8.24 only changed the `else` default, which never fired because replay answers (`.yo-rc.json`) *define* `LA_variable_oidc_use=false`, so the `if`-branch kept rendering `security_oidc_enabled=false` and the Spring-Boot hubs (bie-hub 4.1.x, biocache-hub 8.1.x) still crashed on the missing `org.pac4j.core.config.Config` bean. OIDC client creds + discoveryUri are already rendered, so this just activates them; CAS login flow is unaffected (`security_cas_enabled` stays driven by the flag).
+
 <a name="v1.8.24"></a>
 
 ## v1.8.24 - 2026-06-26
