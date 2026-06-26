@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.24"></a>
+
+## v1.8.24 - 2026-06-26
+
+- fix(quick-start): default OIDC enabled so the Spring-Boot hubs (bie-hub, biocache-hub) register the pac4j `Config` bean and boot instead of crashing with "No qualifying bean of type org.pac4j.core.config.Config"; CAS stays enabled (security_cas_enabled). Matches the documented lademo-local-extras workaround.
+
 <a name="v1.8.23"></a>
 
 ## v1.8.23 - 2026-06-05
