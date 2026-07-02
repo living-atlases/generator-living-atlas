@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.26"></a>
+
+## v1.8.26 - 2026-07-02
+
+- fix(quick-start): force `userdetails` to OIDC (never CAS protocol). v1.8.25 made the OIDC infrastructure unconditional but left `userdetails_use_cas`/`userdetails_use_oidc` tied to `LA_variable_oidc_use`; when that flag is false, `userdetails` alone stayed on the CAS protocol, whose ticket validation releases no `userid`/`role` attributes (ALA releases them via OIDC scopes, not `allowedAttributes`), so ala-auth-plugin `CasAuthService.getUserId()` returned null and recursed into `getUserForEmailAddress()` → StackOverflow on `/userdetails/myprofile`, and the admin lost `ROLE_ADMIN`. Now `userdetails` is forced to OIDC (gated only on `LA_use_CAS`), mirroring the unconditional OIDC infra flags.
+
 <a name="v1.8.25"></a>
 
 ## v1.8.25 - 2026-06-26
