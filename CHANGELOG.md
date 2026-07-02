@@ -1,5 +1,12 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.27"></a>
+
+## v1.8.27 - 2026-07-02
+
+- fix(quick-start): set the OIDC login scope for the ala-auth apps. The role templates default `security.oidc.scope` to just `openid`, which does NOT release the `role`/`authority` claims (CAS `OidcProfileScopeToAttributesFilter` needs the `ala`/`roles` scopes present in the request), so OIDC apps saw no roles (e.g. collectory "ROLE_ADMIN is required"). Now emit `scope = openid profile email ala roles` (CAS scheme; matches ALA prod non-cognito, whose `security_oidc_scope`/`cas_security_oidc_scope` use the same value) when `LA_use_CAS`.
+- fix(quick-start): align `*_webservice_jwt_scopes` to ALA prod (non-cognito). collectory/lists/alerts/ala_bie were using the cognito values (`ala/internal`, `ala/attrs`); ALA CAS prod uses `users/read` (and `users/read ala ala/internal` for bie_index). CAS only granted the registered subset so it was harmless, but this now matches prod. biocache/ala_hub already matched.
+
 <a name="v1.8.26"></a>
 
 ## v1.8.26 - 2026-07-02
