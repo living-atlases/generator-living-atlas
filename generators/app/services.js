@@ -231,6 +231,14 @@ const servicesDesc = {
       'Jenkins slaves for Pipelines',
     allowMultipleDeploys: true,
   },
+  airflow: {
+    name: 'airflow',
+    group: 'airflow',
+    playbook: 'airflow',
+    desc:
+      'Apache Airflow orchestrator for Pipelines (docker-compose overlay)',
+    allowMultipleDeploys: true,
+  },
   data_quality: {
     name: 'data_quality',
     group: 'data_quality_filter_service',

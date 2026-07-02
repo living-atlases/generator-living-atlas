@@ -39,6 +39,7 @@ let dontAsk = false;
 let previousConfig;
 let firstRun;
 let useJenkins = false;
+let useAirflow = false;
 
 /*
    Set of used servers
@@ -122,6 +123,8 @@ function storeGroupServer(name, server) {
     storeGroupServer('spark', server);
     storeGroupServer('hadoop', server);
     if (useJenkins) storeGroupServer('pipelines_jenkins', server);
+    // airflow overlay rides on the pipelines host when enabled
+    if (useAirflow) storeGroupServer('airflow', server);
   }
   if (name === 'docker_swarm') {
     // Add child services
@@ -604,6 +607,7 @@ export default class extends Generator {
 
     if (replay) {
       useJenkins = serviceUseVar('pipelines_jenkins', previousConfig);
+      useAirflow = serviceUseVar('airflow', previousConfig);
       Object.keys(servicesDesc).forEach((service) => {
         const hostVar = `LA_${service}_hostname`;
         const groupServers = previousConfig[hostVar] == null ? null : previousConfig[hostVar].split(hostSepRegexp);

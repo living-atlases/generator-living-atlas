@@ -111,7 +111,10 @@ const additionalToolkitVariables = [
   "LA_variable_pipelines_master",
   "LA_variable_pipelines_ssh_key",
   "LA_use_pipelines_jenkins",
-  "LA_docker_extra_hosts_by_host"
+  "LA_docker_extra_hosts_by_host",
+  "LA_use_airflow",
+  "LA_airflow_url",
+  "LA_airflow_hostname"
 ];
 
 function additionalToolkitPrompts() {
