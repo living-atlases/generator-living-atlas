@@ -29,6 +29,13 @@
     question: byobu/launch-by-default
     value: 'True'
     vtype: boolean
+  # Multiple service aliases can map to the same physical host (see inventory
+  # aliases), so this may race on /var/cache/debconf/config.dat while a sibling
+  # alias runs apt. Retry until the debconf lock is free.
+  register: byobu_debconf
+  until: byobu_debconf is succeeded
+  retries: 30
+  delay: 10
   tags: pre-task-deps
 
 - name: Add additional dependencies for monitoring, troubleshooting, ...
@@ -47,6 +54,9 @@
     state: present
     autoclean: yes
     update_cache: yes
+    # Sibling service aliases on the same physical host may hold the dpkg lock;
+    # wait for it instead of failing (see inventory host aliases).
+    lock_timeout: 300
   tags: pre-task-deps
   when: ansible_os_family == "Debian" and ansible_distribution_version is version("20.04", "<")
 
@@ -66,6 +76,9 @@
     state: present
     autoclean: yes
     update_cache: yes
+    # Sibling service aliases on the same physical host may hold the dpkg lock;
+    # wait for it instead of failing (see inventory host aliases).
+    lock_timeout: 300
   tags: pre-task-deps
   when: ansible_os_family == "Debian" and ansible_distribution_version is version("20.04", ">=") and ansible_distribution_version is version("24.04", "<")
 
@@ -85,6 +98,9 @@
     state: present
     autoclean: yes
     update_cache: yes
+    # Sibling service aliases on the same physical host may hold the dpkg lock;
+    # wait for it instead of failing (see inventory host aliases).
+    lock_timeout: 300
   tags: pre-task-deps
   when: ansible_os_family == "Debian" and ansible_distribution_version is version("24.04", ">=")
 

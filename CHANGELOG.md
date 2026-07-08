@@ -1,5 +1,17 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.29"></a>
+
+## v1.8.29 - 2026-07-08
+
+- fix(pre-deploy): make the `pre_deploy` apt/debconf tasks resilient to dpkg/debconf lock contention. When several service aliases map to the same physical host (inventory host-alias pattern `<server>.<service>`), Ansible runs the `pre_deploy` role on each alias in parallel, so `apt` and the `configure byobu` debconf task collided on `/var/lib/dpkg/lock-frontend` and `/var/cache/debconf/config.dat` (`Could not get lock ...`, `config.dat is locked by another process`), intermittently failing the `ala-install-deploy-tests` VM job. Add `lock_timeout: 300` to the three apt tasks so apt waits for the dpkg lock instead of failing, and `register`/`until`/`retries`/`delay` to the byobu debconf task so it retries until the debconf lock is free.
+
+<a name="v1.8.28"></a>
+
+## v1.8.28 - 2026-07-02
+
+- feat(airflow): co-located Airflow service with auto-generated admin password.
+
 <a name="v1.8.27"></a>
 
 ## v1.8.27 - 2026-07-02
