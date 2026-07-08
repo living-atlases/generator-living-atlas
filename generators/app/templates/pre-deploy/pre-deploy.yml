@@ -1,5 +1,7 @@
 - name: Pre-install python
-  hosts: all
+  # One host per physical server: these are machine-level tasks; running them on
+  # every service alias of the same VM in parallel races on the apt/dpkg locks.
+  hosts: la_pre_deploy_hosts
   gather_facts: false
   pre_tasks:
   - name: Install python2 and python3 for Ansible
@@ -11,7 +13,9 @@
   become: yes
 
 - name: Pre-deploy tasks
-  hosts: all
+  # One host per physical server (see la_pre_deploy_hosts): machine-level setup
+  # (etc-hosts, sudo, users, apt deps) must not run once per service alias.
+  hosts: la_pre_deploy_hosts
   roles:
 <% if (typeof LA_etc_hosts != 'undefined') { %>
     - { role: ypsman.hosts, tags: ["pre-task-etc-hosts"]}

@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.30"></a>
+
+## v1.8.30 - 2026-07-08
+
+- fix(pre-deploy): run machine-level pre-deploy tasks once per physical host to end the apt/dpkg lock races. When several services share a VM the inventory addresses them as separate host aliases (`<server>.<service>`), and the `Pre-install python` and `Pre-deploy tasks` plays ran with `hosts: all`, so Ansible executed apt/debconf on every alias of the same machine in parallel — colliding on `/var/lib/apt/lists/lock`, `/var/lib/dpkg/lock-frontend` and `/var/cache/debconf/config.dat`. Emit a new `[la_pre_deploy_hosts]` inventory group with one representative host per physical server and point those two plays at it, so per-machine setup runs once per VM. This supersedes the per-task `lock_timeout`/retries added in v1.8.29, which could not cover `apt update`'s lists-lock nor the `raw` python bootstrap.
+
 <a name="v1.8.29"></a>
 
 ## v1.8.29 - 2026-07-08
