@@ -1,7 +1,7 @@
 {
   "name": "generator-living-atlas",
   "type": "module",
-  "version": "1.8.30",
+  "version": "1.8.31",
   "description": "A Yeoman Generator for Living Atlas Ansible Inventories",
   "homepage": "https://living-atlases.gbif.org",
   "author": {
@@ -34,6 +34,7 @@
     "lint-staged": "^11.1.2",
     "prettier": "^3.8.1",
     "yeoman-assert": "^3.1.1",
+    "yeoman-environment": "^4.4.3",
     "yeoman-test": "^11.2.0"
   },
   "engines": {
@@ -54,7 +55,11 @@
     "yosay": "^3.0.0"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "transform": {},
+    "testMatch": [
+      "**/__tests__/*.js"
+    ]
   },
   "lint-staged": {
     "*.js": [
@@ -84,7 +89,7 @@
   },
   "scripts": {
     "pretest": "eslint .",
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
     "type": "git",

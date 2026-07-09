@@ -1,5 +1,16 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.31"></a>
+
+## v1.8.31 - 2026-07-09
+
+- fix(inventories): make the machine identity explicit — `[la_pre_deploy_hosts]` now lists the *bare* physical hostname of every server (not the first service alias). A VM whose services are all aliased (`<server>.<service>`) had no bare entry in the inventory, so bootstrap flows that target VM names (e.g. `ansible-playbook --limit <vm1>,<vm2>` as `ala-install-test` does to create the ansible user) silently skipped it and every later play failed with `UNREACHABLE` (seen in `ala-install-deploy-tests`: test-2 never got the ubuntu user). Bare names carry no service group_vars: service identity stays in the aliases (design: bare name = machine, alias = service).
+- fix(post-deploy): dedupe post-deploy by machine, like pre-deploy in v1.8.30. The `Post-deploy tasks` play (`hosts: all`, installs swaks) and the postfix play (4 service groups that usually share VMs) ran once per alias of the same machine in parallel → same apt/dpkg lock races. Now they target `la_pre_deploy_hosts` and a new deduplicated `[la_postfix_hosts]` group (one machine per physical server hosting biocache-hub/cas-servers/alerts-service/doi-service).
+- fix(inventories): emit the spatial service groups (`[geoserver]`, `[geonetwork]`, `[spatial-hub]`, `[spatial-service]`) through the standard alias machinery (`<host>.spatial` when the host runs several services, `localhost` in the local docker inventory) and drop the duplicated bare-hostname re-declaration of those groups (plus `[spatial]`) further down the template, which registered the physical machine as an extra inventory host and leaked spatial group_vars onto it.
+- fix(pre-deploy): the spark pre-deploy play now targets `cluster_master, cluster_nodes` (one bare machine per VM) instead of `spark`, whose members (service aliases) plus children (bare names) made the play edit `/etc/security/limits.conf` twice in parallel on the same machine.
+- fix(tests): the jest suites never ran (ESM repo without `--experimental-vm-modules`; `jest` also picked the branding fixtures under `__tests__/la-for-dev` as suites, and `PromptHostnameFor.filter` crashed on undefined answers). Run jest with the VM-modules flag and a scoped `testMatch`, guard the filter, and fix the suites (paths under `<pkg>-inventories/`, `[localhost_group]`). New assertions: every physical server appears bare in `[la_pre_deploy_hosts]`, spatial groups use the alias, `[la_postfix_hosts]` is deduplicated, and a race guard that parses the generated inventories asserting no service group registers the same machine twice. Added a 3-VM regression test (`__tests__/verify-3vm.js`) reproducing the `ala-install-deploy-tests` topology (services spread across vm1/vm2/vm3) that asserts all three bare VM names land in `[la_pre_deploy_hosts]` — the exact case where a fully-aliased VM used to be skipped.
+- feat(generator): warn at generation time if a service group ends up referencing the same physical machine more than once (`index.js`), the only configuration that would reintroduce parallel apt/dpkg runs on one VM (issue #10).
+
 <a name="v1.8.30"></a>
 
 ## v1.8.30 - 2026-07-08

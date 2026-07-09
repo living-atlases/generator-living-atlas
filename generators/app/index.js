@@ -253,6 +253,11 @@ function PromptHostnameFor(name, subdomain, when) {
     this.when = when;
   }
   this.filter = async (input, a) => {
+    // input can be undefined when answers are mocked (tests) or the prompt is
+    // skipped; leave it untouched so validation elsewhere can complain.
+    if (input == null) {
+      return input;
+    }
     if (this.type == 'list') {
       await validateAndStoreServer(name, input);
     }
@@ -1207,6 +1212,16 @@ export default class extends Generator {
         },
       ], ...additionalToolkitPrompts()]);
 
+    // Answers can hold promises when prompt filters are not awaited by the
+    // adapter (e.g. yeoman-test); resolve them before further processing.
+    for (const key of Object.keys(this.answers)) {
+      const value = this.answers[key];
+      if (value && typeof value.then === 'function') {
+        // eslint-disable-next-line no-await-in-loop
+        this.answers[key] = await value;
+      }
+    }
+
     // For back-compatibility
     if (typeof this.answers['LA_main_hostname'] === 'undefined') {
       this.answers['LA_main_hostname'] = this.answers['LA_domain'];
@@ -1358,6 +1373,25 @@ export default class extends Generator {
       if (debug) logger(servicesInUse);
     }
 
+    // Ensure every used service with a hostname answer is registered in
+    // groupsAndServers. Interactive runs do this in the prompt filter/validate
+    // hooks, but not every adapter awaits filters, and checkbox validations may
+    // not run at all (e.g. yeoman-test). storeGroupServer is idempotent.
+    Object.keys(servicesDesc).forEach((service) => {
+      if (!serviceUseVar(service, this.answers)) return;
+      const hostAnswer = this.answers[`LA_${service}_hostname`];
+      if (hostAnswer == null || hostAnswer === '') return;
+      const hosts =
+        typeof hostAnswer === 'string'
+          ? hostAnswer.split(hostSepRegexp)
+          : hostAnswer;
+      for (const host of hosts) {
+        if (host && isCorrectHostname(host) === true) {
+          storeGroupServer(service, host);
+        }
+      }
+    });
+
     if (this.answers['LA_use_pipelines']) {
       if (isDefined(this.answers['LA_variable_pipelines_master'])) {
         // configured from the toolkit
@@ -1390,6 +1424,24 @@ export default class extends Generator {
     this.answers["LA_physical_servers"] = Array.from(physicalServers.entries()).map(([k, v]) => [k, Array.from(v)]);
     this.answers["LA_server_aliases"] = Array.from(serverAliases.entries());
     this.answers["LA_services_desc"] = servicesDesc;
+
+    // Anti dpkg-race guard: a service group that lists the same physical machine
+    // twice would make a single Ansible play run in parallel on that VM, racing
+    // on the apt/dpkg/debconf locks (issue #10). The template emits one
+    // <host>.<service> alias per physical host, so this should never happen; we
+    // warn here to catch regressions in storeGroupServer / child expansion.
+    for (const [group, gServers] of Object.entries(groupsAndServers)) {
+      if (!Array.isArray(gServers)) continue;
+      const machines = gServers.filter(s => s && s !== '');
+      if (new Set(machines).size !== machines.length) {
+        const dups = machines.filter((s, i) => machines.indexOf(s) !== i);
+        logger(
+          `WARNING: service group [${group}] references the same machine more ` +
+          `than once (${[...new Set(dups)].join(', ')}). This can cause ` +
+          `parallel apt/dpkg runs on one VM (see issue #10).`
+        );
+      }
+    }
 
     // remove these services included in others playbooks (like spark, etc in pipelines)
     servicesInUse = servicesInUse.filter(x => ['spark', 'pipelines_jenkins', 'jenkins', 'hadoop', 'zookeeper'].indexOf(x.service) === -1);

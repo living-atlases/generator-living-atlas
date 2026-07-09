@@ -1,11 +1,18 @@
 - name: Post-deploy tasks
-  hosts: all
+  # One host per physical server (see la_pre_deploy_hosts): machine-level tasks
+  # (apt installs) must not run once per service alias of the same VM in
+  # parallel, or they race on the dpkg/debconf locks.
+  hosts: la_pre_deploy_hosts
   roles:
     - post_deploy
   become: yes
 
 - name: Post-deploy postfix tasks
-  hosts: biocache-hub<%_ if (LA_use_CAS) { _%>, cas-servers<%_ } _%><%_ if (LA_use_alerts) { _%>, alerts-service<%_ } _%><%_ if (LA_use_doi) { _%>, doi-service<%_ } _%>
+  # One machine per physical server hosting biocache-hub/cas-servers/
+  # alerts-service/doi-service (see la_postfix_hosts in the inventory):
+  # postfix is machine-level, installing it once per service alias in
+  # parallel races on the dpkg locks.
+  hosts: la_postfix_hosts
 
   vars:
     postfix_aliases:

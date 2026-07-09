@@ -32,7 +32,10 @@
 
 <%_ if (LA_use_pipelines) { _%>
 - name: Pre-deploy spark tasks
-  hosts: spark
+  # cluster_master/cluster_nodes hold one bare machine name per VM. The [spark]
+  # group also contains the <host>.spark aliases (same machines), and running
+  # this play there too would edit /etc/security/limits.conf twice in parallel.
+  hosts: cluster_master, cluster_nodes
   roles:
     - spark_pre_deploy
   become: yes

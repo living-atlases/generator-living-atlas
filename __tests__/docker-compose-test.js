@@ -1,7 +1,9 @@
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import assert from 'yeoman-assert';
 import helpers from 'yeoman-test';
+import { serviceGroupsWithDuplicatedMachines } from '../test-utils/inventory-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,11 +23,11 @@ describe('generator-living-atlas:app docker_compose data_dir', () => {
         LA_use_docker_compose: true,
         LA_use_docker_swarm: false,
         LA_use_species: false,
-        LA_use_images: false,
+        LA_use_images: true,
         LA_use_regions: false,
         LA_use_CAS: false,
         LA_use_species_lists: false,
-        LA_use_biocache_store: false,
+        LA_use_biocache_store: true,
         LA_use_pipelines: false,
         LA_use_solrcloud: false,
         LA_use_spatial: false,
@@ -34,7 +36,9 @@ describe('generator-living-atlas:app docker_compose data_dir', () => {
         // Mandatory servers
         LA_collectory_hostname: 'localhost',
         LA_logger_hostname: 'localhost',
+        LA_images_hostname: 'localhost',
         LA_solr_hostname: 'localhost',
+        LA_biocache_backend_hostname: 'localhost',
         LA_cas_hostname: 'localhost',
         LA_spatial_hostname: 'localhost',
         LA_biocache_service_hostname: ['localhost'],
@@ -56,8 +60,23 @@ describe('generator-living-atlas:app docker_compose data_dir', () => {
       });
   }, 60000);
 
+  const inventory = 'test-dc-inventories/test-dc-inventory.ini';
+  const devInventory = 'test-dc-inventories/test-dc-dev-docker-inventory.ini';
+
   it('sets data_dir to /data/docker-compose in [docker_compose:vars]', () => {
-    assert.fileContent('test-dc-inventory.ini', /\[docker_compose:vars\]/);
-    assert.fileContent('test-dc-inventory.ini', /data_dir=\/data\/docker-compose/);
+    assert.fileContent(inventory, /\[docker_compose:vars\]/);
+    assert.fileContent(inventory, /data_dir=\/data\/docker-compose/);
+  });
+
+  it('generates a local development docker inventory mapped to localhost', () => {
+    assert.file([devInventory]);
+    assert.fileContent(devInventory, /ansible_connection=local/);
+  });
+
+  it('does not register the same machine twice in any service group (dpkg race guard)', () => {
+    for (const inv of [inventory, devInventory]) {
+      const offenders = serviceGroupsWithDuplicatedMachines(fs.readFileSync(inv, 'utf8'));
+      expect(offenders).toEqual([]);
+    }
   });
 });
