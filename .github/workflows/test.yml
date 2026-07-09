@@ -1,0 +1,34 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - "**"
+    tags-ignore:
+      - "**"
+  pull_request:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Same pinned npm as the publish workflow, to keep lockfile resolution
+      # identical between CI test and release.
+      - run: npm install -g npm@10.8.3
+
+      - run: npm ci
+
+      # jest only (the `pretest` eslint hook flags repo-wide prettier debt that
+      # predates the test suite; run it separately when that is cleaned up).
+      - run: npm run test:ci
