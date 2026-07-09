@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.32"></a>
+
+## v1.8.32 - 2026-07-09
+
+- fix(inventories): move the machine-global nginx `http{}` settings (`nginx_other_log_formats` — the `postdata` `log_format` — and `nginx_server_names_hash_bucket_size`) from the `[logger-service:vars]` / `[biocache-service-clusterdb:vars]` groups to `[all:vars]`. `nginx.conf` is a single file per VM shared by every co-located service; with the host-service aliases (#10) each service alias is a distinct Ansible host with its own vars, so when e.g. `image-service` redeploys nginx it rewrites `nginx.conf` using only its own vars and drops the format defined by `logger`, making `nginx -t` fail validating the logger vhost (`unknown log format "postdata"`). Seen in `ala-install-deploy-tests` #1402 once the machine-identity fix (v1.8.31) let the deploy get far enough to reach the nginx step. These settings are placed before the `docker_swarm` `:vars` block so they stay under `[all:vars]` in swarm mode too. The `nginx` cache/rate-limit settings stay in the biocache group (disabled by default, so they emit no `http{}` directives) with a note to promote them the same way if enabled. New `__tests__/nginx-machine-global.js` asserts the placement. This restores the pre-alias behaviour, where the single inventory merged co-located services' group_vars into one host.
+
 <a name="v1.8.31"></a>
 
 ## v1.8.31 - 2026-07-09
