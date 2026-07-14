@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.33"></a>
+
+## v1.8.33 - 2026-07-14
+
+- feat(ansiblew): support hybrid portals (VM services + docker-compose cluster) in a single run. `--ladocker` now always appends the la-docker-compose `playbooks/site.yml` (the docker leg) and, additionally, the ala-install playbooks of the services passed as positional args (the VM leg) — all concatenated in the same `ansible-playbook` invocation, so one log/JSON result per deploy. `--ladocker ... all` keeps the pure-compose behavior (`site.yml` alone, no per-service playbooks); positional services without `--ladocker` keep the pure-VM behavior. la-toolkit computes the split (VM services as args, docker granularity via `skip_services` extra var).
+
 <a name="v1.8.32"></a>
 
 ## v1.8.32 - 2026-07-09

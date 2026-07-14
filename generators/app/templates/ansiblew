@@ -147,14 +147,16 @@ if __name__ == '__main__':
     if newserver:
         plays.append("%s/ansible/newserver.yml" % alainstall)
 
+    # With --ladocker always run the la-docker-compose site.yml (the docker leg)
+    # first, and additionally any ala-install playbook of the services passed as
+    # positional args (the VM leg of a hybrid portal). 'all' with --ladocker keeps
+    # the pure-compose behavior: site.yml alone covers every docker service.
     if ladocker:
-        if doall:
-            plays.append("%s/playbooks/site.yml" % ladocker)
-    else:
-        <% for(var j=0; j < LA_services_in_use.length; j++) {
-            %>if args['<%= LA_services_in_use[j].map.name %>'] or doall:
-            plays.append("%s/ansible/<%= LA_services_in_use[j].map.playbook %>.yml" % alainstall)
-        <% } %>
+        plays.append("%s/playbooks/site.yml" % ladocker)
+    <% for(var j=0; j < LA_services_in_use.length; j++) {
+        %>if args['<%= LA_services_in_use[j].map.name %>'] or (doall and not ladocker):
+        plays.append("%s/ansible/<%= LA_services_in_use[j].map.playbook %>.yml" % alainstall)
+    <% } %>
 
     inventories = " "
     inventories = inventories.join(plays)
