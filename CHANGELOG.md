@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.8.34"></a>
+
+## v1.8.34 - 2026-07-19
+
+- fix(ansiblew): resolve the la-docker-compose roles for the docker leg. When `--ladocker` is set, `playbooks/site.yml` imports roles (`docker`, `la-compose`, …) that live in the la-docker-compose repo — its ala-install submodule (`ala-install/ansible/roles`) plus its own `roles/` — not in the standalone `ala-install` checkout, so `ansible-playbook` failed with `the role 'docker' was not found` (only `<playbook_dir>/roles` and the galaxy defaults were searched). Prefix the invocation with `env ANSIBLE_ROLES_PATH=<ladocker>/ala-install/ansible/roles:<ladocker>/roles:<alainstall>/ansible/roles`, mirroring the la-docker-compose Jenkinsfile's `export ANSIBLE_ROLES_PATH`, so `ansiblew` stays self-contained on the command line (no caller has to export anything). The standalone ala-install roles are kept last for the VM playbooks of a hybrid single run.
+
 <a name="v1.8.33"></a>
 
 ## v1.8.33 - 2026-07-14

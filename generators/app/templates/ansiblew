@@ -161,5 +161,17 @@ if __name__ == '__main__':
     inventories = " "
     inventories = inventories.join(plays)
 
-    playCmd = "%s ansible-playbook %s -u %s %s %s -i %s-local-passwords.ini %s %s --extra-vars 'target=all%s'" % (cmdPrefix, additionalParams, user, baseInventories, extraInvs, inv_path, inventories, extras, extraVars)
+    # la-docker-compose's site.yml imports roles ('docker', 'la-compose', ...)
+    # that live in the la-docker-compose repo (its ala-install submodule roles
+    # plus its own roles/), not in the standalone ala-install checkout. Mirror
+    # the la-docker-compose Jenkinsfile and point ANSIBLE_ROLES_PATH at them so
+    # the docker leg resolves its roles without the caller having to export
+    # anything (ansiblew stays self-contained on the command line). The
+    # standalone ala-install roles are kept last for the VM playbooks of a
+    # hybrid single run.
+    rolesEnv = ""
+    if ladocker:
+        rolesEnv = "env ANSIBLE_ROLES_PATH=%s/ala-install/ansible/roles:%s/roles:%s/ansible/roles " % (ladocker, ladocker, alainstall)
+
+    playCmd = "%s %sansible-playbook %s -u %s %s %s -i %s-local-passwords.ini %s %s --extra-vars 'target=all%s'" % (cmdPrefix, rolesEnv, additionalParams, user, baseInventories, extraInvs, inv_path, inventories, extras, extraVars)
     execCmd(playCmd, fail_on_error, nodryrun)
