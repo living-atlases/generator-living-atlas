@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.0"></a>
+
+## v1.9.0 - 2026-07-24
+
+- feat(quick-start): migrate the default taxonomic backbone from the legacy GBIF Backbone Taxonomy to the Catalogue of Life eXtended Release (COL XR). GBIF has switched its default taxonomy from the legacy GBIF Backbone Taxonomy (UUID `d7dddbf4-2cf0-4f39-9b2a-bb099caae36c`, integer taxonKeys) — frozen since 2023 and never to be updated again — to COL XR (UUID `7ddf754f-d193-4cc9-b351-99906754a03b`, alphanumeric IDs such as `Q2M4`). This bumps the nameindex/namematching defaults to the 2026-07-23 build: `custom_namematching_url`, `ala_namemaching_service_source` and `ala_sensitive_data_service_namematching_source` (lucene 6/8 `.tgz`) plus their sha1 checksums, and `custom_name_sources` (`gbif-backbone` entry — name kept for compatibility, data now COL XR). Ref: GBIF data blog, "How to migrate from the legacy GBIF Backbone to COL XR".
+
 <a name="v1.8.34"></a>
 
 ## v1.8.34 - 2026-07-19
