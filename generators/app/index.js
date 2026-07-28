@@ -486,6 +486,22 @@ function generateBranding(conf, brandDest) {
       pkg.scripts.build = `cross-env BASE_BRANDING_URL=${baked} vite build && cross-env BASE_BRANDING_URL=${baked} BUILD_INIT=1 vite build`;
       this.fs.writeJSON(brandPkgPath, pkg);
     }
+
+    // Brunch brandings load app/js/settings.js via CommonJS require() in
+    // brunch-config.js, so it must be `module.exports = {`, not the `export default {`
+    // used by the Vite settings template. Convert it for brunch, otherwise the brunch
+    // build fails with "Failed to load Brunch config file. SyntaxError: Unexpected token
+    // 'export'".
+    const brandSettingsPath = this.destinationPath(brandSettings);
+    if (isBrunch && this.fs.exists(brandSettingsPath)) {
+      const s = this.fs.read(brandSettingsPath);
+      if (/^export default\s*\{/m.test(s)) {
+        this.fs.write(
+          brandSettingsPath,
+          s.replace(/^export default\s*\{/m, 'module.exports = {')
+        );
+      }
+    }
   }
 }
 
