@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.2"></a>
+
+## v1.9.2 - 2026-07-28
+
+- fix(branding): don't let an invalid branding `package.json` abort the whole `yo` replay. v1.9.1 read it with `readJSON`, which throws on invalid JSON; a branding left broken by an earlier run (e.g. the old trailing-comma bug) crashed `yo living-atlas --replay --force` before `ansiblew` and every later file was written — so the deploy's regenerate step silently produced nothing and the project stayed stale (old `ansiblew` without `ANSIBLE_CONFIG`, still-broken `package.json`, no SSH pipelining → slow deploys). The read is now wrapped in try/catch and the baking is skipped with a warning.
+
 <a name="v1.9.1"></a>
 
 ## v1.9.1 - 2026-07-28
