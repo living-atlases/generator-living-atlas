@@ -461,10 +461,25 @@ function generateBranding(conf, brandDest) {
     // replacement) so we never emit an invalid trailing comma when "build" is the last
     // key in "scripts" — that produced invalid JSON and broke `yarn install` on brunch
     // brandings (e.g. gbif-es).
-    const pkg = this.fs.readJSON(brandPkgPath);
-    const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
-    const isBrunch = Object.keys(deps).some(d => d === 'brunch' || d.includes('brunch'));
-    if (pkg.scripts && !isBrunch) {
+    // readJSON throws on invalid JSON. A branding left with a broken package.json by
+    // an earlier run must NOT crash the whole `yo` replay (that aborts before ansiblew
+    // and every later file is written, silently leaving the project stale). Skip the
+    // baking with a warning instead.
+    let pkg = null;
+    try {
+      pkg = this.fs.readJSON(brandPkgPath);
+    } catch (e) {
+      logger(
+        `WARNING: branding package.json is not valid JSON, skipping build-script baking (${brandPkgPath}): ${e.message}`
+      );
+    }
+    const deps = pkg
+      ? Object.assign({}, pkg.dependencies, pkg.devDependencies)
+      : {};
+    const isBrunch = Object.keys(deps).some(
+      d => d === 'brunch' || d.includes('brunch')
+    );
+    if (pkg && pkg.scripts && !isBrunch) {
       const bUrl = conf['LA_branding_url'] || conf['LA_domain'];
       const bPath = (conf['LA_branding_path'] || '').replace(/\/$/, '');
       const baked = `${conf['LA_urls_prefix']}${bUrl}${bPath}`;
