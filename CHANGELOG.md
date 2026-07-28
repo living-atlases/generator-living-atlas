@@ -1,5 +1,12 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.3"></a>
+
+## v1.9.3 - 2026-07-28
+
+- fix(branding): make `app/js/settings.js` Brunch-compatible. Brunch brandings `require()` settings.js as CommonJS from `brunch-config.js`, but the Vite settings template writes `export default {` (ESM), so the Brunch build failed with `Failed to load Brunch config file. SyntaxError: Unexpected token 'export'`. For Brunch brandings the generator now rewrites `export default {` → `module.exports = {`.
+- fix(perf/stats): enable SSH pipelining in the generated `ansiblew` via `ANSIBLE_PIPELINING`/`ANSIBLE_SSH_ARGS` env vars instead of `ANSIBLE_CONFIG`. Pointing `ANSIBLE_CONFIG` at la-docker-compose's cfg (v1.9.1/v1.9.2) REPLACED the toolkit's `~/.ansible.cfg` and dropped its `callback_plugins`, which writes the results JSON the toolkit parses for its deploy stats — so the stats donut showed all zeros. Env vars layer on top of `~/.ansible.cfg`, keeping both pipelining (fast deploys) and the results/stats callback.
+
 <a name="v1.9.2"></a>
 
 ## v1.9.2 - 2026-07-28
