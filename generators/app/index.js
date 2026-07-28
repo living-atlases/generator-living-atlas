@@ -453,16 +453,24 @@ function generateBranding(conf, brandDest) {
   // (header_and_footer_baseurl). package.json is cloned verbatim (not
   // templated), so this replaceLine is the replay-safe source of truth.
   const brandPkg = `${brandDest}/package.json`;
-  if (this.fs.exists(this.destinationPath(brandPkg))) {
-    const bUrl = conf['LA_branding_url'] || conf['LA_domain'];
-    const bPath = (conf['LA_branding_path'] || '').replace(/\/$/, '');
-    const baked = `${conf['LA_urls_prefix']}${bUrl}${bPath}`;
-    replaceLine.call(
-      this,
-      brandPkg,
-      '"build":',
-      `    "build": "cross-env BASE_BRANDING_URL=${baked} vite build && cross-env BASE_BRANDING_URL=${baked} BUILD_INIT=1 vite build",`
-    );
+  const brandPkgPath = this.destinationPath(brandPkg);
+  if (this.fs.exists(brandPkgPath)) {
+    // Only Vite brandings consume BASE_BRANDING_URL at build time. Brunch brandings
+    // bake the URL via app/js/settings.js and keep `brunch build --production`, so we
+    // must NOT rewrite their build script. Edit the JSON structurally (not by line
+    // replacement) so we never emit an invalid trailing comma when "build" is the last
+    // key in "scripts" — that produced invalid JSON and broke `yarn install` on brunch
+    // brandings (e.g. gbif-es).
+    const pkg = this.fs.readJSON(brandPkgPath);
+    const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
+    const isBrunch = Object.keys(deps).some(d => d === 'brunch' || d.includes('brunch'));
+    if (pkg.scripts && !isBrunch) {
+      const bUrl = conf['LA_branding_url'] || conf['LA_domain'];
+      const bPath = (conf['LA_branding_path'] || '').replace(/\/$/, '');
+      const baked = `${conf['LA_urls_prefix']}${bUrl}${bPath}`;
+      pkg.scripts.build = `cross-env BASE_BRANDING_URL=${baked} vite build && cross-env BASE_BRANDING_URL=${baked} BUILD_INIT=1 vite build`;
+      this.fs.writeJSON(brandPkgPath, pkg);
+    }
   }
 }
 
