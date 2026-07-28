@@ -171,7 +171,12 @@ if __name__ == '__main__':
     # hybrid single run.
     rolesEnv = ""
     if ladocker:
-        rolesEnv = "env ANSIBLE_ROLES_PATH=%s/ala-install/ansible/roles:%s/roles:%s/ansible/roles " % (ladocker, ladocker, alainstall)
+        # Also load la-docker-compose's ansible.cfg (SSH pipelining/ControlPersist,
+        # fact caching) which is NOT auto-loaded here because ansible-playbook runs from
+        # the inventory dir, not the playbooks dir. Without this the docker leg pays a
+        # full SSH round-trip per task (nginx_vhost alone is ~1360 tasks). The explicit
+        # ANSIBLE_ROLES_PATH below still overrides the cfg's relative roles_path.
+        rolesEnv = "env ANSIBLE_CONFIG=%s/playbooks/ansible.cfg ANSIBLE_ROLES_PATH=%s/ala-install/ansible/roles:%s/roles:%s/ansible/roles " % (ladocker, ladocker, ladocker, alainstall)
 
     playCmd = "%s %sansible-playbook %s -u %s %s %s -i %s-local-passwords.ini %s %s --extra-vars 'target=all%s'" % (cmdPrefix, rolesEnv, additionalParams, user, baseInventories, extraInvs, inv_path, inventories, extras, extraVars)
     execCmd(playCmd, fail_on_error, nodryrun)
