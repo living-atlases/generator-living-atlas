@@ -1,5 +1,13 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.1"></a>
+
+## v1.9.1 - 2026-07-28
+
+- fix(branding): stop corrupting the branding `package.json`. The `"build"` script was rewritten by line replacement, appending a trailing comma and hardcoding a `vite build` command. When `"build"` was the last key in `"scripts"` (e.g. the gbif-es brunch branding) the trailing comma produced invalid JSON, so the branding Docker build failed at `yarn install` (`SyntaxError: Unexpected token } in package.json`). It also forced a Vite build onto Brunch brandings that have no Vite. The `package.json` is now edited structurally (JSON read/write) and the build script is only rewritten for Vite brandings; Brunch brandings keep `brunch build --production` and bake `BASE_BRANDING_URL` via `app/js/settings.js`.
+- fix(perf): load la-docker-compose's `playbooks/ansible.cfg` (SSH pipelining, ControlPersist, fact caching) from the generated `ansiblew`. The docker leg runs `ansible-playbook` from the inventory dir, so that cfg was never auto-loaded and every task paid a full SSH round-trip (`nginx_vhost` alone is ~1360 tasks → multi-hour deploys). `ansiblew` now points `ANSIBLE_CONFIG` at it when `--ladocker` is used; the explicit `ANSIBLE_ROLES_PATH` still overrides its relative `roles_path`.
+- chore(deps): `npm audit fix` (non-breaking) — resolves 2 advisories.
+
 <a name="v1.9.0"></a>
 
 ## v1.9.0 - 2026-07-24
