@@ -1,5 +1,12 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.4"></a>
+
+## v1.9.4 - 2026-07-29
+
+- fix(inventory): never emit a `[x:vars]` section for a group that is not declared. Ansible's ini plugin rejects such a section ("Section [x:vars] not valid for undefined group") and, because it populates the inventory as it reads it, silently DROPS everything from that line to the end of the file — plus any inventory loaded afterwards that referenced a group declared in the lost tail. It is only a WARNING, so the deploy runs on a half-read inventory. gbif-es was losing 49 sections of its generated inventory (every solrcloud, zookeeper and pipelines host's vars) and 10 more of its local-extras. Two sources fixed: the per-host docker section (`nginx_docker_internal_aliases`/`docker_extra_hosts`) named itself after the physical host, but a group by that name only exists for hosts running SEVERAL services (`<host>_group`) — hosts with a single service now get their one-host group declared too; and `[docker_compose:vars]`/`[docker_compose_hosts:vars]`, emitted whenever docker-compose is enabled while the groups themselves were only emitted once a machine had been assigned to them.
+- fix(inventory): declare the hub groups (`biocache-hub-<hub>`, `branding-<hub>`, `bie-hub-<hub>`, `regions-<hub>`, `hub-<hub>`) empty in the portal inventory. A hub deploy loads the portal inventory, its own and the PORTAL's local-extras, so that shared file is where hub vars live by design — but the portal's own deploy loads only its inventory and that local-extras, where those `:vars` sections then pointed at undeclared groups and truncated the file. The hosts still come from each hub's own inventory; for the portal deploy the vars apply to nobody.
+
 <a name="v1.9.3"></a>
 
 ## v1.9.3 - 2026-07-28
