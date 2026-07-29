@@ -74,4 +74,33 @@ export function serviceGroupsWithDuplicatedMachines(content) {
   return offenders;
 }
 
+/**
+ * Returns the `[x:vars]` / `[x:children]` sections whose group x is never declared
+ * as `[x]` anywhere in the given inventories.
+ *
+ * Ansible's ini plugin rejects such a section ("Section [x:vars] not valid for
+ * undefined group: x") and — because it populates the inventory as it reads — silently
+ * drops everything from that line to the end of the file; any later inventory that
+ * referenced a group declared in the lost tail goes down with it too. The deploy then
+ * runs on a half-read inventory with nothing but a WARNING to show for it.
+ *
+ * Pass every inventory loaded together (inventory + local-extras + ...), in load order:
+ * a group may legitimately be declared by an earlier one.
+ */
+export function varsSectionsWithoutGroup(contents) {
+  const declared = new Set(['all', 'ungrouped']); // both always exist, implicitly
+  const referenced = []; // [{ section, group }]
+  for (const content of [].concat(contents)) {
+    for (const rawLine of content.split('\n')) {
+      const header = rawLine.trim().match(/^\[([^\]]+)\]$/);
+      if (!header) continue;
+      const name = header[1];
+      const colon = name.indexOf(':');
+      if (colon === -1) declared.add(name);
+      else referenced.push({ section: name, group: name.slice(0, colon) });
+    }
+  }
+  return referenced.filter((r) => !declared.has(r.group)).map((r) => r.section);
+}
+
 export { parseGroups, parseAliases };
