@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.5"></a>
+
+## v1.9.5 - 2026-08-04
+
+- fix(inventory): pin `doi_service_version` (4.1.0) and `sds_version` (1.7.1) to published container image tags. The previous defaults (doi 1.1.5, sds 1.6.2) have no image on `livingatlases/doi-service` / `livingatlases/sds-webapp2` (only 3.0.2/4.0.0/4.1.0 and 1.6.4/1.7.0/1.7.1 exist), so `docker compose pull` failed the deploy. doi 4.x runs against a dedicated ES7 sidecar in la-docker-compose because grails-elasticsearch uses the ES transport client, removed in ES 8.x.
+
 <a name="v1.9.4"></a>
 
 ## v1.9.4 - 2026-07-29
