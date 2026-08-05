@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.6"></a>
+
+## v1.9.6 - 2026-08-05
+
+- fix(inventory): raise `solr_num_of_partitions` from 3 to 10 (it carried a bare `# FIXME`). `IndexRecordToSolrPipeline` salts the `latitude_longitude` join key across that many buckets, the pipeline's only defence against a coordinate shared by very many records, and it computes the bucket as `nextInt(numOfPartitions - 1)` — so the value must stay >= 2 or the solr stage dies with "IllegalArgumentException: bound must be positive", and the effective bucket count is one less than configured. `include_sampling` follows `LA_use_spatial`, so every portal with spatial enabled runs that path. Size it against the hottest coordinate rather than the dataset: `solr_num_of_partitions >= (records on the most common coordinate) / 20000`. 10 matches `la-pipelines-emr.yaml` and covers about 180k records on one coordinate. Fixed upstream in https://github.com/AtlasOfLivingAustralia/pipelines/pull/17
+
 <a name="v1.9.5"></a>
 
 ## v1.9.5 - 2026-08-04
