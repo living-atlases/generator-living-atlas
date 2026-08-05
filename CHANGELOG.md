@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.7"></a>
+
+## v1.9.7 - 2026-08-05
+
+- fix(inventory): point `ala_sensitive_data_service_namematching_source` at the **lucene-8** backbone build instead of the lucene-6 one. The lucene-6 artifact is for the pipelines' `ala-name-matching` library (`custom_namematching_url` / `nameindex_datestamp`); the sensitive-data-service links Lucene 8 and only opens index formats 7-9, so it crash-looped at boot with `RuntimeException: Unable to initialise searcher: Format version is not supported (.../cb/segments_3): 6 (needs to be between 7 and 9)` — an `IndexFormatTooOldException` out of `ALANameSearcher`. It now uses the same artifact and sha1 as `ala_namemaching_service_source`, which the namematching-service already reads.
+
 <a name="v1.9.6"></a>
 
 ## v1.9.6 - 2026-08-05
