@@ -103,4 +103,31 @@ export function varsSectionsWithoutGroup(contents) {
   return referenced.filter((r) => !declared.has(r.group)).map((r) => r.section);
 }
 
+/**
+ * Version variables (`*_version`) assigned more than once in an inventory.
+ *
+ * The fallback defaults block used to be emitted unconditionally alongside the
+ * versions the toolkit selected, so every pinned service got two assignments
+ * and the effective one was whichever an ini parser happened to read last. That
+ * is not a contract: it hid a `pipelines_version` still carrying a 2022 Debian
+ * package string, and made the deployed version unreadable from the file.
+ *
+ * Returns [{ name, values }] for each variable assigned twice or more.
+ */
+export function duplicatedVersionVars(content) {
+  const seen = new Map(); // name -> [values]
+  for (const rawLine of content.split('\n')) {
+    const line = rawLine.trim();
+    if (line.startsWith('#') || line.startsWith('[')) continue;
+    const match = line.match(/^(\w*_version)\s*=\s*(.*)$/);
+    if (!match) continue;
+    const [, name, value] = match;
+    if (!seen.has(name)) seen.set(name, []);
+    seen.get(name).push(value.trim());
+  }
+  return [...seen.entries()]
+    .filter(([, values]) => values.length > 1)
+    .map(([name, values]) => ({ name, values }));
+}
+
 export { parseGroups, parseAliases };
