@@ -322,7 +322,13 @@ const servicesDesc = {
   docker_compose: {
     name: 'docker_compose',
     group: 'docker_compose',
-    playbook: 'docker-compose',
+    // No ala-install playbook: the compose leg is driven by la-docker-compose's
+    // playbooks/site.yml, which ansiblew appends via --ladocker. Emitting a
+    // per-service play here produced ala-install/ansible/docker-compose.yml,
+    // which does not exist in the fork (it has docker-common.yml and
+    // docker-swarm.yml but no docker-compose.yml), so every CLI run died with
+    // "the playbook ... could not be found" (gh-44).
+    playbook: null,
     allowMultipleDeploys: true,
     desc: 'docker compose'
   },

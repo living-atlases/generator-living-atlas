@@ -7,7 +7,7 @@ By default don't exec nothing only show the commands. With --nodryrun you can ex
 the real commands.
 
 Usage:
-   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ ( <%= LA_services_in_use.map(m => m.map.name).join(' | ') %> )... | all ]
+   ansiblew --alainstall=<dir_of_ala_install_repo> [options] [ ( <%= LA_services_in_use.filter(m => m.map.playbook).map(m => m.map.name).join(' | ') %> )... | all ]
    ansiblew -h | --help
    ansiblew -v | --version
 
@@ -154,6 +154,7 @@ if __name__ == '__main__':
     if ladocker:
         plays.append("%s/playbooks/site.yml" % ladocker)
     <% for(var j=0; j < LA_services_in_use.length; j++) {
+        if (!LA_services_in_use[j].map.playbook) { continue; }
         %>if args['<%= LA_services_in_use[j].map.name %>'] or (doall and not ladocker):
         plays.append("%s/ansible/<%= LA_services_in_use[j].map.playbook %>.yml" % alainstall)
     <% } %>
