@@ -81,6 +81,21 @@ describe('inventory *_version assignments (gh-45)', () => {
     expect(duplicatedVersionVars(rendered)).toEqual([]);
   });
 
+  // The toolkit never pins biocollect, ecodata or dashboard, so for those three
+  // the fallback IS the effective version -- it goes straight into
+  // `livingatlases/<svc>:<version>` in the generated compose file. They used to
+  // carry 2022 defaults (5.2.6 / 3.3.1 / 2.2) that were never published as
+  // container images, so the deploy died on the pull. Pin the assertions so a
+  // future edit cannot quietly reintroduce a tag that does not exist.
+  it('falls back to published container tags for the unpinned services', () => {
+    const rendered = render([['collectory_version', '6.0.0']]);
+
+    expect(valueOf(rendered, 'biocollect_version')).toBe('8.4');
+    expect(valueOf(rendered, 'ecodata_version')).toBe('5.9.2');
+    expect(valueOf(rendered, 'dashboard_version')).toBe('2.6');
+    expect(valueOf(rendered, 'pdf_service_version')).toBe('1.3');
+  });
+
   it('emits the full fallback set when the toolkit sends nothing', () => {
     for (const rendered of [render([]), render(undefined)]) {
       expect(valueOf(rendered, 'collectory_version')).toBe('1.6.4');
