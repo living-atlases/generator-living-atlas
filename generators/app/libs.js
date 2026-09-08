@@ -78,6 +78,7 @@ const additionalToolkitVariables = [
   "LA_variable_caches_collections_enabled",
   "LA_variable_caches_layers_enabled",
   "LA_variable_caches_logs_enabled",
+  "LA_variable_carto_api_key",
   "LA_variable_cas_webflow_encryption_key",
   "LA_variable_cas_webflow_signing_key",
   "LA_variable_cas_oauth_encryption_key",
