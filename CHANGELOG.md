@@ -1,5 +1,17 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.8"></a>
+
+## v1.9.8 - 2026-09-04
+
+- feat(inventory): emit `carto_api_key` in `[all:vars]`. CARTO basemaps now require an API key, so the tiles bie-hub and biocache-hub ship with come back stamped "API KEY REQUIRED". ala-install grew an optional `carto_api_key` that both roles read (AtlasOfLivingAustralia/ala-install#1008); this registers it as a toolkit variable (`LA_variable_carto_api_key`) and writes it once for both services. Emitted empty when unset, which leaves the ala-install role default in charge. Setting `default_map_url` / `map_mininal_url` to a full URL still overrides everything, so inventories that already append the key by hand are unaffected.
+
+- fix(inventory): fall back to container tags that exist. `biocollect`, `ecodata` and `dashboard` are not in the toolkit block, so for those three the entry in `fallbackVersions` is the effective version: it goes straight into `livingatlases/<svc>:<version>` in the generated compose file. They still carried the 2022 defaults 5.2.6 / 3.3.1 / 2.2, none of which was ever published as an image, so enabling any of them in a docker deploy failed on the pull. Of the 24 entries in the list, 17 name a tag that does not exist in the registry; the rest stay hidden because la-toolkit pins them, and some carry deliberate constraints (`biocache_service` 2.7.1 is tied to tomcat8/9), so only the three that actually reach a file are touched. `namematching_service` is left alone: the registry publishes only `latest` for it.
+
+- fix(inventory): assign each `*_version` once, not twice with the last one winning. The fallback defaults block was emitted unconditionally, right before the block with the versions the toolkit selected, so every pinned service got two assignments and the right one won only by an accident of ini parsers keeping the last occurrence. It also kept stale defaults alive in the file and made the deployed version impossible to read off the inventory. The fallback is now skipped for anything the toolkit pinned. Behaviour is unchanged: the winner is the same, it is just the only line now. Reported by Michael Mattern (NLPHH-Atlas, la-toolkit 1.7.0). Closes #45
+
+- fix(ansiblew): stop emitting a play for a playbook that does not exist. `docker_compose` carried `playbook: 'docker-compose'`, so ansiblew appended `<ala-install>/ansible/docker-compose.yml` per service in use. That file does not exist in the fork, so every CLI run on a compose portal died with "the playbook ... could not be found" before doing anything. The compose leg already has its playbook via `--ladocker`, which covers every docker service, so `docker_compose` needs no per-service play: `playbook: null`, and it drops out of the usage line. CLI only, the UI was never affected. Reported by Michael Mattern (NLPHH-Atlas, la-toolkit 1.7.0). Closes #44
+
 <a name="v1.9.7"></a>
 
 ## v1.9.7 - 2026-08-05
