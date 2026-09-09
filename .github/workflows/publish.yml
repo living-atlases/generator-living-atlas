@@ -25,11 +25,15 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
-      # Use specific npm version to avoid MODULE_NOT_FOUND bug in npm@latest (10.9.7)
-      - run: npm install -g npm@10.8.3
+      # Trusted publishing (OIDC) needs npm >= 11.5.1; it does not exist in the
+      # 10.x line at all, which is why the trusted publisher configured on npmjs
+      # was silently ignored while this pinned npm@10.8.3. That pin was there to
+      # dodge a MODULE_NOT_FOUND bug in npm 10.9.7, gone in the 11.x line.
+      - run: npm install -g npm@11.19.1
 
       - run: npm ci
 
+      # No NODE_AUTH_TOKEN: the trusted publisher configured for this package on
+      # npmjs (living-atlases/generator-living-atlas, publish.yml) authenticates
+      # this step over OIDC, using the id-token permission granted above.
       - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

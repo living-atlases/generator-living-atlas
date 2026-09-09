@@ -25,7 +25,7 @@ jobs:
 
       # Same pinned npm as the publish workflow, to keep lockfile resolution
       # identical between CI test and release.
-      - run: npm install -g npm@10.8.3
+      - run: npm install -g npm@11.19.1
 
       - run: npm ci
 
