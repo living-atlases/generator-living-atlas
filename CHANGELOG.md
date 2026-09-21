@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.9"></a>
+
+## v1.9.9 - 2026-09-21
+
+- feat(inventory): render data hubs on docker compose. A hub is a second set of front-ends inside the portal's compose stack, but the compose run never learned about it: the hub inventories were declared and never loaded, and `la_hubs` was never emitted, so a compose deploy rendered no hub at all (the CI showed `hubs: []` on every host). The portal inventory now lists the hubs to render once in `[docker_compose:vars]` (`la_hubs`); each hub inherits the portal's docker facts, so it uses container paths and gets its own container name, vhost appname and service aliases; a hub only wires the services it uses (a records-only hub no longer advertises species and regions); a localhost-mode twin of every hub inventory is written for `--docker-local`; the portal's compose run loads the hub inventories. The machine-level pre/post-deploy playbooks are no longer duplicated per hub, and `LA_is_hub` is read as a boolean. VM deployments are unchanged.
+
 <a name="v1.9.8"></a>
 
 ## v1.9.8 - 2026-09-04
