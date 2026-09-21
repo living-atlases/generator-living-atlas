@@ -130,4 +130,38 @@ export function duplicatedVersionVars(content) {
     .map(([name, values]) => ({ name, values }));
 }
 
+/**
+ * Same as parseGroups but returns plain objects, and separately the [x:vars] and
+ * [x:children] sections, so a test can assert on structure instead of regexing
+ * the rendered text.
+ */
+export function parseIniGroups(content) {
+  const groups = Object.fromEntries(parseGroups(content));
+  const groupVars = {};
+  const groupChildren = {};
+  let current = null;
+  let kind = null;
+  for (const rawLine of content.split('\n')) {
+    const line = rawLine.trim();
+    if (line === '' || line.startsWith('#') || line.startsWith(';')) continue;
+    const header = line.match(/^\[([^\]]+)\]$/);
+    if (header) {
+      const [name, suffix] = header[1].split(':');
+      kind = suffix || null;
+      current = kind ? name : null;
+      if (kind === 'vars' && !(name in groupVars)) groupVars[name] = {};
+      if (kind === 'children' && !(name in groupChildren)) groupChildren[name] = [];
+      continue;
+    }
+    if (!current) continue;
+    if (kind === 'children') {
+      groupChildren[current].push(line);
+    } else if (kind === 'vars') {
+      const eq = line.indexOf('=');
+      if (eq > 0) groupVars[current][line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
+    }
+  }
+  return { groups, groupVars, groupChildren };
+}
+
 export { parseGroups, parseAliases };

@@ -546,7 +546,7 @@ function generateAnsiblew(conf, dest) {
   );
 }
 
-function generate(conf, dest, filePrefix) {
+function generate(conf, dest, filePrefix, opts = {}) {
   const useBranding = conf['LA_generate_branding'];
   if (useBranding) {
     const brandDest = `${conf['LA_pkg_name']}-branding`;
@@ -572,6 +572,12 @@ function generate(conf, dest, filePrefix) {
       additionalVariables
     );
   }
+
+  // pre/post-deploy are machine-level playbooks of the portal. A hub runs on the
+  // portal's machines, so emitting a <hub>-pre-deploy/ copy of them is duplication
+  // that only invites drift. The hub's own branding above is kept: a hub does have
+  // a branding of its own.
+  if (opts.isHub) return;
 
   const preDeployDest = `${conf['LA_pkg_name']}-pre-deploy`;
   const postDeployDest = `${conf['LA_pkg_name']}-post-deploy`;
@@ -1502,7 +1508,9 @@ export default class extends Generator {
     // For now we use with "LA_pkg_name-inventories"
     if (!fsN.existsSync(dest)) dest = `${conf['LA_pkg_name']}-inventories`;
 
-    const isHub = isDefined(conf['LA_is_hub']);
+    // LA_is_hub arrives from the toolkit as a boolean, and isDefined() tests
+    // .length, so this guard used to be false even inside a hub's own dir.
+    const isHub = conf['LA_is_hub'] === true;
     const hasHubs = isDefined(conf['LA_hubs']);
 
     const cmdOpts = {
@@ -1936,6 +1944,19 @@ export default class extends Generator {
     generateAnsiblew.call(this, conf, dest);
 
     if (hasHubs) {
+      // Docker facts are portal-scoped: a hub owns no cluster of its own, it runs in
+      // the portal's compose stack. The hub inventory needs them to decide between
+      // host paths and container paths, and to emit its own service aliases.
+      const portalIsCompose = conf['LA_use_docker_compose'] === true;
+      const inheritedDockerKeys = [
+        'LA_use_docker_compose',
+        'LA_use_docker_swarm',
+        'LA_docker_compose_hostname',
+        'LA_nginx_docker_internal_aliases_by_host',
+        'LA_docker_extra_hosts_by_host',
+        'LA_localhost_mode',
+      ];
+
       for (let hub of conf['LA_hubs']) {
         // const hubBrandDest = `${hub['LA_pkg_name']}-branding`;
         const hubDest = `${hub['LA_pkg_name']}-inventories`;
@@ -1945,6 +1966,14 @@ export default class extends Generator {
           ...hub,
           LA_portal_pkg_name: conf['LA_pkg_name'], // preserve portal name for relative paths
         };
+        for (let key of inheritedDockerKeys)
+          if (typeof conf[key] !== 'undefined') joinedConf[key] = conf[key];
+
+        // Only the services this hub actually uses. The old hardcoded list of four
+        // made a records-only hub advertise species and regions it does not deploy.
+        const hubServiceNames = ['branding', 'ala_hub']
+          .concat(hub['LA_use_species'] ? ['ala_bie'] : [])
+          .concat(hub['LA_use_regions'] ? ['regions'] : []);
 
         // noinspection JSUnresolvedFunction
         this.fs.copyTpl(
@@ -1952,12 +1981,27 @@ export default class extends Generator {
           this.destinationPath(`${hubDest}/${filePrefix}-inventory.ini`),
           joinedConf
         );
+
+        // The localhost-mode twin, for the same reason the portal has one: with
+        // --docker-local every portal alias is rewritten to localhost, and a hub
+        // inventory still naming the real machines resolves to nothing, so the hub
+        // silently dropped out of the compose file the run was about to write.
+        if (portalIsCompose) {
+          this.fs.copyTpl(
+            this.templatePath(`data-hub/data-hub-inventory.ini`),
+            this.destinationPath(
+              `${hubDest}/${filePrefix}-dev-docker-inventory.ini`
+            ),
+            { ...joinedConf, LA_localhost_mode: true }
+          );
+        }
         let ansiblewHubConf = {};
         ansiblewHubConf.LA_pkg_name = conf['LA_pkg_name'];
         ansiblewHubConf.LA_hub_pkg_name = hub['LA_pkg_name'];
         ansiblewHubConf.LA_is_hub = true;
+        ansiblewHubConf.LA_use_docker_compose = portalIsCompose;
         ansiblewHubConf.LA_services_in_use = [];
-        for (let name of ['branding', 'ala_hub', 'ala_bie', 'regions'])
+        for (let name of hubServiceNames)
           ansiblewHubConf.LA_services_in_use.push({
             service: name,
             map: servicesDesc[name],
@@ -1968,7 +2012,7 @@ export default class extends Generator {
           joinedConf['LA_additionalVariables'] = null;
         }
         generateAnsiblew.call(this, ansiblewHubConf, hubDest);
-        generate.call(this, joinedConf, hubDest, filePrefix);
+        generate.call(this, joinedConf, hubDest, filePrefix, { isHub: true });
       }
     }
   }

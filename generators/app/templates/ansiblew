@@ -98,12 +98,17 @@ if __name__ == '__main__':
         extras = "%s --tags %s" % (extras, tags)
     if debug:
         extras = "%s -vvvv" % (extras)
+    # The docker leg renders every compose artifact from the docker_compose host, so
+    # limiting a hub deploy to hub-<pkg> alone would exclude the only host that runs
+    # la-compose. Widen the limit there and tell la-compose which hub to render with
+    # la_hub_only instead.
+    hubLimit=<% if (typeof LA_hub_pkg_name != 'undefined') { %>"hub-<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
+    if isHub and ladocker:
+        hubLimit = "%s,docker_compose,docker_compose_hosts" % hubLimit
     if limit:
-        hubLimit=<% if (typeof LA_hub_pkg_name != 'undefined') { %>",hub-<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
-        extras = "%s --limit %s%s" % (extras, limit, hubLimit)
+        extras = "%s --limit %s%s" % (extras, limit, (",%s" % hubLimit) if hubLimit else "")
     else:
         if isHub:
-            hubLimit=<% if (typeof LA_hub_pkg_name != 'undefined') { %>"hub-<%= LA_hub_pkg_name %>"<% } else { %>""<% } %>
             extras = "%s --limit %s" % (extras, hubLimit)
     if extra_vars:
         extras = "%s --extra-vars '%s'" % (extras, extra_vars)
@@ -130,15 +135,44 @@ if __name__ == '__main__':
         extraInvs = "%s -i %s" % (extraInvs, extra_inv)
 
     <%_ if (typeof LA_is_hub != 'undefined' && LA_is_hub) { _%>
-    baseInventories = "-i %s-inventory.ini -i ./%s-inventory.ini -i %s-local-extras.ini " % (inv_path, hub_pkg, inv_path)
+    if docker_local:
+        # Both sides in localhost mode, or this hub's aliases name machines the
+        # localhost-mode portal inventory no longer has.
+        baseInventories = "-i ../%s-inventories/%s-dev-docker-inventory.ini -i ./%s-dev-docker-inventory.ini -i %s-local-extras.ini " % (pkg, pkg, hub_pkg, inv_path)
+    else:
+        baseInventories = "-i %s-inventory.ini -i ./%s-inventory.ini -i %s-local-extras.ini " % (inv_path, hub_pkg, inv_path)
     # for now disabled that extraVars
     # extraVars = ',ala_install_repo=%s' % alainstall
-    extraVars = ' biocache_hub=%s-hub bie_hub=%s-bie-hub regions=%s-regions' % (hub_pkg, hub_pkg, hub_pkg)
+    if ladocker:
+        # NEVER set biocache_hub/bie_hub/regions here: extra-vars are global and win
+        # over every group var, so they would rename the PORTAL's own hub while the
+        # docker leg renders it. la-compose takes the hub from the inventory instead.
+        extraVars = ' la_hub_only=%s' % hub_pkg
+    else:
+        extraVars = ' biocache_hub=%s-hub bie_hub=%s-bie-hub regions=%s-regions' % (hub_pkg, hub_pkg, hub_pkg)
     <%_ } else { _%>
     if docker_local:
         baseInventories = "-i %s-dev-docker-inventory.ini -i %s-local-extras.ini" % (pkg, pkg)
     else:
         baseInventories = "-i %s-inventory.ini -i %s-local-extras.ini" % (pkg, pkg)
+    <%_ if (typeof LA_hubs != 'undefined' && LA_hubs.length > 0) { _%>
+    # The compose leg renders ONE docker-compose.yml for the whole stack, data hubs
+    # included, and it resolves each hub through that hub's own inventory groups. Those
+    # groups only exist in the hub inventories, so the portal run has to load them: with
+    # them missing the hubs drop out of the very file that is about to be applied, and
+    # the next `up` removes their containers. VM deploys keep their per-hub runs and
+    # must NOT gain hub hosts here, hence the ladocker gate.
+    if ladocker:
+        # --docker-local rewrites every address to localhost, so the hub inventory
+        # has to be the localhost-mode twin as well: mixing the two leaves the hub's
+        # aliases pointing at machines this run does not know, and la-compose then
+        # renders the stack without it.
+        hubSuffix = "dev-docker-inventory.ini" if docker_local else "inventory.ini"
+        for hubPkg in [<%- LA_hubs.map(h => `"${h.LA_pkg_name}"`).join(', ') %>]:
+            hubInv = "../%s-inventories/%s-%s" % (hubPkg, hubPkg, hubSuffix)
+            if os.path.isfile(hubInv):
+                baseInventories = "%s -i %s" % (baseInventories, hubInv)
+    <%_ } _%>
     extraVars = ''
     <%_ } _%>
 
