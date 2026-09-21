@@ -5,3 +5,6 @@ coverage
 *.iml
 __tests__/la-for-dev/
 .opencode
+
+# Test fixtures need their .yo-rc.json (keys inside are placeholders, never real)
+!__tests__/fixtures/**/.yo-rc.json
