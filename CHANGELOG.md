@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.11"></a>
+
+## v1.9.11 - 2026-09-22
+
+- fix(inventory): render bie-hub's languageCodesUrl and blacklist at the container path. A hub's `bie-hub-config.yml` pointed `languageCodesUrl` and `external.blacklist` at `/data/<pkg>-bie-hub/config/...` (the HOST dir), but the container always mounts `/data/ala-bie-hub` regardless of the hub's name, so bie-hub got a `FileNotFoundException` on `languages.json` and crash-looped (la-docker-compose build #402, right after the v1.9.10 cert fix let nginx come up healthy). Needs ala-install#97a29942 (`bie_hub_language_codes_url` / `bie_hub_blacklist_url`, following the same pattern as `biocache_grouped_facets_url`); this release emits both, pointed at the container path, for every hub.
+
 <a name="v1.9.10"></a>
 
 ## v1.9.10 - 2026-09-22
