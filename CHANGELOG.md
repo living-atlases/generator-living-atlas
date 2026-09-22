@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.10"></a>
+
+## v1.9.10 - 2026-09-22
+
+- fix(inventory): let a hub's domain auto-detect win over a stale stored cert flag. `data-hub-inventory.ini` and `quick-start-inventory.ini` let an explicitly stored `LA_variable_use_la_site_certs: false` defeat the `l-a.site` domain auto-detect, so a hub whose la-toolkit config still carries that stale per-hub default (not a deliberate choice: nobody wants nginx serving `ssl-cert-snakeoil` on a public `*.l-a.site` vhost) got no certificate at all and crash-looped (la-docker-compose build #401, all 3 hosts). A hub shares the same nginx/cert setup as the portal it belongs to, so the domain auto-detect now wins over a stored `false`; an explicit `true`, or a `false` under a domain the auto-detect does not recognise, are unaffected.
+
 <a name="v1.9.9"></a>
 
 ## v1.9.9 - 2026-09-21
