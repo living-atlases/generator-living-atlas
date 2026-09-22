@@ -46,6 +46,12 @@ describe('data hubs on docker compose', () => {
       'biocache_grouped_facets_url=file:///data/ala-hub/config/grouped_facets_default.json'
     );
     expect(full).not.toContain('file:///data/lademohub-hub/config');
+    // Same split for bie-hub's own mount (/data/ala-bie-hub, not /data/lademohub-bie-hub):
+    // without it the app looks for languages.json where the container never mounts it
+    // and crash-loops (build #402).
+    expect(full).toContain('bie_hub_language_codes_url=file:///data/ala-bie-hub/config/languages.json');
+    expect(full).toContain('bie_hub_blacklist_url=file:///data/ala-bie-hub/config/blacklist.json');
+    expect(full).not.toContain('file:///data/lademohub-bie-hub/config');
     // ... while the host-side data dir still carries the hub identity.
     expect(full).toContain('biocache_hub = lademohub-hub');
     expect(full).toContain('bie_hub = lademohub-bie-hub');
