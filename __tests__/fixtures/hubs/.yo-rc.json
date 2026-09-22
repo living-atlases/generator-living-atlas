@@ -437,7 +437,8 @@
           "LA_regions_hostname": "localhost",
           "LA_regions_url": "regions-hub.l-a.site",
           "LA_regions_path": "",
-          "LA_use_branding": true
+          "LA_use_branding": true,
+          "LA_variable_use_la_site_certs": false
         },
         {
           "LA_id": "hub-lademohub2",

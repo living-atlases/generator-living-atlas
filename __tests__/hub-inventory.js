@@ -119,6 +119,16 @@ describe('data hubs on docker compose', () => {
     expect(bySource.lademohub).toEqual(expect.stringContaining('base-branding'));
   });
 
+  it('gives a hub the portal-style certs even if its stored flag says otherwise', () => {
+    // lademohub carries LA_variable_use_la_site_certs: false in the fixture --
+    // a stale la-toolkit hub-creation default, not a deliberate choice: nobody
+    // wants nginx serving snakeoil on a public *.l-a.site vhost. The hub sits
+    // on the same domain as the portal (l-a.site), so the domain auto-detect
+    // must win over that stored false (build #401, la-docker-compose).
+    expect(full).toContain('ssl_certificate_server_dir=/etc/letsencrypt/live/l-a.site');
+    expect(full).not.toContain('ssl-cert-snakeoil');
+  });
+
   it('does not duplicate the portal machine-level playbooks per hub', () => {
     expect(fs.existsSync('lademohub-pre-deploy')).toBe(false);
     expect(fs.existsSync('lademohub-post-deploy')).toBe(false);
