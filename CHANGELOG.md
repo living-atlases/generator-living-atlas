@@ -1,5 +1,11 @@
 <a name="unreleased"></a>
 
+<a name="v1.9.12"></a>
+
+## v1.9.12 - 2026-09-28
+
+- fix(inventory): `LA_etc_hosts` never overrides a name the docker host already resolves. Each compose host's `docker_extra_hosts` was the toolkit's per-host list plus every line of `LA_etc_hosts`. On a portal half migrated from VMs to docker-compose, `LA_etc_hosts` still names the VMs for services the docker stack now runs, so those names came back after the toolkit had left them out (its "local wins" rule), and docker keeps the first `/etc/hosts` line for a name: on gbif.es every container sent `registros-ws.gbif.es` to an old frontend VM, and Gatus measured it instead of the cluster. An `LA_etc_hosts` entry now yields when its name is one of the host's own vhosts or is already mapped per host.
+
 <a name="v1.9.11"></a>
 
 ## v1.9.11 - 2026-09-22
