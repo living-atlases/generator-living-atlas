@@ -1661,7 +1661,11 @@ export default class extends Generator {
     const localPassDest = `${dest}/${filePrefix}-local-passwords.ini`;
     const localExtras = `${dest}/${filePrefix}-local-extras.ini`;
 
-    if (firstRun || !this.fs.exists(localPassDest)) {
+    // Only a brand new passwords file gets the geoserver_password treatment below: on later runs
+    // the operator may have set the real GeoServer password there by hand.
+    const localPassIsNew = firstRun || !this.fs.exists(localPassDest);
+
+    if (localPassIsNew) {
       // We'll generate some easy but strong passwords for our new database, etc
 
       conf['LA_passwords'] = [];
@@ -1934,11 +1938,15 @@ export default class extends Generator {
 
     // Comment geoserver password because of:
     // https://github.com/AtlasOfLivingAustralia/ala-install/issues/556
-    commentLine.call(
-      this,
-      localPassDest,
-      'geoserver_password'
-    );
+    // Only in a new file: re-commenting it on every run silently dropped a hand-set password
+    // and left the inventory's default ('geoserver') in force.
+    if (localPassIsNew) {
+      commentLine.call(
+        this,
+        localPassDest,
+        'geoserver_password'
+      );
+    }
 
     generate.call(this, conf, dest, filePrefix);
     generateAnsiblew.call(this, conf, dest);
