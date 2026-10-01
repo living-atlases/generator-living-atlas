@@ -1,3 +1,9 @@
+<a name="v1.9.13"></a>
+
+## v1.9.13 - 2026-10-01
+
+- fix(passwords): `geoserver_password` in `<pkg>-local-passwords.ini` is only commented out when that file is created, no longer on every run. Re-commenting it on each regeneration dropped a hand-set GeoServer password and left the inventory default (`geoserver`) in force.
+
 <a name="unreleased"></a>
 
 <a name="v1.9.12"></a>
