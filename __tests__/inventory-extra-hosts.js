@@ -67,3 +67,24 @@ describe('docker_extra_hosts of a VM + docker-compose portal', () => {
     );
   });
 });
+
+// la-docker-compose keeps one datastore per stage, so each compose host must say which
+// stage it belongs to, and only once the toolkit uses stages at all.
+describe('docker_stage of a compose host', () => {
+  it('is written when the toolkit sends a stage for the host', async () => {
+    await runWith({
+      LA_nginx_docker_internal_aliases_by_host: { localhost: ['records.l-a.site'] },
+      LA_docker_stage_by_host: { localhost: 'staging' },
+    });
+    const inv = fs.readFileSync('lademo-inventories/lademo-inventory.ini', 'utf8');
+    expect(inv.match(/^docker_stage=.*$/gm)).toEqual(['docker_stage=staging']);
+  }, 120000);
+
+  it('is absent when the toolkit uses no stages', async () => {
+    await runWith({
+      LA_nginx_docker_internal_aliases_by_host: { localhost: ['records.l-a.site'] },
+    });
+    const inv = fs.readFileSync('lademo-inventories/lademo-inventory.ini', 'utf8');
+    expect(inv).not.toMatch(/^docker_stage=/m);
+  }, 120000);
+});

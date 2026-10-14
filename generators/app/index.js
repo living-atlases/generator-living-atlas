@@ -1962,6 +1962,7 @@ export default class extends Generator {
         'LA_docker_compose_hostname',
         'LA_nginx_docker_internal_aliases_by_host',
         'LA_docker_extra_hosts_by_host',
+        'LA_docker_stage_by_host',
         'LA_localhost_mode',
       ];
 
