@@ -1,3 +1,9 @@
+<a name="v1.9.14"></a>
+
+## v1.9.14 - 2026-10-14
+
+- feat(inventory): `docker_stage=<stage>` in the vars of each docker-compose host that the toolkit marks `production` or `staging` (`LA_docker_stage_by_host`). la-docker-compose uses it to give each stage its own datastores. Inventories without staging hosts are unchanged.
+
 <a name="v1.9.13"></a>
 
 ## v1.9.13 - 2026-10-01
