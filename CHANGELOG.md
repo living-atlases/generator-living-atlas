@@ -1,3 +1,10 @@
+<a name="v1.9.15"></a>
+
+## v1.9.15 - 2026-10-28
+
+- fix(inventory): `[bie-hub:vars]` sets `specieslist_service_url` to the lists base URL, without `/ws`. ala-install reads that variable in bie-index, which wants the `/ws` of the global value, and in bie-hub, which appends `/ws/species/<guid>` itself: with the global value bie-hub asked for `/ws/ws/species/<guid>`, got a 404 and showed species pages without their lists. bie-index is unchanged.
+- ci: Node 20 is out of the test matrix (end of life, no fix for CVE-2026-111497 in its bundled brotli). Node 22 stays.
+
 <a name="v1.9.14"></a>
 
 ## v1.9.14 - 2026-10-14
