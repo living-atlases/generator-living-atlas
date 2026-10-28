@@ -1,3 +1,10 @@
+<a name="v1.9.16"></a>
+
+## v1.9.16 - 2026-10-28
+
+- fix(inventory): `[spatial:vars]` sets `lists_ui_url` to the same value as `lists_url`. The spatial hub writes each "view this list" link with `lists.urlUi`, which falls back to `lists.ala.org.au` when it is not set, so the list picker of every portal sent its users to ALA with druids that only exist in the portal's own list service. ALA keeps the UI and the web service of its lists on different hosts, hence the separate variable; a portal that does too can now set it on its own.
+- fix(inventory): the example searches of the alerts page point at the portal, not at ALA. `occurrence_searchUrl`, `regions_searchUrl`, `speciesPages_searchUrl` and `collection_searchUrl` were hardcoded to `biocache`/`regions`/`bie`/`collections.ala.org.au`, with Australian examples, so the alerts page of every portal linked its users to ALA.
+
 <a name="v1.9.15"></a>
 
 ## v1.9.15 - 2026-10-28
