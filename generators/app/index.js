@@ -14,6 +14,7 @@ import { Base64 } from 'js-base64';
 import crypto from 'crypto';
 
 import {
+  bakeBrandingBuildScripts,
   defUseSubdomain,
   defUseSubdomainPrompt,
   isCorrectHostname,
@@ -483,7 +484,7 @@ function generateBranding(conf, brandDest) {
       const bUrl = conf['LA_branding_url'] || conf['LA_domain'];
       const bPath = (conf['LA_branding_path'] || '').replace(/\/$/, '');
       const baked = `${conf['LA_urls_prefix']}${bUrl}${bPath}`;
-      pkg.scripts.build = `cross-env BASE_BRANDING_URL=${baked} vite build && cross-env BASE_BRANDING_URL=${baked} BUILD_INIT=1 vite build`;
+      pkg.scripts = bakeBrandingBuildScripts(pkg.scripts, baked);
       this.fs.writeJSON(brandPkgPath, pkg);
     }
 

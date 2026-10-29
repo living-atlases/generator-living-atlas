@@ -128,7 +128,26 @@ function additionalToolkitPrompts() {
   return addPrompt;
 }
 
+// Vite brandings read BASE_BRANDING_URL at build time, so the generator bakes the
+// branding's public URL into its package.json scripts. The build keeps a trailing
+// `npm run build:bs5` (the Bootstrap 5 templates, base-branding >= 2026-10) and the
+// build:bs5 script gets the same URL; without it the bs5 output was silently dropped.
+const bakeBrandingBuildScripts = (scripts, baked) => {
+  const out = { ...scripts };
+  const hasBs5 = typeof out['build:bs5'] === 'string';
+  out.build =
+    `cross-env BASE_BRANDING_URL=${baked} vite build && cross-env BASE_BRANDING_URL=${baked} BUILD_INIT=1 vite build` +
+    (hasBs5 ? ' && npm run build:bs5' : '');
+  if (hasBs5) {
+    out['build:bs5'] = /BASE_BRANDING_URL=\S+/.test(out['build:bs5'])
+      ? out['build:bs5'].replace(/BASE_BRANDING_URL=\S+/g, `BASE_BRANDING_URL=${baked}`)
+      : `cross-env BASE_BRANDING_URL=${baked} ${out['build:bs5']}`;
+  }
+  return out;
+};
+
 export {
+  bakeBrandingBuildScripts,
   defUseSubdomain,
   defUseSubdomainPrompt,
   isCorrectDomain,
