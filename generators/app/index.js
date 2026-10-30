@@ -1936,6 +1936,12 @@ export default class extends Generator {
 
     handleClientKeysGeneration.call(this, localPassDest, 'userdetails_client_id', { userdetails: {} });
 
+    // Added on their own: a portal that enables biocollect later already has collectory_client_id.
+    if (this.answers['LA_use_biocollect']) {
+      handleClientKeysGeneration.call(this, localPassDest, 'biocollect_client_id', { biocollect: {} });
+      handleClientKeysGeneration.call(this, localPassDest, 'ecodata_client_id', { ecodata: {} });
+    }
+
 
     // Comment geoserver password because of:
     // https://github.com/AtlasOfLivingAustralia/ala-install/issues/556
